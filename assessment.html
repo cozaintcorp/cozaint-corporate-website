@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Request a MARCIA™ Assessment | Cozaint</title>
+<meta name="description" content="Estimate your video retention storage needs and request a MARCIA assessment.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header" id="top">
+  <div class="header-inner">
+    <a href="index.html" class="logo">cozaint<span class="logo-dot">.</span></a>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="marcia.html">Products</a>
+      <a href="how-it-works.html">How it works</a>
+      <a href="environments.html">Environments</a>
+      <a href="evidence.html">Evidence</a>
+      <a href="resources.html">Resources</a>
+    </nav>
+    <a href="#calculator" class="btn btn-primary btn-small">Jump to calculator</a>
+  </div>
+</header>
+
+<main>
+
+  <section class="assess-hero">
+    <div class="section-inner">
+      <p class="eyebrow eyebrow-dark">Request a MARCIA™ assessment</p>
+      <h1>Start with a practical lifecycle conversation.</h1>
+      <p class="assess-hero-sub">A MARCIA™ Assessment begins with your cameras, retention goals, storage mix, Video Management System and operating requirements — then turns them into a practical lifecycle conversation.</p>
+    </div>
+  </section>
+
+  <!-- CALCULATOR -->
+  <section class="calc-section" id="calculator">
+    <div class="section-inner calc-grid">
+      <div class="calc-intro">
+        <p class="eyebrow eyebrow-dark">Video-retention capacity</p>
+        <h2>Simple for visitors.<br>Detailed for system designers.</h2>
+        <p>Enter your camera count, resolution, and retention target below. The calculator applies the same bitrate, motion-factor, and LTO capacity model Cozaint uses internally to size a system.</p>
+      </div>
+
+      <div class="calc-card">
+        <div class="calc-card-head">
+          <span>Storage Calculator</span>
+        </div>
+
+        <div class="calc-body">
+          <label for="calcCustomer">Customer name</label>
+          <input type="text" id="calcCustomer" placeholder="Customer or organization">
+
+          <div class="calc-row">
+            <div>
+              <label for="calcCameras">Number of cameras</label>
+              <input type="number" id="calcCameras" min="1" value="700">
+            </div>
+            <div>
+              <label for="calcResolution">Resolution</label>
+              <select id="calcResolution"></select>
+            </div>
+          </div>
+
+          <div class="calc-row">
+            <div>
+              <label for="calcFps">Frames per second</label>
+              <input type="number" id="calcFps" min="1" max="120" value="20">
+            </div>
+            <div>
+              <label for="calcRetention">Retention days</label>
+              <input type="number" id="calcRetention" min="1" value="730">
+            </div>
+          </div>
+
+          <label for="calcMotion">Motion percentage <span id="motionVal">24%</span></label>
+          <input type="range" id="calcMotion" min="1" max="100" value="24">
+
+          <details class="calc-advanced">
+            <summary>Advanced settings</summary>
+            <div class="calc-row">
+              <div>
+                <label for="calcBpp">Bits per pixel (BPP)</label>
+                <input type="number" id="calcBpp" min="0.01" max="1" step="0.01" value="0.15">
+              </div>
+              <div>
+                <label for="calcLto">LTO generation</label>
+                <select id="calcLto">
+                  <option value="12">LTO-8 — 12 TB / cartridge</option>
+                  <option value="18" selected>LTO-9 — 18 TB / cartridge</option>
+                  <option value="30">LTO-10 — 30 TB / cartridge</option>
+                </select>
+              </div>
+            </div>
+            <div class="calc-row">
+              <div>
+                <label for="calcHours">Hours per cartridge write (300 MB/sec)</label>
+                <input type="number" id="calcHours" min="1" value="7">
+              </div>
+              <div>
+                <label for="calcWriteDrives">Write drives per site</label>
+                <input type="number" id="calcWriteDrives" min="1" value="3">
+              </div>
+            </div>
+            <div class="calc-row">
+              <div>
+                <label for="calcStandby">Standby drives</label>
+                <input type="number" id="calcStandby" min="0" value="1">
+              </div>
+            </div>
+          </details>
+
+          <div class="calc-results" id="calcResults">
+            <p class="calc-results-label">Results</p>
+            <div class="calc-results-grid">
+              <div><span>Bitrate per camera</span><strong id="rBitrate">—</strong></div>
+              <div><span>Storage per camera / day</span><strong id="rPerCamDay">—</strong></div>
+              <div><span>Total retention storage</span><strong id="rTotalTb">—</strong></div>
+              <div><span>LTO cartridges needed</span><strong id="rSlots">—</strong></div>
+              <div><span>Cartridges written / day</span><strong id="rSlotsDay">—</strong></div>
+              <div><span>Drive-hours needed / day</span><strong id="rHours">—</strong></div>
+            </div>
+          </div>
+          <p class="calc-disclaimer">Planning estimate only. Nothing entered here is transmitted to Cozaint®. Results require validation by a Cozaint specialist before use in a final system design.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALIDATION NOTICE -->
+  <section class="validation-notice">
+    <div class="section-inner">
+      <p class="eyebrow eyebrow-light">Planning estimate</p>
+      <h2 class="on-dark">Results will require validation.</h2>
+      <ul class="validation-list">
+        <li>This calculator identifies outputs as planning estimates — not guarantees or final system designs.</li>
+        <li>No visitor information is transmitted by the calculator.</li>
+        <li>No estimate or quote-reference PDF is generated automatically.</li>
+        <li>A Cozaint specialist will review your numbers before any recommendation is finalized.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ASSESSMENT FORM -->
+  <section class="assessment" id="assessment">
+    <div class="section-inner assessment-grid">
+      <div class="assessment-copy">
+        <p class="eyebrow">Next step</p>
+        <h2>Send your numbers to a Cozaint specialist.</h2>
+        <p>Share your environment and we'll respond with a tailored lifecycle conversation — no purchase commitment.</p>
+        <ol class="assessment-steps">
+          <li><span>01</span>Review your current environment</li>
+          <li><span>02</span>Identify retention opportunities</li>
+          <li><span>03</span>Plan a tailored demonstration</li>
+        </ol>
+      </div>
+      <form class="assessment-form" id="assessment-form">
+        <label for="company">Company name</label>
+        <input type="text" id="company" name="company" placeholder="Company name" required>
+
+        <label for="improve">What are you trying to improve?</label>
+        <select id="improve" name="improve" required>
+          <option value="" disabled selected>Select one</option>
+          <option value="retention">Extend retention history</option>
+          <option value="cost">Reduce storage cost</option>
+          <option value="ops">Reduce operator workload</option>
+          <option value="compliance">Meet a compliance requirement</option>
+          <option value="other">Something else</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary btn-full">Request my assessment</button>
+        <p class="form-note">A Cozaint specialist will respond to discuss your environment. No purchase commitment.</p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-bottom section-inner footer-bottom-product">
+    <div>
+      <a href="index.html" class="logo logo-footer">cozaint<span class="logo-dot">.</span></a>
+      <p class="footer-tagline">Your Vault for Visual AI</p>
+    </div>
+    <div class="footer-cols">
+      <div>
+        <h4>Products</h4>
+        <a href="marcia.html">MARCIA™</a>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="evidence.html">Technology Partners</a>
+        <a href="environments.html">Environments</a>
+        <a href="resources.html">Resources</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="index.html#top">About Us</a>
+        <a href="index.html#top">Contact</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-legal section-inner">
+    <p>© 2026 Cozaint. Legal entity and trademark statement require verification before publication. Review copy only.</p>
+  </div>
+</footer>
+
+<script src="calculator.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
