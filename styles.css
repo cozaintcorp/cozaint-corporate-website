@@ -469,7 +469,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
    ============================================ */
 .site-footer { background: var(--forest-deep); }
 .footer-next { padding-top: 32px; padding-bottom: 56px; }
-.site-footer .eyebrow-light { font-size: 16px; }
+.site-footer .eyebrow-light { font-size: 18.72px; }
 .contact-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; padding-bottom: 56px; }
 .contact-grid h2 { font-size: clamp(28px, 3.4vw, 40px); }
 .contact-address { color: #9fb0a8; font-size: 15px; }
@@ -528,7 +528,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .ebook-copy h2 { font-size: clamp(24px, 2.6vw, 30px); font-family: var(--font-display); font-weight: 500; }
 
 .resources { background: var(--forest-deep); padding-top: 0; }
-.resources .section-inner { padding-top: 0; padding-bottom: 48px; }
+.resources .section-inner { padding-top: 0; }
 .resource-list { display: flex; flex-direction: column; gap: 12px; }
 .resource-row {
   display: flex;
