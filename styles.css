@@ -754,3 +754,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .ask-proof-quote figcaption { margin-top: 12px; color: var(--grey-600); font-size: 13px; }
 .ask-proof-quote figcaption strong { display: block; color: var(--ink); font-size: 14px; }
 .ask-proof-card > p { margin-bottom: 22px; }
+
+/* call to action folded into the "Where it matters" panel */
+.ask-cta-inline { background: var(--forest-deep); border-radius: 10px; text-align: center; padding: 48px 32px; margin-top: 48px; }
+.ask-cta-inline h2 { color: #fff; max-width: 22ch; margin: 0 auto 14px; }
+.ask-cta-inline p { color: #b9c6bf; max-width: 56ch; margin: 0 auto; }
+.ask-cta-inline .hero-actions { justify-content: center; margin-top: 26px; }
