@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Testimonials | Cozaint</title>
+<meta name="description" content="What customers say about Cozaint and its video storage products.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header" id="top">
+ <div class="header-inner">
+    <a href="index.html" class="logo"><img src="assets/cozaint-logo-green.png" alt="Cozaint" style="height: 32px;"></a>
+    <nav class="main-nav">
+      <a href="https://cozaint.com/about">About</a>
+      <div class="nav-dropdown" style="position:relative; display:inline-block;">
+        <a href="#">Product Suite ▾</a>
+        <div class="nav-dropdown-menu" style="display:none; position:absolute; top:100%; left:0; background:#fff; border:1px solid rgba(0,0,0,0.1); border-radius:6px; box-shadow:0 8px 24px rgba(0,0,0,0.12); min-width:160px; z-index:10; padding:8px 0;">
+          <a href="marcia.html" style="display:block; padding:8px 16px; white-space:nowrap;">MARCIA</a>
+          <a href="alice1.html" style="display:block; padding:8px 16px; white-space:nowrap;">ALICE1</a>
+          <a href="askalice.html" style="display:block; padding:8px 16px; white-space:nowrap;">askALICE</a>
+          <a href="https://cozaint.com/bobbytower" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY Tower</a>
+          <a href="https://cozaint.com/bobbyw" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY-W</a>
+          <a href="https://cozaint.com/bobbym" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY-M</a>
+        </div>
+      </div>
+      <a href="https://cozaint.com/downloads">Downloads</a>
+      <a href="faq.html?product=cozaint">FAQs</a>
+      <a href="https://cozaint.com/podcasts">Podcasts</a>
+      <a href="https://cozaint.com/partners">Partners</a>
+      <a href="https://cozaint.com/contact">Contact</a>
+    </nav>
+    <a href="https://cozaint.com/contact" class="btn btn-primary btn-small">Schedule a Meeting</a>
+  </div>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="section-inner">
+      <p class="eyebrow">Testimonials</p>
+      <h1>What our customers say.</h1>
+      <p class="sub">Real organizations that rely on Cozaint to keep the video they can't afford to lose.</p>
+      <div class="filter-bar" role="group" aria-label="Filter testimonials by product"><button class="filter-chip" type="button" data-product="all" aria-pressed="false">All products</button><button class="filter-chip" type="button" data-product="marcia" aria-pressed="false">MARCIA</button><button class="filter-chip" type="button" data-product="alice1" aria-pressed="false">ALICE1</button><button class="filter-chip" type="button" data-product="askalice" aria-pressed="false">askALICE</button><button class="filter-chip" type="button" data-product="bobby" aria-pressed="false">BOBBY</button></div>
+    </div>
+  </section>
+  <section class="tm-section">
+    <div class="section-inner">
+      <div class="tm-grid" id="tmGrid"><noscript>Please enable JavaScript to see testimonials.</noscript></div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  var DATA=[{"name": "Scott Prather", "role": "Senior IT Analyst, City of Oceanside, CA", "products": ["marcia", "askalice"], "paras": ["We needed to upgrade our Security Surveillance system at our water treatment plant and since we have worked with several different systems, we knew what we liked and what we didn’t like. It is always difficult to find a system that fits within our budget and meets our long-term retention requirements. Cozaint’s askALICE has been an ideal fit for our surveillance recording needs and our budget."]}, {"name": "Dan Lauriano", "role": "Owner, Riptide Rockin’ Sushi & Teppan Restaurant, Mission Viejo, CA", "products": ["marcia", "askalice"], "paras": ["Our team works very hard to create a fun and inviting atmosphere where our guests can enjoy a great meal, have fun with friends and family around our teppan tables or socialize around our friendly bar.", "But we do get the occasional claim that something terrible happened and we are presented with a baseless lawsuit. We have been getting more of these claims where the proposed action occurred 90-days ago, or more."]}, {"name": "LT. Elizabeth Esparza", "role": "Pascua Yaqui Police Department", "products": ["bobby"], "paras": ["With certain transactions occurring between complete strangers —such as online sales— sometimes our community may wish to meet at a more secure location where video surveillance and the ability to reach one of our officers in an emergency is all in one safe zone."]}];
+  var NAMES={marcia:"MARCIA",alice1:"ALICE1",askalice:"askALICE",bobby:"BOBBY"};
+  var grid=document.getElementById("tmGrid"), chips=document.querySelectorAll(".filter-chip");
+  function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+  function render(p){
+    var list=DATA.filter(function(d){return p==="all"||d.products.indexOf(p)>-1;});
+    if(!list.length){grid.innerHTML='<div class="tm-empty" style="grid-column:1/-1"><strong>Testimonials for '+NAMES[p]+' are on the way.</strong><br>Want to hear from customers now? <a href="https://cozaint.com/contact">Talk to us</a>.</div>';}
+    else grid.innerHTML=list.map(function(d){
+      return '<figure class="tm-card"><blockquote>'+d.paras.map(function(t,i){return '<p>'+(i===0?'\u201C':'\u201C')+esc(t)+'\u201D</p>';}).join("")+'</blockquote><figcaption><strong>'+esc(d.name)+'</strong>'+esc(d.role)+'</figcaption><div class="tm-tags">'+d.products.map(function(x){return '<span class="tm-tag">'+NAMES[x]+'</span>';}).join("")+'</div></figure>';
+    }).join("");
+    chips.forEach(function(c){c.setAttribute("aria-pressed",c.dataset.product===p?"true":"false");});
+  }
+  var q=new URLSearchParams(location.search).get("product"); q=(q&&(q==="all"||NAMES[q]))?q:"all";
+  chips.forEach(function(c){c.addEventListener("click",function(){var p=c.dataset.product;render(p);history.replaceState(null,"",p==="all"?"testimonials.html":"testimonials.html?product="+p);});});
+  render(q);
+})();
+</script>
+<!-- CONTACT / FOOTER -->
+<footer class="site-footer">
+  <div class="section-inner footer-next">
+    <p class="eyebrow eyebrow-light">Where do we go next?</p>
+    <div class="next-steps-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:24px; margin-top: 24px;">
+      <a href="https://cozaint.com/contact" class="next-step-card" style="display:block; padding:24px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; text-decoration:none; color:inherit;">
+        <h3 class="on-dark">Talk to us</h3>
+        <p>Tell us about your cameras and how long you need to keep video.</p>
+      </a>
+      <a href="assessment.html" class="next-step-card" style="display:block; padding:24px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; text-decoration:none; color:inherit;">
+        <h3 class="on-dark">Request an assessment</h3>
+        <p>Get a tailored recommendation for your site.</p>
+      </a>
+      <a href="faq.html?product=cozaint" class="next-step-card" style="display:block; padding:24px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; text-decoration:none; color:inherit;">
+        <h3 class="on-dark">Read the FAQs</h3>
+        <p>Quick answers about Cozaint and each product.</p>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-bottom section-inner">
+    <a href="#top" class="logo logo-footer"><img src="assets/cozaint-logo-white.png" alt="Cozaint" style="height: 28px;"></a>
+    <div class="footer-cols">
+      <div>
+        <h4>Company</h4>
+        <div>
+          <a href="https://cozaint.com/about">About Cozaint</a>
+          <a href="https://cozaint.com/partners">Become a Partner</a>
+          <a href="https://cozaint.com/team">Team</a>
+          <a href="testimonials.html">Testimonials</a>
+          <a href="faq.html?product=cozaint">FAQs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-legal section-inner">
+    <p>© 2026 Cozaint. Legal entity and trademark statement require verification before publication. Review copy only.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
