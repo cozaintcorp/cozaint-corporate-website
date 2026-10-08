@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Request a MARCIA™ Assessment | Cozaint</title>
-<meta name="description" content="Estimate your video retention storage needs and request a MARCIA assessment.">
+<title id="assessPageTitle">Request an Assessment | Cozaint</title>
+<meta name="description" content="Estimate your video retention storage needs and request a Cozaint assessment.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
@@ -44,9 +44,9 @@
 
   <section class="assess-hero">
     <div class="section-inner">
-      <p class="eyebrow eyebrow-dark">Request a MARCIA™ assessment</p>
-      <h1>Start with a practical lifecycle conversation.</h1>
-      <p class="assess-hero-sub">A MARCIA™ Assessment begins with your cameras, retention goals, storage mix, Video Management System and operating requirements — then turns them into a practical lifecycle conversation.</p>
+      <p class="eyebrow eyebrow-dark" id="assessEyebrow">Request a Cozaint assessment</p>
+      <h1 id="assessTitle">Start with a practical lifecycle conversation.</h1>
+      <p class="assess-hero-sub" id="assessSub">A Cozaint Assessment begins with your cameras, retention goals, storage mix, Video Management System and operating requirements — then turns them into a practical lifecycle conversation.</p>
     </div>
   </section>
 
@@ -227,6 +227,25 @@
   </div>
 </footer>
 
+<script>
+// Product-specific wording: assessment.html?product=marcia | alice1 | askalice
+(function () {
+  var P = {
+    marcia: { name: 'MARCIA™', eyebrow: 'Request a MARCIA™ assessment', title: 'Start with a practical lifecycle conversation.',
+      sub: 'A MARCIA™ Assessment begins with your cameras, retention goals, storage mix, Video Management System and operating requirements — then turns them into a practical lifecycle conversation.' },
+    alice1: { name: 'ALICE1™', eyebrow: 'Request an ALICE1™ assessment', title: 'Start with how much video you need to keep.',
+      sub: 'An ALICE1™ Assessment begins with your cameras, retention goals and operating requirements — then shows what an always-ready video vault would look like for you.' },
+    askalice: { name: 'askALICE™', eyebrow: 'Request an askALICE™ assessment', title: 'Start with how long you need to keep your video.',
+      sub: 'An askALICE™ Assessment begins with your cameras, resolution and retention goals — then shows what two-tier storage would cost compared with hard drives or the cloud.' }
+  };
+  var key = (new URLSearchParams(location.search).get('product') || '').toLowerCase();
+  var p = P[key];
+  if (!p) return;
+  document.title = 'Request ' + (key === 'marcia' ? 'a ' : 'an ') + p.name.replace('™','') + ' Assessment | Cozaint';
+  var set = function (id, t) { var e = document.getElementById(id); if (e) e.textContent = t; };
+  set('assessEyebrow', p.eyebrow); set('assessTitle', p.title); set('assessSub', p.sub);
+})();
+</script>
 <script src="calculator.js"></script>
 <script src="script.js"></script>
 <script src="nav.js"></script>
