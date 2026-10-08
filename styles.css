@@ -745,3 +745,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* askALICE hero film */
 .ask-video { margin-top: 24px; aspect-ratio: 16/9; width: 100%; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 30px 80px rgba(0,0,0,0.45); background: #000; }
 .ask-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* testimonials folded into the "Where it matters" cards */
+.ask-proof-card { display: flex; flex-direction: column; }
+.ask-proof-quote { margin: auto 0 0; padding: 18px 0 0 18px; border-top: 1px solid var(--line); border-left: 3px solid var(--mint); }
+.ask-proof-quote blockquote { margin: 0; }
+.ask-proof-quote blockquote p { font-family: var(--font-display); font-size: 15.5px; line-height: 1.55; color: var(--ink); margin: 0; }
+.ask-proof-quote figcaption { margin-top: 12px; color: var(--grey-600); font-size: 13px; }
+.ask-proof-quote figcaption strong { display: block; color: var(--ink); font-size: 14px; }
+.ask-proof-card > p { margin-bottom: 22px; }
