@@ -932,3 +932,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .bw-card h3 { margin: 0 0 8px; }
 .bw-card h3 span { font: 700 13px var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: #1c8a5c; margin-left: 8px; }
 .bw-card p { margin: 0 0 10px; color: #35453f; line-height: 1.55; }
+
+/* ---- About page ---- */
+.ab-mission-grid { display: grid; grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); gap: 56px; align-items: center; }
+.ab-mission p { line-height: 1.7; color: #35453f; max-width: 62ch; }
+.ab-award { margin: 0; background: #fff; border: 1px solid rgba(15,46,36,.12); border-radius: 14px; padding: 16px 16px 20px; box-shadow: 0 16px 40px rgba(15,46,36,.12); text-align: center; }
+.ab-award img { width: 100%; height: auto; max-height: 460px; object-fit: cover; border-radius: 8px; display: block; }
+.ab-award figcaption { margin-top: 14px; font-size: 14px; color: #35453f; line-height: 1.5; }
+.ab-award figcaption b { color: var(--ink); font-size: 16px; }
+@media (max-width: 800px) { .ab-mission-grid { grid-template-columns: 1fr; gap: 32px; } .ab-award { max-width: 320px; margin: 0 auto; } }
