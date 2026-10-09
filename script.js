@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', function () {
   var form = document.getElementById('assessment-form');
   if (form) {
     var LEAD_EMAIL = 'info@cozaint.com';
+    // EspoCRM Lead Capture address. Paste the API URL from Administration > Lead Capture here.
+    var LEAD_ENDPOINT = '';
     var status = document.getElementById('formStatus');
     var src = (new URLSearchParams(location.search).get('product') || 'assessment');
     document.getElementById('leadSource').value = 'assessment page (' + src + ')';
@@ -37,11 +39,21 @@ document.addEventListener('DOMContentLoaded', function () {
       var originalText = button.textContent;
       button.textContent = 'Sending...';
       button.disabled = true;
-      fetch(form.getAttribute('action'), {
+      if (!LEAD_ENDPOINT) { fallback(data); button.textContent = originalText; button.disabled = false; return; }
+      var parts = data.name.split(/\s+/);
+      var first = parts.length > 1 ? parts.slice(0, -1).join(' ') : null;
+      var last = parts.length > 1 ? parts[parts.length - 1] : parts[0];
+      var payload = {
+        firstName: first, lastName: last, emailAddress: data.email, phoneNumber: data.phone || null,
+        accountName: data.company,
+        description: 'Goal: ' + data.improve + '\nFrom: ' + data.source + '\n' + data.calc
+      };
+      if (data.website) { form.reset(); button.textContent = originalText; button.disabled = false; return; }
+      fetch(LEAD_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(data)
-      }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok && j && j.ok }; }); })
+        body: JSON.stringify(payload)
+      }).then(function (r) { return { ok: r.status === 200 }; })
         .then(function (res) {
           if (!res.ok) throw new Error('send failed');
           status.className = 'form-status ok';
