@@ -2,22 +2,59 @@
 document.addEventListener('DOMContentLoaded', function () {
   var form = document.getElementById('assessment-form');
   if (form) {
+    var LEAD_EMAIL = 'info@cozaint.com';
+    var status = document.getElementById('formStatus');
+    var src = (new URLSearchParams(location.search).get('product') || 'assessment');
+    document.getElementById('leadSource').value = 'assessment page (' + src + ')';
+    function val(id) { var el = document.getElementById(id); return el ? el.value : ''; }
+    function calcSummary() {
+      var res = document.getElementById('calcResolution');
+      var resText = res && res.options && res.selectedIndex >= 0 ? res.options[res.selectedIndex].text : '';
+      return 'Customer: ' + val('calcCustomer') + '; Cameras: ' + val('calcCameras') + '; Resolution: ' + resText +
+        '; FPS: ' + val('calcFps') + '; Retention days: ' + val('calcRetention');
+    }
+    function fallback(data) {
+      var body = 'Name: ' + data.name + '\nEmail: ' + data.email + '\nPhone: ' + data.phone + '\nCompany: ' + data.company +
+        '\nGoal: ' + data.improve + '\n' + data.calc;
+      var href = 'mailto:' + LEAD_EMAIL + '?subject=' + encodeURIComponent('Assessment request') + '&body=' + encodeURIComponent(body);
+      status.className = 'form-status err';
+      status.innerHTML = 'We could not send that automatically. Please <a href="' + href + '">email us</a> or call 760-975-8000.';
+    }
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var company = document.getElementById('company').value.trim();
+      status.className = 'form-status'; status.textContent = '';
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      document.getElementById('leadCalc').value = calcSummary();
+      var data = {
+        name: val('leadName').trim(), email: val('leadEmail').trim(), phone: val('leadPhone').trim(),
+        company: val('company').trim(), improve: form.querySelector('#improve').selectedOptions[0].text,
+        website: form.querySelector('[name=website]').value, source: val('leadSource'), calc: val('leadCalc')
+      };
       var button = form.querySelector('button[type="submit"]');
       var originalText = button.textContent;
-      if (!company) return;
-      button.textContent = 'Request sent';
+      button.textContent = 'Sending...';
       button.disabled = true;
-      form.reset();
-      setTimeout(function () {
-        button.textContent = originalText;
-        button.disabled = false;
-      }, 3000);
-      // NOTE: this form currently only simulates a submission.
-      // Wire it up to your actual lead-capture endpoint (email service,
-      // CRM webhook, etc.) before this goes live to real visitors.
+      fetch(form.getAttribute('action'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok && j && j.ok }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error('send failed');
+          status.className = 'form-status ok';
+          status.textContent = 'Thank you. A Cozaint specialist will be in touch shortly.';
+          form.reset();
+          button.textContent = 'Request sent';
+          setTimeout(function () { button.textContent = originalText; button.disabled = false; }, 4000);
+        })
+        .catch(function () {
+          fallback(data);
+          button.textContent = originalText;
+          button.disabled = false;
+        });
     });
   }
 

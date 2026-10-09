@@ -171,9 +171,18 @@
           <li><span>03</span>Plan a tailored demonstration</li>
         </ol>
       </div>
-      <form class="assessment-form" id="assessment-form">
+      <form class="assessment-form" id="assessment-form" action="send-lead.php" method="post" novalidate>
+        <label for="leadName">Your name</label>
+        <input type="text" id="leadName" name="name" placeholder="Your name" autocomplete="name" required>
+
+        <label for="leadEmail">Work email</label>
+        <input type="email" id="leadEmail" name="email" placeholder="you@company.com" autocomplete="email" required>
+
+        <label for="leadPhone">Phone <span class="opt">(optional)</span></label>
+        <input type="tel" id="leadPhone" name="phone" placeholder="Phone" autocomplete="tel">
+
         <label for="company">Company name</label>
-        <input type="text" id="company" name="company" placeholder="Company name" required>
+        <input type="text" id="company" name="company" placeholder="Company name" autocomplete="organization" required>
 
         <label for="improve">What are you trying to improve?</label>
         <select id="improve" name="improve" required>
@@ -185,8 +194,13 @@
           <option value="other">Something else</option>
         </select>
 
+        <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="hidden" name="source" id="leadSource" value="assessment">
+        <input type="hidden" name="calc" id="leadCalc" value="">
+
         <button type="submit" class="btn btn-primary btn-full">Request my assessment</button>
-        <p class="form-note">A Cozaint specialist will respond to discuss your environment. No purchase commitment.</p>
+        <p class="form-note" id="formNote">A Cozaint specialist will respond to discuss your environment. No purchase commitment.</p>
+        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
       </form>
     </div>
   </section>

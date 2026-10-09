@@ -912,3 +912,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .pt-become { padding: 64px 0; }
 .pt-fit { background: var(--forest); color: #fff; padding: 64px 0; }
 .pt-fit h2 { color: #fff; margin: 8px 0 0; }
+
+/* Lead form */
+.assessment-form .opt { font-weight: 500; opacity: .7; }
+.assessment-form .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.form-status { margin: 12px 0 0; font-weight: 600; }
+.form-status.ok { color: #1c8a5c; }
+.form-status.err { color: #b3402d; }
+.form-status a { text-decoration: underline; }
