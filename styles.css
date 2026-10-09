@@ -889,3 +889,26 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .dl-group { padding-top: 8px; padding-bottom: 8px; }
 .dl-title { color: #fff; font-size: 26px; margin: 28px 0 14px; }
 .dl-title span { font-family: var(--font-body); font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--mint); margin-left: 10px; }
+
+/* Technology Partners page */
+.pt-section { padding: 56px 0 24px; }
+.pt-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+.pt-chip { border: 1px solid rgba(15,46,36,.25); background: transparent; color: var(--ink); border-radius: 999px; padding: 10px 20px; font: 700 15px var(--font-body); cursor: pointer; }
+.pt-chip.on { background: var(--forest); border-color: var(--forest); color: #fff; }
+.pt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
+.pt-tile { background: #fff; border: 1px solid rgba(15,46,36,.12); border-radius: 14px; padding: 26px; box-shadow: 0 10px 30px rgba(15,46,36,.06); transition: transform .2s, box-shadow .2s; }
+.pt-tile:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(15,46,36,.14); }
+.pt-logobox { height: 90px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(15,46,36,.1); margin-bottom: 16px; }
+.pt-logo { max-height: 60px; max-width: 80%; object-fit: contain; }
+.pt-logo + .pt-name { display: none; }
+.pt-name { font-family: var(--font-display, 'Fraunces', serif); font-weight: 600; font-size: 26px; color: var(--forest); text-align: center; }
+.pt-role { font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #1c8a5c; margin: 0 0 8px; }
+.pt-text { margin: 0; color: #35453f; line-height: 1.55; }
+.pt-flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; margin-top: 28px; }
+.pt-step { border: 1px solid rgba(255,255,255,.18); border-radius: 14px; padding: 24px; }
+.pt-step b { display: inline-flex; width: 34px; height: 34px; border-radius: 50%; background: var(--mint); color: var(--forest-deep); align-items: center; justify-content: center; margin-bottom: 12px; }
+.pt-step h3 { margin: 0 0 8px; color: #fff; }
+.pt-step p { margin: 0; color: #cfe6dc; }
+.pt-become { padding: 64px 0; }
+.pt-fit { background: var(--forest); color: #fff; padding: 64px 0; }
+.pt-fit h2 { color: #fff; margin: 8px 0 0; }
