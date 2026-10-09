@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOBBY-W Wall-Mounted Security Kiosk | Cozaint</title>
+<meta name="description" content="BOBBY-W is a wall-mounted security kiosk for buildings and campuses. It watches around the clock, helps visitors, and brings in a live agent when needed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header" id="top">
+ <div class="header-inner">
+    <a href="index.html" class="logo"><img src="assets/cozaint-logo-green.png" alt="Cozaint" style="height: 40px;"></a>
+    <nav class="main-nav" id="mainNav">
+      <a href="https://cozaint.com/about">About</a>
+      <div class="nav-dropdown" style="position:relative; display:inline-block;">
+        <a href="#">Product Suite ▾</a>
+        <div class="nav-dropdown-menu" style="display:none; position:absolute; top:100%; left:0; background:#fff; border:1px solid rgba(0,0,0,0.1); border-radius:6px; box-shadow:0 8px 24px rgba(0,0,0,0.12); min-width:160px; z-index:10; padding:8px 0;">
+          <a href="marcia.html" style="display:block; padding:8px 16px; white-space:nowrap;">MARCIA</a>
+          <a href="alice1.html" style="display:block; padding:8px 16px; white-space:nowrap;">ALICE1</a>
+          <a href="askalice.html" style="display:block; padding:8px 16px; white-space:nowrap;">askALICE</a>
+          <a href="bobbytower.html" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY Tower</a>
+          <a href="bobbyw.html" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY-W</a>
+          <a href="https://cozaint.com/bobbym" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY-M</a>
+        </div>
+      </div>
+      <a href="downloads.html">Downloads</a>
+      <a href="faq.html?product=bobby">FAQs</a>
+      <a href="https://cozaint.com/podcasts">Podcasts</a>
+      <a href="partners.html">Partners</a>
+      <a href="https://cozaint.com/contact">Contact</a>
+      <a href="https://cozaint.com/contact" class="nav-cta">Schedule a Meeting</a>
+    </nav>
+    <a href="https://cozaint.com/contact" class="btn btn-primary btn-small">Schedule a Meeting</a>
+    <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-inner" style="grid-template-columns: minmax(0,1fr) minmax(0,1fr);">
+      <div class="hero-copy">
+        <p class="eyebrow">BOBBY™-W</p>
+        <h1>On the Wall.<br>On the Watch.<br>Always On.</h1>
+        <p class="hero-sub">A wall-mounted security kiosk that watches your building or campus around the clock, helps visitors find their way, and brings in a live agent the moment someone needs a person.</p>
+        <div class="hero-actions">
+          <a href="#where" class="btn btn-link">Where Would You Put One? →</a>
+          <a href="https://cozaint.com/contact" class="btn btn-primary">Talk to Us About BOBBY-W</a>
+        </div>
+      </div>
+      <div class="hero-media-group">
+        <div class="hero-logo-badge bobby-badge">
+          <div class="bobby-logo-wrap"><img src="assets/bobby-logo.png" alt="BOBBY"><span class="bobby-lid" aria-hidden="true"><i></i></span></div>
+        </div>
+        <div class="bw-hero-unit">
+          <img src="assets/bobby-w-kiosk.svg" alt="BOBBY-W wall-mounted security kiosk with touchscreen and camera">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PICK YOUR PLACE (interactive) -->
+  <section class="bt-where" id="where">
+    <div class="section-inner">
+      <p class="eyebrow centered" style="color:var(--mint);">Pick your place</p>
+      <h2 class="centered">One kiosk. Built around your building.</h2>
+      <p class="lead">Tap where you'd put one. The touchscreen and the feature list change to fit.</p>
+      <div class="bt-chips" id="btChips" role="tablist" aria-label="Choose an environment"></div>
+      <div class="bt-stage">
+        <div class="bt-tower" aria-hidden="false">
+          <div class="bt-screen" id="btScreen">
+            <div class="bt-status"><span><i></i> Active</span><span>Login</span></div>
+            <div class="bt-title" id="btTitle"></div>
+            <div class="bt-sub" id="btSub"></div>
+            <div class="bt-tiles" id="btTiles"></div>
+          </div>
+          <div class="bt-label">BOBBY-W</div>
+        </div>
+        <div class="bt-detail">
+          <h3 id="btHead"></h3>
+          <p id="btLine"></p>
+          <ul class="bt-feats" id="btFeats"></ul>
+          <p class="bt-note"><span class="bt-tag">Optional add-on</span> marks capabilities that can be added to a kiosk. Ask us what fits your site.</p>
+          <a class="btn btn-primary" id="btAsk" href="https://cozaint.com/contact">Tell us about your site</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALWAYS WATCHING, ALWAYS ANSWERED -->
+  <section class="continuity">
+    <div class="section-inner">
+      <p class="eyebrow centered">Always watching. Always answered.</p>
+      <h2 class="centered">The kiosk sees it. A person responds.</h2>
+      <p class="lead bt-lead-dark">With optional live remote monitoring, a person at Cozaint can watch the kiosk and talk with visitors. Choose what happens:</p>
+      <div class="bt-scen-tabs" id="btScenTabs" role="tablist"></div>
+      <ol class="bt-steps" id="btSteps"></ol>
+    </div>
+  </section>
+
+  <!-- WHAT'S INSIDE -->
+  <section class="features bt-inside">
+    <div class="section-inner bt-inside-grid">
+      <div class="bt-inside-photo bw-render">
+        <img src="assets/bobby-w-kiosk.svg" alt="BOBBY-W wall-mounted security kiosk">
+        <p>BOBBY-W wall-mounted kiosk</p>
+      </div>
+      <div>
+        <p class="eyebrow">What it does</p>
+        <h2>Everything on the wall.</h2>
+        <div class="bt-spec-grid">
+          <div class="bt-spec"><b>Wall</b><span>mounted kiosk, built to watch its surroundings continuously</span></div>
+          <div class="bt-spec"><b>Touch</b><span>screen with Access, Agent, Events, Info and Panic</span></div>
+          <div class="bt-spec"><b>Live</b><span>agent chat when someone needs a person, with optional 24/7 remote monitoring</span></div>
+          <div class="bt-spec"><b>Mesh</b><span>wireless hotspot, and a mesh network between multiple BOBBY units</span></div>
+          <div class="bt-spec"><b>Power</b><span>is all a self-contained unit needs, with cellular service if the site has no network</span></div>
+          <div class="bt-spec"><b>24x7</b><span>technical support from the Cozaint Surveillance Platform team</span></div>
+        </div>
+        <ul class="check-list">
+          <li>Turnkey: power it up, connect it to the network, and it starts watching</li>
+          <li>All alerts, notifications and responses are recorded, with monthly reports for analysis</li>
+          <li>Real-time event information for on-premise security staff</li>
+          <li>Services available: site surveys, installation and setup, maintenance, application support, hardware support and a guaranteed warranty</li>
+        </ul>
+        <p class="bt-fine">Full details are in the datasheet below.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF + CTA -->
+  <section class="ask-proof">
+    <div class="section-inner">
+      <p class="eyebrow centered">Better together</p>
+      <h2 class="centered">Blanket your whole campus.</h2>
+      <div class="bw-family">
+        <div class="bw-card">
+          <h3>BOBBY-W <span>on the wall</span></h3>
+          <p>Inside and at the entrances, where visitors need help, access is controlled and a camera should be watching.</p>
+        </div>
+        <div class="bw-card">
+          <h3>BOBBY Tower <span>on the grounds</span></h3>
+          <p>Out in the lots and walkways, a freestanding tower with four cameras, a siren and a live agent a tap away.</p>
+          <p><a class="btn btn-link" href="bobbytower.html" style="color:var(--ink); border-color:var(--ink);">See BOBBY Tower &rarr;</a></p>
+        </div>
+      </div>
+      <div class="ask-cta-inline">
+        <h2>Where would you put one?</h2>
+        <p>Dispatch several BOBBY kiosks and towers around your building or campus, and put more eyes and ears where you need them. Tell us about your site.</p>
+        <div class="hero-actions">
+          <a href="https://cozaint.com/contact" class="btn btn-primary">Talk to Us About BOBBY-W</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOBBY RESOURCES -->
+  <section class="resources" id="bobby-resources">
+    <div class="section-inner">
+      <div class="resource-list">
+        <a class="resource-row" href="assets/bobby-w-datasheet.pdf" target="_blank">
+          <span>BOBBY-W Datasheet</span>
+          <span class="resource-tag">PDF ↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- CONTACT / FOOTER -->
+<footer class="site-footer">
+  <div class="section-inner footer-next">
+    <p class="eyebrow eyebrow-light">Where do we go next?</p>
+    <div class="next-steps-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:24px; margin-top: 24px;">
+      <a href="https://cozaint.com/contact" class="next-step-card" style="display:block; padding:24px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; text-decoration:none; color:inherit;">
+        <h3 class="on-dark">Talk to us about BOBBY-W</h3>
+        <p>Tell us where you would put one and what you want to watch over.</p>
+      </a>
+      <a href="bobbytower.html" class="next-step-card" style="display:block; padding:24px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; text-decoration:none; color:inherit;">
+        <h3 class="on-dark">See BOBBY Tower</h3>
+        <p>The freestanding tower, in use at the Pascua Yaqui Police Department.</p>
+      </a>
+      <a href="askalice.html" class="next-step-card" style="display:block; padding:24px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; text-decoration:none; color:inherit;">
+        <h3 class="on-dark">See askALICE</h3>
+        <p>Keep the video your cameras record for months or years, at a fraction of the cost.</p>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-bottom section-inner">
+    <a href="#top" class="logo logo-footer"><img src="assets/cozaint-logo-white.png" alt="Cozaint" style="height: 28px;"></a>
+    <div class="footer-cols">
+      <div>
+        <h4>Company</h4>
+        <div>
+          <a href="https://cozaint.com/about">About Cozaint</a>
+          <a href="partners.html#become">Become a Partner</a>
+          <a href="testimonials.html">Testimonials</a>
+          <a href="faq.html">FAQs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="nav.js"></script>
+<script>
+(function(){
+  var ADD = ' ';
+  var ENV = [
+    {k:'campus', n:'Corporate campuses', sub:'Welcome', tiles:['Directions','Events','Agent','Access'],
+     line:'Put more eyes and ears around the buildings and walkways of a campus, and give visitors a place to ask.',
+     f:['Wall-mounted touchscreen with directions and event information','Chat with a live agent when someone needs help','Panic button always on screen','Alerts, notifications and responses recorded, with monthly reports',['Facial recognition or smartphone access control'],['Door and window sensors and wireless IoT sensors'],['24/7 live remote monitoring']]},
+    {k:'hospital', n:'Hospitals', sub:'How can we help?', tiles:['Directions','Events','Agent','Access'],
+     line:'Help for visitors at the entrances, and watchfulness in the corridors and restricted areas.',
+     f:['Directions and local information on the touchscreen','Chat with a live agent','Panic button always on screen','Real-time event information for on-site security staff',['Smoke, CO2 and water detection sensors'],['Facial recognition or smartphone access to restricted rooms'],['24/7 live remote monitoring']]},
+    {k:'parking', n:'Parking lots', sub:'Lot assistance', tiles:['Directions','Events','Agent','Help'],
+     line:'Augment your security team in large open spaces with a camera and a way to call for help.',
+     f:['Video surveillance of the surrounding area','Chat with a live agent','Panic button always on screen','Real-time event information for on-site security staff',['Video analytics, such as people counting'],['24/7 live remote monitoring']]},
+    {k:'entrance', n:'Building entrances', sub:'Check in', tiles:['Access','Agent','Events','Info'],
+     line:'A friendly front desk that never leaves, controlling who comes in and recording who does.',
+     f:['Touchscreen with Access, Agent, Events and Info','Chat with a live agent','Panic button always on screen','All alerts and responses recorded',['Facial recognition or smartphone access control'],['Door and window sensors'],['24/7 live remote monitoring']]},
+    {k:'rooms', n:'Restricted rooms', sub:'Authorized access', tiles:['Access','Agent','Info','Help'],
+     line:'Control who gets into the rooms that matter, and keep a record of every attempt.',
+     f:['Wall-mounted camera and touchscreen at the door','Chat with a live agent','All alerts, notifications and responses recorded, with monthly reports',['Facial recognition or smartphone access control'],['Glass break and door or window sensors'],['24/7 live remote monitoring']]},
+    {k:'occupancy', n:'Occupancy and lobbies', sub:'Welcome', tiles:['Directions','Events','Agent','Info'],
+     line:'Know what is going on in the lobby, and help visitors without posting someone there.',
+     f:['Directions and local event information','Chat with a live agent','Panic button always on screen','Wireless connectivity and a local hotspot',['People counting for occupancy management'],['24/7 live remote monitoring']]}
+  ];
+  var chips=document.getElementById('btChips');
+  ENV.forEach(function(e,i){
+    var b=document.createElement('button'); b.type='button'; b.className='bt-chip'; b.textContent=e.n; b.setAttribute('role','tab'); b.dataset.i=i;
+    b.addEventListener('click',function(){ show(i,true); }); chips.appendChild(b);
+  });
+  function show(i,user){
+    var e=ENV[i];
+    [].forEach.call(chips.children,function(c,j){ c.classList.toggle('on',j===i); c.setAttribute('aria-selected',j===i); });
+    document.getElementById('btTitle').textContent=e.n;
+    document.getElementById('btSub').textContent=e.sub;
+    var t=document.getElementById('btTiles'); t.innerHTML='';
+    e.tiles.forEach(function(x,k){ var d=document.createElement('div'); d.className='bt-tile t'+k; d.textContent=x; t.appendChild(d); });
+    var p=document.createElement('div'); p.className='bt-tile panic'; p.textContent='Panic'; t.appendChild(p);
+    document.getElementById('btHead').textContent='BOBBY at '+(e.n.charAt(0).toLowerCase()+e.n.slice(1));
+    document.getElementById('btLine').textContent=e.line;
+    var ul=document.getElementById('btFeats'); ul.innerHTML='';
+    e.f.forEach(function(f){
+      var li=document.createElement('li'); var txt=Array.isArray(f)?f[0]:f; li.appendChild(document.createTextNode(txt));
+      if(Array.isArray(f)){ var s=document.createElement('span'); s.className='bt-tag'; s.textContent='Optional add-on'; li.appendChild(s); }
+      ul.appendChild(li);
+    });
+        var st=document.querySelector('.bt-stage'); st.classList.remove('flash'); void st.offsetWidth; st.classList.add('flash');
+  }
+  show(0,false);
+
+  var SC=[
+    {n:'Someone presses Panic', s:[['Visitor presses Panic','The red button on the touchscreen is always on screen.'],['An alert goes out','The kiosk signals the alert, and the event is recorded.'],['A person responds','With optional live monitoring, a Cozaint agent sees it and can talk with the visitor through the kiosk.'],['Staff are informed','On-premise security staff get real-time event information to coordinate their response.']]},
+    {n:'A door or window opens', s:[['Sensor trips','Optional door and window sensors report access where there should be none.'],['Alert to the agent','The event reaches a live agent, along with what the kiosk sees.'],['Staff are informed','Real-time event information goes to on-premise security staff.'],['Recorded for review','Alerts, notifications and responses are recorded, and monthly reports support your analysis.']]},
+    {n:'Smoke, CO2 or water', s:[['Sensors detect it','Optional wireless sensors watch for smoke, CO2 and water, and for abnormal conditions.'],['Alert to the agent','The alert is raised immediately, so trouble is not discovered hours later.'],['Staff are informed','Your team gets real-time event information to respond.'],['Recorded for review','Every alert and response is logged.']]},
+    {n:'A visitor needs help', s:[['Visitor walks up','The touchscreen offers directions and local event information.'],['Needs a person','One tap starts a chat with a live agent.'],['Talk it through','The visitor gets the answer or the help they need.'],['Problem solved','Directions, a message passed on, or help sent. No one had to be posted there.']]}
+  ];
+  var tabs=document.getElementById('btScenTabs'), steps=document.getElementById('btSteps');
+  SC.forEach(function(c,i){
+    var b=document.createElement('button'); b.type='button'; b.className='bt-chip light'; b.textContent=c.n; b.setAttribute('role','tab');
+    b.addEventListener('click',function(){ scen(i); }); tabs.appendChild(b);
+  });
+  function scen(i){
+    [].forEach.call(tabs.children,function(c,j){ c.classList.toggle('on',j===i); c.setAttribute('aria-selected',j===i); });
+    steps.innerHTML=''; SC[i].s.forEach(function(x,k){
+      var li=document.createElement('li'); li.style.animationDelay=(k*120)+'ms';
+      li.innerHTML='<span class="bt-num">'+(k+1)+'</span><h4></h4><p></p>'; li.querySelector('h4').textContent=x[0]; li.querySelector('p').textContent=x[1]; steps.appendChild(li);
+    });
+  }
+  scen(0);
+})();
+</script>
+</body>
+</html>

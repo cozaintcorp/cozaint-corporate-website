@@ -920,3 +920,15 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .form-status.ok { color: #1c8a5c; }
 .form-status.err { color: #b3402d; }
 .form-status a { text-decoration: underline; }
+
+/* BOBBY-W page */
+.bw-hero-unit { background: radial-gradient(ellipse at 50% 30%, #1d4a3a 0%, #0f2e24 60%, #0a2019 100%); border-radius: 20px; padding: 28px; display: flex; justify-content: center; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 30px 70px rgba(0,0,0,.45); }
+.bw-hero-unit img { width: min(260px, 62%); height: auto; display: block; filter: drop-shadow(0 20px 30px rgba(0,0,0,.5)); }
+.bt-inside-photo.bw-render { background: radial-gradient(ellipse at 50% 30%, #1d4a3a 0%, #0f2e24 70%); border-radius: 18px; padding: 28px; text-align: center; }
+.bt-inside-photo.bw-render img { width: min(320px, 80%); height: auto; }
+.bt-inside-photo.bw-render p { color: #cfe6dc; }
+.bw-family { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; margin: 28px 0 40px; }
+.bw-card { background: #fff; border: 1px solid rgba(15,46,36,.12); border-radius: 14px; padding: 26px; box-shadow: 0 10px 30px rgba(15,46,36,.06); }
+.bw-card h3 { margin: 0 0 8px; }
+.bw-card h3 span { font: 700 13px var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: #1c8a5c; margin-left: 8px; }
+.bw-card p { margin: 0 0 10px; color: #35453f; line-height: 1.55; }

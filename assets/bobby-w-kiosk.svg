@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 640" role="img" aria-label="BOBBY-W wall-mounted security kiosk">
+  <defs>
+    <linearGradient id="shell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbfbfa"/><stop offset="1" stop-color="#d9dedb"/></linearGradient>
+    <linearGradient id="scr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16278f"/><stop offset=".6" stop-color="#2a1f9c"/><stop offset="1" stop-color="#5b1f93"/></linearGradient>
+    <filter id="glow" x="-200%" y="-20%" width="500%" height="140%"><feGaussianBlur stdDeviation="3.5"/></filter>
+  </defs>
+  <path d="M46 14 H354 Q384 14 384 46 L392 600 Q392 626 364 626 H36 Q8 626 8 600 L16 46 Q16 14 46 14 Z" fill="url(#shell)" stroke="#aeb6b2" stroke-width="2"/>
+  <path d="M52 30 H348 Q370 30 372 52 L378 590 Q378 610 358 610 H42 Q22 610 22 590 L28 52 Q30 30 52 30 Z" fill="none" stroke="#ffffff" stroke-width="2" opacity=".7"/>
+  <!-- LED strips -->
+  <g>
+    <rect x="48" y="140" width="9" height="330" rx="4" fill="#7e9bff" filter="url(#glow)"><animate attributeName="opacity" values=".55;1;.55" dur="2.4s" repeatCount="indefinite"/></rect>
+    <rect x="48" y="140" width="9" height="330" rx="4" fill="#bcd0ff"/>
+    <rect x="343" y="140" width="9" height="330" rx="4" fill="#7e9bff" filter="url(#glow)"><animate attributeName="opacity" values=".55;1;.55" dur="2.4s" repeatCount="indefinite"/></rect>
+    <rect x="343" y="140" width="9" height="330" rx="4" fill="#bcd0ff"/>
+  </g>
+  <!-- camera and microphones -->
+  <circle cx="200" cy="64" r="15" fill="#10131c" stroke="#8d9692" stroke-width="3"/><circle cx="200" cy="64" r="6" fill="#2a3f7a"/><circle cx="197" cy="61" r="2" fill="#9fb8ff"/>
+  <circle cx="104" cy="70" r="9" fill="#1a1d26"/><circle cx="296" cy="70" r="9" fill="#1a1d26"/>
+  <!-- screen -->
+  <rect x="82" y="104" width="236" height="410" rx="14" fill="#0b0e1c"/>
+  <rect x="90" y="112" width="220" height="394" rx="8" fill="url(#scr)"/>
+  <circle cx="106" cy="128" r="5" fill="#35e07a"/><text x="116" y="132" font-family="Manrope,Arial,sans-serif" font-size="11" font-weight="700" fill="#35e07a">Active</text>
+  <text x="200" y="262" text-anchor="middle" font-family="Georgia,serif" font-size="26" fill="#fff">Welcome</text>
+  <text x="200" y="286" text-anchor="middle" font-family="Manrope,Arial,sans-serif" font-size="11" font-weight="800" letter-spacing="2" fill="#7fe7b5">HOW CAN WE HELP?</text>
+  <!-- button bar -->
+  <g font-family="Manrope,Arial,sans-serif" font-size="9.5" fill="#fff" text-anchor="middle">
+    <rect x="90" y="428" width="176" height="78" fill="#2f6bf0"/>
+    <rect x="266" y="428" width="44" height="78" fill="#e0564f"/>
+    <g stroke="#ffffff" stroke-opacity=".35"><line x1="134" y1="428" x2="134" y2="506"/><line x1="178" y1="428" x2="178" y2="506"/><line x1="222" y1="428" x2="222" y2="506"/></g>
+    <text x="112" y="490">Access</text><text x="156" y="490">Agent</text><text x="200" y="490">Events</text><text x="244" y="490">Info</text><text x="288" y="490">Panic</text>
+    <circle cx="112" cy="452" r="9" fill="none" stroke="#fff" stroke-width="2"/><rect x="118" y="450" width="12" height="3" fill="#fff"/>
+    <circle cx="156" cy="448" r="8" fill="none" stroke="#fff" stroke-width="2"/><path d="M146 466 q10 -10 20 0" fill="none" stroke="#fff" stroke-width="2"/>
+    <rect x="190" y="441" width="20" height="18" rx="2" fill="none" stroke="#fff" stroke-width="2"/><line x1="190" y1="447" x2="210" y2="447" stroke="#fff" stroke-width="2"/>
+    <text x="244" y="460" font-size="20" font-weight="800" font-family="Georgia,serif">i</text>
+    <path d="M288 441 l10 18 h-20 z" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/>
+  </g>
+  <!-- reader -->
+  <rect x="146" y="540" width="108" height="40" rx="8" fill="#e9ece9" stroke="#b9c0bc" stroke-width="2"/>
+</svg>
