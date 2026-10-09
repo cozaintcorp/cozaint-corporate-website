@@ -23,7 +23,7 @@
           <a href="marcia.html" style="display:block; padding:8px 16px; white-space:nowrap;">MARCIA</a>
           <a href="alice1.html" style="display:block; padding:8px 16px; white-space:nowrap;">ALICE1</a>
           <a href="askalice.html" style="display:block; padding:8px 16px; white-space:nowrap;">askALICE</a>
-          <a href="https://cozaint.com/bobbytower" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY Tower</a>
+          <a href="bobbytower.html" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY Tower</a>
           <a href="https://cozaint.com/bobbyw" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY-W</a>
           <a href="https://cozaint.com/bobbym" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY-M</a>
         </div>
@@ -241,7 +241,7 @@
   var key = (new URLSearchParams(location.search).get('product') || '').toLowerCase();
   var p = P[key];
   if (!p) return;
-  document.title = 'Request ' + (key === 'marcia' ? 'a ' : 'an ') + p.name.replace('™','') + ' Assessment | Cozaint';
+  document.title = 'Request ' + ((key === 'marcia' || key === 'bobby') ? 'a ' : 'an ') + p.name.replace('™','') + ' Assessment | Cozaint';
   var set = function (id, t) { var e = document.getElementById(id); if (e) e.textContent = t; };
   set('assessEyebrow', p.eyebrow); set('assessTitle', p.title); set('assessSub', p.sub);
 })();

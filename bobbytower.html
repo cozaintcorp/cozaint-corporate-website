@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOBBY™ Tower | Cozaint</title>
+<meta name="description" content="BOBBY Tower is a self-sufficient smart security kiosk: 360-degree cameras, a touchscreen, two-way audio and live agent monitoring, on a monthly subscription.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header" id="top">
+ <div class="header-inner">
+    <a href="index.html" class="logo"><img src="assets/cozaint-logo-green.png" alt="Cozaint" style="height: 40px;"></a>
+    <nav class="main-nav" id="mainNav">
+      <a href="https://cozaint.com/about">About</a>
+      <div class="nav-dropdown" style="position:relative; display:inline-block;">
+        <a href="#">Product Suite ▾</a>
+        <div class="nav-dropdown-menu" style="display:none; position:absolute; top:100%; left:0; background:#fff; border:1px solid rgba(0,0,0,0.1); border-radius:6px; box-shadow:0 8px 24px rgba(0,0,0,0.12); min-width:160px; z-index:10; padding:8px 0;">
+          <a href="marcia.html" style="display:block; padding:8px 16px; white-space:nowrap;">MARCIA</a>
+          <a href="alice1.html" style="display:block; padding:8px 16px; white-space:nowrap;">ALICE1</a>
+          <a href="askalice.html" style="display:block; padding:8px 16px; white-space:nowrap;">askALICE</a>
+          <a href="bobbytower.html" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY Tower</a>
+          <a href="https://cozaint.com/bobbyw" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY-W</a>
+          <a href="https://cozaint.com/bobbym" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY-M</a>
+        </div>
+      </div>
+      <a href="https://cozaint.com/downloads">Downloads</a>
+      <a href="faq.html?product=bobby">FAQs</a>
+      <a href="https://cozaint.com/podcasts">Podcasts</a>
+      <a href="https://cozaint.com/partners">Partners</a>
+      <a href="https://cozaint.com/contact">Contact</a>
+      <a href="https://cozaint.com/contact" class="nav-cta">Schedule a Meeting</a>
+    </nav>
+    <a href="https://cozaint.com/contact" class="btn btn-primary btn-small">Schedule a Meeting</a>
+    <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-inner" style="grid-template-columns: minmax(0,1fr) minmax(0,1fr);">
+      <div class="hero-copy">
+        <p class="eyebrow">BOBBY™ Tower</p>
+        <h1>More Eyes.<br>More Ears.<br>Always On.</h1>
+        <p class="hero-sub">A self-sufficient security kiosk that watches your property around the clock, talks with visitors, and brings in a live agent the moment something looks wrong.</p>
+        <div class="hero-actions">
+          <a href="#where" class="btn btn-link">Where Would You Put One? →</a>
+          <a href="https://cozaint.com/contact" class="btn btn-primary">Talk to Us About BOBBY</a>
+        </div>
+      </div>
+      <div class="hero-media-group">
+        <div class="hero-logo-badge bobby-badge">
+          <img src="assets/bobby-logo.png" alt="BOBBY Tower">
+        </div>
+        <!-- FILM SPOT: replace the <img> below with a <video> using the same .ask-video wrapper when the BOBBY film is ready -->
+        <div class="ask-video bobby-film">
+          <img src="assets/bobby-hero.jpg" alt="BOBBY Tower installed at the Pascua Yaqui Police Department">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PICK YOUR PLACE (interactive) -->
+  <section class="bt-where" id="where">
+    <div class="section-inner">
+      <p class="eyebrow centered" style="color:var(--mint);">Pick your place</p>
+      <h2 class="centered">One tower. Built around your site.</h2>
+      <p class="lead">Tap where you'd put one. The touchscreen and the feature list change to fit.</p>
+      <div class="bt-chips" id="btChips" role="tablist" aria-label="Choose an environment"></div>
+      <div class="bt-stage">
+        <div class="bt-tower" aria-hidden="false">
+          <div class="bt-screen" id="btScreen">
+            <div class="bt-status"><span><i></i> Active</span><span>Login</span></div>
+            <div class="bt-title" id="btTitle"></div>
+            <div class="bt-sub" id="btSub"></div>
+            <div class="bt-tiles" id="btTiles"></div>
+          </div>
+          <div class="bt-label">BOBBY Tower</div>
+        </div>
+        <div class="bt-detail">
+          <h3 id="btHead"></h3>
+          <p id="btLine"></p>
+          <ul class="bt-feats" id="btFeats"></ul>
+          <p class="bt-note"><span class="bt-tag">Optional add-on</span> marks capabilities that can be added to a tower. They are not included in the base unit.</p>
+          <a class="btn btn-primary" id="btAsk" href="https://cozaint.com/contact">Tell us about your site</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALWAYS WATCHING, ALWAYS ANSWERED -->
+  <section class="continuity">
+    <div class="section-inner">
+      <p class="eyebrow centered">Always watching. Always answered.</p>
+      <h2 class="centered">The tower sees it. A person responds.</h2>
+      <p class="lead bt-lead-dark">Every subscription includes access to Cozaint's Agent Monitoring Platform, so a live agent can verify what the tower detects. Choose what happens:</p>
+      <div class="bt-scen-tabs" id="btScenTabs" role="tablist"></div>
+      <ol class="bt-steps" id="btSteps"></ol>
+    </div>
+  </section>
+
+  <!-- WHAT'S INSIDE -->
+  <section class="features bt-inside">
+    <div class="section-inner bt-inside-grid">
+      <div class="bt-inside-photo">
+        <img src="assets/bobby-tower.jpg" alt="BOBBY Tower, front view">
+        <p>Installed at the Pascua Yaqui Police Department</p>
+      </div>
+      <div>
+        <p class="eyebrow">What's inside</p>
+        <h2>Everything on board.</h2>
+        <div class="bt-spec-grid">
+          <div class="bt-spec"><b>4</b><span>1080p cameras for a 360° view, recording continuously</span></div>
+          <div class="bt-spec"><b>27″</b><span>touchscreen for visitors, messages and signage</span></div>
+          <div class="bt-spec"><b>2-way</b><span>audio between the visitor and a live agent</span></div>
+          <div class="bt-spec"><b>LED + siren</b><span>wraparound lights and siren for panic and warnings</span></div>
+          <div class="bt-spec"><b>IoT</b><span>sensors for smoke, motion and door or window access</span></div>
+          <div class="bt-spec"><b>2 years</b><span>warranty, with a limited-maintenance design</span></div>
+        </div>
+        <ul class="check-list">
+          <li>Connects by WiFi, wired Ethernet (CAT6e) or cellular</li>
+          <li>Standard 110VAC power. About 6½ feet tall, 286 lb, on a ground plate that anchors to the site</li>
+          <li>Power supply is UL 62368-1 listed and rated for -30° to +70°C</li>
+          <li>Install is a ground plate, three tower sections, power and network. Then power up</li>
+        </ul>
+        <p class="bt-fine">Telescoping camera pole optional. Full dimensions and install steps are in the spec sheet below.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF + CTA -->
+  <section class="ask-proof">
+    <div class="section-inner">
+      <p class="eyebrow centered">Where it matters</p>
+      <h2 class="centered">A safe zone the community can walk up to.</h2>
+      <div class="bt-proof">
+        <div class="bt-proof-photo"><img src="assets/bobby-safe-zone.jpg" alt="BOBBY Tower safe zone at the Pascua Yaqui Police Department"></div>
+        <div class="bt-proof-copy">
+          <h3>Pascua Yaqui Police Department</h3>
+          <p>The tower marks a safe zone: an information button, an emergency button, and around-the-clock audio and video monitoring by the department. People can meet there with confidence, and reach an officer fast.</p>
+          <figure class="ask-proof-quote">
+            <blockquote><p>&ldquo;With certain transactions occurring between complete strangers &mdash;such as online sales&mdash; sometimes our community may wish to meet at a more secure location where video surveillance and the ability to reach one of our officers in an emergency is all in one safe zone.&rdquo;</p></blockquote>
+            <figcaption><strong>LT. Elizabeth Esparza</strong>Pascua Yaqui Police Department</figcaption>
+          </figure>
+          <p style="margin-top:22px;"><a class="btn btn-link" href="testimonials.html?product=bobby" style="color:var(--ink); border-color:var(--ink);">Read more customer testimonials &rarr;</a></p>
+        </div>
+      </div>
+      <div class="ask-cta-inline">
+        <h2>Where would you put one?</h2>
+        <p>Tell us about your site and what you want to watch over. BOBBY Tower is a monthly subscription, and leasing is available.</p>
+        <div class="hero-actions">
+          <a href="https://cozaint.com/contact" class="btn btn-primary">Talk to Us About BOBBY</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOBBY RESOURCES -->
+  <section class="resources" id="bobby-resources">
+    <div class="section-inner">
+      <div class="resource-list">
+        <a class="resource-row" href="assets/bobby-tower-datasheet.pdf" target="_blank">
+          <span>BOBBY Tower Datasheet</span>
+          <span class="resource-tag">PDF ↗</span>
+        </a>
+        <a class="resource-row" href="assets/bobby-tower-spec-sheet.pdf" target="_blank">
+          <span>BOBBY Tower Specifications and Install Guide</span>
+          <span class="resource-tag">PDF ↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- CONTACT / FOOTER -->
+<footer class="site-footer">
+  <div class="section-inner footer-next">
+    <p class="eyebrow eyebrow-light">Where do we go next?</p>
+    <div class="next-steps-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:24px; margin-top: 24px;">
+      <a href="https://cozaint.com/contact" class="next-step-card" style="display:block; padding:24px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; text-decoration:none; color:inherit;">
+        <h3 class="on-dark">Talk to us about BOBBY</h3>
+        <p>Tell us where you would put a tower and what you want to watch over.</p>
+      </a>
+      <a href="testimonials.html?product=bobby" class="next-step-card" style="display:block; padding:24px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; text-decoration:none; color:inherit;">
+        <h3 class="on-dark">Hear from a customer</h3>
+        <p>How the Pascua Yaqui Police Department uses BOBBY Tower.</p>
+      </a>
+      <a href="askalice.html" class="next-step-card" style="display:block; padding:24px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; text-decoration:none; color:inherit;">
+        <h3 class="on-dark">See askALICE</h3>
+        <p>Keep the video your cameras record for months or years, at a fraction of the cost.</p>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-bottom section-inner">
+    <a href="#top" class="logo logo-footer"><img src="assets/cozaint-logo-white.png" alt="Cozaint" style="height: 28px;"></a>
+    <div class="footer-cols">
+      <div>
+        <h4>Company</h4>
+        <div>
+          <a href="https://cozaint.com/about">About Cozaint</a>
+          <a href="https://cozaint.com/partners">Become a Partner</a>
+          <a href="testimonials.html">Testimonials</a>
+          <a href="faq.html">FAQs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="nav.js"></script>
+<script>
+(function(){
+  var ADD = ' ';
+  var ENV = [
+    {k:'mall', n:'Shopping malls', sub:'Welcome', tiles:['Directory','Events','Lost & Found','Tenant check-in'],
+     line:'A friendly, visible presence for shoppers and a calm line to your security team.',
+     f:['360° surveillance with recorded video','Panic pole: the LED light show that draws attention fast','After-hours surveillance and recording','Emergency and visitor messages on the screen','Lost and found announcements','Touchscreen for advertising, a cost-neutral opportunity','Curbside check-in for tenants',['Facial recognition for known shoplifters',1]]},
+    {k:'hospital', n:'Hospitals', sub:'How can we help?', tiles:['Directory','Departments','Patient info','Appointments'],
+     line:'Wayfinding, check-in and a watchful eye at the entrances people use most.',
+     f:['360° surveillance with recorded video','Panic pole LED light show','27″ interactive touchscreen','Emergency communications and visitor messages','Patient information','Concierge: order food, flowers or gifts for delivery to a patient room','Curbside check-in for appointments','Directory map and department list']},
+    {k:'campus', n:'Universities', sub:'Campus info', tiles:['Directory','Departments','Events','Appointments'],
+     line:'Coverage for the paths, lots and lawns where a campus has no walls.',
+     f:['360° surveillance with recorded video','Panic pole LED light show','After-hours surveillance and recording','Emergency communications and 2-way communication','Appointment notices','Directory map, department info and events','Digital signage','Curbside check-in for appointments']},
+    {k:'k12', n:'K-12 schools', sub:'School info', tiles:['School map','Events','Muster point','Appointments'],
+     line:'Visitor guidance, a muster point and a fast way to reach help.',
+     f:['360° surveillance with recorded video','Panic pole LED light show','After-hours surveillance and recording','Emergency communications','School map, events info and muster point','Appointment notices','Curbside check-in for appointments',['Secure access control by facial recognition or smartphone ID',1]]},
+    {k:'gov', n:'Government buildings', sub:'Visitor services', tiles:['Directory','Departments','Appointments','Check-in'],
+     line:'Guide visitors, record the approaches, and keep a person one tap away.',
+     f:['360° surveillance with recorded video','Panic pole LED light show','After-hours surveillance and recording','Emergency communications and visitor messages','Appointment notices and curbside check-in','Directory map, department list and digital signage',['Facial recognition for a most-wanted list',1],['Secure access control by facial recognition or smartphone ID',1]]},
+    {k:'park', n:'Theme parks', sub:'Welcome to the park', tiles:['Park map','Events','Messages','Help'],
+     line:'More eyes in a crowd, and a way for guests to ask for help right where they are.',
+     f:['360° surveillance with recorded video','Panic pole LED light show','After-hours surveillance and recording','2-way emergency communications and visitor messages','27″ interactive touchscreen with park map and events info','Video verification of alerts',['Gunshot and scream detection (audio analytics)',1]]},
+    {k:'convention', n:'Convention centers', sub:'Event guide', tiles:['Directory map','Events','Concierge','Signage'],
+     line:'Wayfinding and concierge for attendees, and watchfulness around the loading docks.',
+     f:['360° surveillance with recorded video','Panic pole LED light show','After-hours surveillance and recording','Emergency communications and visitor messages','Concierge service with 2-way communication','Directory map, department list, events info and digital signage','Curbside check-in for appointments',['License plate reading for delivery vehicles',1],['Secure access control by facial recognition or smartphone ID',1]]},
+    {k:'sports', n:'Sports venues', sub:'Game day', tiles:['Directory','Departments','Events','Signage'],
+     line:'Watch the lots and gates, and guide fans without adding staff.',
+     f:['360° surveillance with recorded video','Panic pole LED light show','After-hours surveillance and recording','Emergency communications and visitor messages','Concierge service with 2-way communication','Directory map, department list, events info and digital signage',['License plate reading for delivery vehicles',1]]},
+    {k:'hoa', n:'HOAs and condos', sub:'Resident services', tiles:['Building map','Events','Call resident','Messages'],
+     line:'A front door that visitors can use, and residents can answer from their own unit.',
+     f:['27″ interactive touchscreen','24-hour video surveillance and recording','360° surveillance','Panic pole LED light show','Emergency communications and visitor messaging','Building map and events info','2-way communication to residents’ units',['Secure access control by facial recognition or smartphone ID',1],['License plate reading for delivery vehicles',1]]},
+    {k:'construction', n:'Construction sites', sub:'Site monitoring', tiles:['Site info','Deliveries','Talk to agent','Help'],
+     line:'A tower that stands guard after the crew goes home, with nothing to wire into a building.',
+     f:['360° surveillance with recorded video','24-hour surveillance and recording','Motion detection sensors','27″ interactive touchscreen','2-way communication and emergency communication','Environmental monitoring through the IoT sensors',['License plate reading for delivery vehicles',1]]},
+    {k:'logistics', n:'Shipping and logistics', sub:'Driver check-in', tiles:['Check-in','Bay assignment','Directory','Talk to agent'],
+     line:'Drivers check in and get a bay at the tower. An extended-height unit works from the cab.',
+     f:['Driver check-in and bay assignment','Extended-height unit for in-cab driver access','360° surveillance with recorded video','After-hours surveillance and recording','27″ interactive touchscreen, department list and directory map',['License plate reading for delivery vehicles',1]]},
+    {k:'events', n:'Pop-up events', sub:'Event guide', tiles:['Event map','Events','Messages','Help'],
+     line:'Temporary events can have temporary eyes and ears.',
+     f:['27″ interactive touchscreen with event map and info','360° surveillance with recorded video','Panic pole LED light show','24-hour surveillance and recording','2-way emergency communications and visitor messaging',['License plate reading for delivery vehicles',1]]}
+  ];
+  var chips=document.getElementById('btChips');
+  ENV.forEach(function(e,i){
+    var b=document.createElement('button'); b.type='button'; b.className='bt-chip'; b.textContent=e.n; b.setAttribute('role','tab'); b.dataset.i=i;
+    b.addEventListener('click',function(){ show(i,true); }); chips.appendChild(b);
+  });
+  function show(i,user){
+    var e=ENV[i];
+    [].forEach.call(chips.children,function(c,j){ c.classList.toggle('on',j===i); c.setAttribute('aria-selected',j===i); });
+    document.getElementById('btTitle').textContent=e.n;
+    document.getElementById('btSub').textContent=e.sub;
+    var t=document.getElementById('btTiles'); t.innerHTML='';
+    e.tiles.forEach(function(x,k){ var d=document.createElement('div'); d.className='bt-tile t'+k; d.textContent=x; t.appendChild(d); });
+    var p=document.createElement('div'); p.className='bt-tile panic'; p.textContent='Panic'; t.appendChild(p);
+    document.getElementById('btHead').textContent='BOBBY at '+(e.n.charAt(0).toLowerCase()+e.n.slice(1));
+    document.getElementById('btLine').textContent=e.line;
+    var ul=document.getElementById('btFeats'); ul.innerHTML='';
+    e.f.forEach(function(f){
+      var li=document.createElement('li'); var txt=Array.isArray(f)?f[0]:f; li.appendChild(document.createTextNode(txt));
+      if(Array.isArray(f)){ var s=document.createElement('span'); s.className='bt-tag'; s.textContent='Optional add-on'; li.appendChild(s); }
+      ul.appendChild(li);
+    });
+        var st=document.querySelector('.bt-stage'); st.classList.remove('flash'); void st.offsetWidth; st.classList.add('flash');
+  }
+  show(0,false);
+
+  var SC=[
+    {n:'Someone presses Panic', s:[['Visitor presses Panic','The red button on the touchscreen is always on screen.'],['Lights and siren','The wraparound LEDs flash and the siren sounds, so everyone nearby notices.'],['An agent sees it','The alert lands on the Agent Monitoring Platform with live video from the tower cameras.'],['Two-way talk','The agent speaks with the visitor through the tower and decides what happens next.']]},
+    {n:'Motion after hours', s:[['Tower detects movement','Motion sensors and cameras notice activity when no one should be there.'],['Alert to the agent','The event appears on the agent’s screen with the camera view.'],['Video verification','The agent looks before anyone is called, so a cat is not a break-in.'],['Agent acts','Check the camera, make an announcement through the tower, or contact your supervisor.']]},
+    {n:'Smoke or a door opens', s:[['Sensors trip','IoT sensors detect smoke, or unauthorized door or window access.'],['Alert to the agent','The alert and the tower’s camera view reach the agent immediately.'],['Agent verifies','Video confirms what the sensor reported.'],['Recorded for review','Cameras record continuously, so you can play back exactly what happened.']]},
+    {n:'A visitor needs help', s:[['Visitor walks up','The touchscreen offers directory, events and information.'],['Needs a person','One tap connects to a live agent.'],['Two-way talk','Visitor and agent speak through the tower.'],['Problem solved','Directions, a message passed on, or help sent. No one had to be posted there.']]}
+  ];
+  var tabs=document.getElementById('btScenTabs'), steps=document.getElementById('btSteps');
+  SC.forEach(function(c,i){
+    var b=document.createElement('button'); b.type='button'; b.className='bt-chip light'; b.textContent=c.n; b.setAttribute('role','tab');
+    b.addEventListener('click',function(){ scen(i); }); tabs.appendChild(b);
+  });
+  function scen(i){
+    [].forEach.call(tabs.children,function(c,j){ c.classList.toggle('on',j===i); c.setAttribute('aria-selected',j===i); });
+    steps.innerHTML=''; SC[i].s.forEach(function(x,k){
+      var li=document.createElement('li'); li.style.animationDelay=(k*120)+'ms';
+      li.innerHTML='<span class="bt-num">'+(k+1)+'</span><h4></h4><p></p>'; li.querySelector('h4').textContent=x[0]; li.querySelector('p').textContent=x[1]; steps.appendChild(li);
+    });
+  }
+  scen(0);
+})();
+</script>
+</body>
+</html>
