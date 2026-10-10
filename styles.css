@@ -987,3 +987,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .resource-row small { color: #9fb0a8; font-weight: 400; margin-left: 10px; }
 .resource-pending { opacity: .7; cursor: default; }
 .resource-pending:hover { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); }
+
+/* BOBBY logo: animated head + wordmark */
+.bobby-lockup { display: flex; align-items: center; justify-content: center; gap: 4%; width: 84%; margin: 0 auto; line-height: 0; }
+.bobby-lockup .bobby-head { width: 21%; height: auto; display: block; flex: none; }
+.bobby-lockup .bobby-word { width: 75%; height: auto; display: block; flex: none; }
