@@ -954,3 +954,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .ct-alt { margin-top: 24px; color: #35453f; }
 .ct-alt a { color: var(--ink); }
 @media (max-width: 800px) { .ct-grid, .ct-grid.ct-two { grid-template-columns: 1fr; } }
+
+/* ---- Team page ---- */
+.tm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.tm-card { background: #fff; border: 1px solid rgba(15,46,36,.12); border-radius: 14px; padding: 30px 26px 28px; box-shadow: 0 10px 30px rgba(15,46,36,.06); text-align: center; }
+.tm-card img { width: 120px; height: 120px; display: block; margin: 0 auto 16px; }
+.tm-card h3 { margin: 0 0 4px; }
+.tm-role { color: #1c8a5c; font-weight: 700; margin: 0 0 12px; }
+.tm-card p:last-child { margin: 0; color: #35453f; line-height: 1.55; font-size: 15px; text-align: left; }
+@media (max-width: 900px) { .tm-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .tm-grid { grid-template-columns: 1fr; } }
