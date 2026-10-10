@@ -998,3 +998,4 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .bobby-lockup { display: flex; align-items: center; justify-content: center; gap: 4%; width: 84%; margin: 0 auto; line-height: 0; }
 .bobby-lockup .bobby-head { width: 21%; height: auto; display: block; flex: none; }
 .bobby-lockup .bobby-word { width: 75%; height: auto; display: block; flex: none; }
+#heroVideo { object-fit: contain; background: #0a2019; }
