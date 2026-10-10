@@ -32,10 +32,10 @@
       <a href="faq.html?product=cozaint">FAQs</a>
       <a href="https://cozaint.com/podcasts">Podcasts</a>
       <a href="partners.html">Partners</a>
-      <a href="https://cozaint.com/contact">Contact</a>
-      <a href="https://cozaint.com/contact" class="nav-cta">Schedule a Meeting</a>
+      <a href="contact.html">Contact</a>
+      <a href="contact.html#quote" class="nav-cta">Schedule a Meeting</a>
     </nav>
-    <a href="https://cozaint.com/contact" class="btn btn-primary btn-small">Schedule a Meeting</a>
+    <a href="contact.html#quote" class="btn btn-primary btn-small">Schedule a Meeting</a>
     <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav"><span></span><span></span><span></span></button>
   </div>
 </header>
@@ -64,7 +64,7 @@
   function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;");}
   function render(p){
     var list=DATA.filter(function(d){return p==="all"||d.products.indexOf(p)>-1;});
-    if(!list.length){grid.innerHTML='<div class="tm-empty" style="grid-column:1/-1"><strong>Testimonials for '+NAMES[p]+' are on the way.</strong><br>Want to hear from customers now? <a href="https://cozaint.com/contact">Talk to us</a>.</div>';}
+    if(!list.length){grid.innerHTML='<div class="tm-empty" style="grid-column:1/-1"><strong>Testimonials for '+NAMES[p]+' are on the way.</strong><br>Want to hear from customers now? <a href="contact.html#quote">Talk to us</a>.</div>';}
     else grid.innerHTML=list.map(function(d){
       return '<figure class="tm-card"><blockquote>'+d.paras.map(function(t,i){return '<p>'+(i===0?'\u201C':'\u201C')+esc(t)+'\u201D</p>';}).join("")+'</blockquote><figcaption><strong>'+esc(d.name)+'</strong>'+esc(d.role)+'</figcaption><div class="tm-tags">'+d.products.map(function(x){return '<span class="tm-tag">'+NAMES[x]+'</span>';}).join("")+'</div></figure>';
     }).join("");
@@ -80,7 +80,7 @@
   <div class="section-inner footer-next">
     <p class="eyebrow eyebrow-light">Where do we go next?</p>
     <div class="next-steps-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:24px; margin-top: 24px;">
-      <a href="https://cozaint.com/contact" class="next-step-card" style="display:block; padding:24px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; text-decoration:none; color:inherit;">
+      <a href="contact.html#quote" class="next-step-card" style="display:block; padding:24px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; text-decoration:none; color:inherit;">
         <h3 class="on-dark">Talk to us</h3>
         <p>Tell us about your cameras and how long you need to keep video.</p>
       </a>

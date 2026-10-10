@@ -2,9 +2,9 @@
 document.addEventListener('DOMContentLoaded', function () {
   var form = document.getElementById('assessment-form');
   if (form) {
-    var LEAD_EMAIL = 'info@cozaint.com';
-    // EspoCRM Lead Capture address. Paste the API URL from Administration > Lead Capture here.
-    var LEAD_ENDPOINT = '';
+    var LEAD_EMAIL = (window.COZAINT_LEAD && window.COZAINT_LEAD.email) || 'info@cozaint.com';
+    // The EspoCRM Lead Capture address is set in lead-config.js.
+    var LEAD_ENDPOINT = (window.COZAINT_LEAD && window.COZAINT_LEAD.endpoint) || '';
     var status = document.getElementById('formStatus');
     var src = (new URLSearchParams(location.search).get('product') || 'assessment');
     document.getElementById('leadSource').value = 'assessment page (' + src + ')';

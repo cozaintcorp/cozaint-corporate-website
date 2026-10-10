@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Cozaint | Request a Quote</title>
+<meta name="description" content="Reach Cozaint by phone, email or the quote form. Headquarters in Palmetto Bay, Florida, with an office in San Diego, California.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header" id="top">
+ <div class="header-inner">
+    <a href="index.html" class="logo"><img src="assets/cozaint-logo-green.png" alt="Cozaint" style="height: 40px;"></a>
+    <nav class="main-nav" id="mainNav">
+      <a href="about.html">About</a>
+      <div class="nav-dropdown" style="position:relative; display:inline-block;">
+        <a href="#">Product Suite ▾</a>
+        <div class="nav-dropdown-menu" style="display:none; position:absolute; top:100%; left:0; background:#fff; border:1px solid rgba(0,0,0,0.1); border-radius:6px; box-shadow:0 8px 24px rgba(0,0,0,0.12); min-width:160px; z-index:10; padding:8px 0;">
+          <a href="marcia.html" style="display:block; padding:8px 16px; white-space:nowrap;">MARCIA</a>
+          <a href="alice1.html" style="display:block; padding:8px 16px; white-space:nowrap;">ALICE1</a>
+          <a href="askalice.html" style="display:block; padding:8px 16px; white-space:nowrap;">askALICE</a>
+          <a href="bobbytower.html" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY Tower</a>
+          <a href="bobbyw.html" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY-W</a>
+          <a href="bobbym.html" style="display:block; padding:8px 16px; white-space:nowrap;">BOBBY-M</a>
+        </div>
+      </div>
+      <a href="downloads.html">Downloads</a>
+      <a href="faq.html?product=bobby">FAQs</a>
+      <a href="https://cozaint.com/podcasts">Podcasts</a>
+      <a href="partners.html">Partners</a>
+      <a href="contact.html">Contact</a>
+      <a href="contact.html#quote" class="nav-cta">Schedule a Meeting</a>
+    </nav>
+    <a href="contact.html#quote" class="btn btn-primary btn-small">Schedule a Meeting</a>
+    <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero ab-hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-inner" style="grid-template-columns: minmax(0,1fr);">
+      <div class="hero-copy">
+        <p class="eyebrow">Contact us</p>
+        <h1>We&rsquo;re Here to Help.</h1>
+        <p class="hero-sub">Reach out to us through any of the channels below.</p>
+        <div class="hero-actions">
+          <a href="#quote" class="btn btn-primary">Request a Quote Online</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features ct-channels">
+    <div class="section-inner">
+      <div class="ct-grid">
+        <div class="ct-card"><p class="eyebrow">Headquarters</p><h3>Cozaint Corporation</h3><p>Palmetto Bay, FL 33157</p></div>
+        <div class="ct-card"><p class="eyebrow">Call us</p><h3><a href="tel:+17609758000">760-975-8000</a></h3></div>
+        <div class="ct-card"><p class="eyebrow">Email us</p><h3><a href="mailto:info@cozaint.com">info@cozaint.com</a></h3></div>
+      </div>
+      <h2 style="margin-top:56px;">Our locations</h2>
+      <div class="ct-grid ct-two">
+        <div class="ct-card"><h3>Cozaint Corporation Headquarters</h3><p>Palmetto Bay, FL 33157</p></div>
+        <div class="ct-card"><h3>San Diego Office</h3><p>San Diego, CA 92128</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="assessment" id="quote">
+    <div class="section-inner assessment-grid">
+      <div class="assessment-copy">
+        <p class="eyebrow">Request a quote online</p>
+        <h2>Tell us what you need.</h2>
+        <p>Tell us a little about your site and what you would like to improve. A Cozaint specialist will get back to you. There is no purchase commitment.</p>
+        <p class="ct-alt">Prefer to talk? Call <a href="tel:+17609758000"><b>760-975-8000</b></a> or email <a href="mailto:info@cozaint.com"><b>info@cozaint.com</b></a>.</p>
+      </div>
+      <form class="assessment-form" id="contact-form" novalidate>
+        <label for="cName">Your name</label>
+        <input type="text" id="cName" name="name" placeholder="Your name" autocomplete="name" required>
+        <label for="cEmail">Work email</label>
+        <input type="email" id="cEmail" name="email" placeholder="you@company.com" autocomplete="email" required>
+        <label for="cPhone">Phone <span class="opt">(optional)</span></label>
+        <input type="tel" id="cPhone" name="phone" placeholder="Phone" autocomplete="tel">
+        <label for="cCompany">Company name</label>
+        <input type="text" id="cCompany" name="company" placeholder="Company name" autocomplete="organization" required>
+        <label for="cInterest">What are you interested in?</label>
+        <select id="cInterest" name="interest" required>
+          <option value="" disabled selected>Select one</option>
+          <option value="marcia">MARCIA video storage</option>
+          <option value="askalice">askALICE</option>
+          <option value="alice1">ALICE1</option>
+          <option value="bobbytower">BOBBY Tower</option>
+          <option value="bobbyw">BOBBY-W</option>
+          <option value="bobbym">BOBBY-M</option>
+          <option value="partner">Becoming a partner</option>
+          <option value="government">Government solutions (GSA)</option>
+          <option value="other">Something else</option>
+        </select>
+        <label for="cMessage">How can we help? <span class="opt">(optional)</span></label>
+        <textarea id="cMessage" name="message" rows="4" placeholder="Tell us about your site or your question"></textarea>
+        <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn btn-primary btn-full">Send my request</button>
+        <p class="form-note">A Cozaint specialist will respond. No purchase commitment.</p>
+        <p class="form-status" id="cStatus" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<!-- CONTACT / FOOTER -->
+<footer class="site-footer">
+  <div class="section-inner footer-next">
+    <p class="eyebrow eyebrow-light">Where do we go next?</p>
+    <div class="next-steps-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:24px; margin-top: 24px;">
+      <a href="marcia.html" class="next-step-card" style="display:block; padding:24px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; text-decoration:none; color:inherit;">
+        <h3 class="on-dark">See MARCIA</h3>
+        <p>Keep more video, for longer, for less.</p>
+      </a>
+      <a href="bobbytower.html" class="next-step-card" style="display:block; padding:24px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; text-decoration:none; color:inherit;">
+        <h3 class="on-dark">See BOBBY</h3>
+        <p>Smart security kiosks that watch around the clock.</p>
+      </a>
+      <a href="partners.html" class="next-step-card" style="display:block; padding:24px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; text-decoration:none; color:inherit;">
+        <h3 class="on-dark">Meet our partners</h3>
+        <p>The technology companies we work with.</p>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-bottom section-inner">
+    <a href="#top" class="logo logo-footer"><img src="assets/cozaint-logo-white.png" alt="Cozaint" style="height: 28px;"></a>
+    <div class="footer-cols">
+      <div>
+        <h4>Company</h4>
+        <div>
+          <a href="about.html">About Cozaint</a>
+          <a href="partners.html#become">Become a Partner</a>
+          <a href="testimonials.html">Testimonials</a>
+          <a href="faq.html">FAQs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="lead-config.js"></script>
+<script src="contact.js"></script>
+<script src="nav.js"></script>
+
+</body>
+</html>
