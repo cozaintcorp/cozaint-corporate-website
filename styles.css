@@ -964,3 +964,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .tm-card p:last-child { margin: 0; color: #35453f; line-height: 1.55; font-size: 15px; text-align: left; }
 @media (max-width: 900px) { .tm-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .tm-grid { grid-template-columns: 1fr; } }
+
+/* ---- Podcasts page ---- */
+.pc-episode { display: grid; grid-template-columns: 220px minmax(0,1fr); gap: 32px; align-items: center; background: #fff; border: 1px solid rgba(15,46,36,.12); border-radius: 14px; padding: 28px; box-shadow: 0 10px 30px rgba(15,46,36,.06); margin-top: 14px; }
+.pc-episode img { width: 220px; height: 220px; object-fit: cover; border-radius: 10px; display: block; }
+.pc-show { margin: 0 0 6px; color: #1c8a5c; font-weight: 700; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+.pc-episode h2 { margin: 0 0 18px; font-size: clamp(22px, 2.6vw, 30px); }
+.pc-links { margin: 14px 0 0; }
+.pc-links a { color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--mint); font-weight: 600; }
+@media (max-width: 700px) { .pc-episode { grid-template-columns: 1fr; } .pc-episode img { width: 100%; height: auto; max-width: 260px; } }
