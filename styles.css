@@ -973,3 +973,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .pc-links { margin: 14px 0 0; }
 .pc-links a { color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--mint); font-weight: 600; }
 @media (max-width: 700px) { .pc-episode { grid-template-columns: 1fr; } .pc-episode img { width: 100%; height: auto; max-width: 260px; } }
+
+/* ---- MARCIA GSX demo ---- */
+.gsx-figure { margin: 0 auto; max-width: 900px; }
+.gsx-figure .ask-video { margin-top: 0; }
+.gsx-figure figcaption { margin-top: 16px; text-align: center; font-size: 17px; color: #35453f; }
+.gsx-figure figcaption b { color: var(--ink); }
+.gsx-figure video { object-fit: contain; }
