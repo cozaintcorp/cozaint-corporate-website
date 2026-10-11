@@ -1041,3 +1041,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .ob-cards { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 560px) { .ob-cards { grid-template-columns: 1fr; } }
+
+/* Landing page A: stronger note under the main link */
+.hero-note-strong { color: #fff; font-weight: 800; font-size: 15px; letter-spacing: 0.05em; }
