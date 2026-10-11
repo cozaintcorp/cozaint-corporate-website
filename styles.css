@@ -999,3 +999,45 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .bobby-lockup .bobby-head { width: 21%; height: auto; display: block; flex: none; }
 .bobby-lockup .bobby-word { width: 75%; height: auto; display: block; flex: none; }
 #heroVideo { object-fit: contain; background: #0a2019; }
+
+/* ============================================
+   Landing page Option B (review copy)
+   ============================================ */
+.ob-banner { background: #f2c94c; color: #1d1a05; text-align: center; font-size: 13px; font-weight: 700; padding: 8px 16px; letter-spacing: 0.02em; }
+.ob-badge { background: #fff; padding: 22px 28px; line-height: 0; }
+.ob-badge img { width: 62%; max-width: 280px; height: auto; display: block; margin: 0 auto; }
+.ob-problem { background: var(--paper-deep); }
+.ob-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 56px; }
+.ob-stat { background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 28px 28px 30px; }
+.ob-num { display: block; font-family: var(--font-display); font-size: clamp(56px, 6vw, 84px); line-height: 1; color: var(--forest); margin-bottom: 8px; }
+.ob-stat h3 { font-size: 20px; margin: 0 0 10px; }
+.ob-stat p { margin: 0; font-size: 15px; }
+.ob-why { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; border-top: 2px solid var(--ink); padding-top: 28px; }
+.ob-why h3 { font-size: 22px; margin: 0 0 10px; }
+.ob-why p { margin: 0; font-size: 16px; }
+.ob-marcia { background: var(--forest-deep); }
+.ob-marcia .gap-intro { color: #b9c6bf; }
+.ob-steps { list-style: none; margin: 0 0 48px; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.ob-steps li { border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 26px 26px 28px; }
+.ob-step-num { display: block; color: var(--mint); font-weight: 800; font-size: 14px; margin-bottom: 10px; }
+.ob-steps h3 { color: #fff; font-size: 21px; margin: 0 0 10px; }
+.ob-steps p { color: #b9c6bf; margin: 0; font-size: 15px; }
+.ob-proof { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 32px; margin-bottom: 40px; }
+.ob-proof strong { display: block; font-family: var(--font-display); font-weight: 500; font-size: clamp(26px, 3vw, 36px); color: var(--mint); margin-bottom: 6px; }
+.ob-proof span { color: #b9c6bf; font-size: 15px; }
+.ob-actions { margin-top: 0; }
+.ob-products { background: var(--paper); }
+.ob-h2 { font-size: clamp(28px, 3.4vw, 40px); max-width: 24ch; margin: 0 0 40px; }
+.ob-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.ob-card { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 26px; color: var(--ink); transition: border-color .15s, transform .15s; }
+.ob-card:hover { border-color: var(--mint); transform: translateY(-2px); }
+.ob-card h3 { font-size: 24px; margin: 0 0 4px; }
+.ob-tag { color: #1f7a52; font-weight: 700; font-size: 13px; margin: 0 0 12px; }
+.ob-card p { font-size: 15px; }
+.ob-card .env-link { margin-top: auto; padding-top: 14px; font-weight: 700; color: var(--forest); }
+@media (max-width: 980px) {
+  .ob-stats, .ob-steps, .ob-proof { grid-template-columns: 1fr; }
+  .ob-why { grid-template-columns: 1fr; gap: 24px; }
+  .ob-cards { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) { .ob-cards { grid-template-columns: 1fr; } }
