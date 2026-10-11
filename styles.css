@@ -1044,3 +1044,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* Landing page A: stronger note under the main link */
 .hero-note-strong { color: #fff; font-weight: 800; font-size: 15px; letter-spacing: 0.05em; }
+
+/* About page: team link under the eyebrow, hero moved up */
+.ab-hero .hero-inner { padding-top: 48px; }
+.ab-team-link { display: inline-block; color: #fff; font-weight: 800; font-size: 20px; margin: 0 0 26px; padding-bottom: 3px; border-bottom: 2px solid var(--mint); }
+.ab-team-link:hover { color: var(--mint); }
