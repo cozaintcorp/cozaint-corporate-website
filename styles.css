@@ -1056,3 +1056,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .ab-hero .hero-inner { padding-top: 48px; }
 .ab-team-link { display: inline-block; color: #fff; font-weight: 800; font-size: 20px; margin: 0 0 26px; padding-bottom: 3px; border-bottom: 2px solid var(--mint); }
 .ab-team-link:hover { color: var(--mint); }
+
+/* Three side-by-side columns that stack on phones (ALICE1 features) */
+.three-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; margin-top: 48px; }
+@media (max-width: 900px) { .three-cols { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
