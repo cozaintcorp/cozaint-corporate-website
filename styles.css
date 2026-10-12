@@ -979,6 +979,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .pc-show { margin: 0 0 6px; color: #1c8a5c; font-weight: 700; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
 .pc-episode h2 { margin: 0 0 18px; font-size: clamp(22px, 2.6vw, 30px); }
 .pc-links { margin: 14px 0 0; }
+.pc-episode + .pc-episode { margin-top: 28px; }
+.pc-thumb { position: relative; display: block; width: 220px; height: 220px; border-radius: 10px; overflow: hidden; line-height: 0; background: #0f2e24; }
+.pc-thumb img { color: transparent; }
+@media (max-width: 700px) { .pc-thumb { width: 100%; max-width: 260px; height: auto; aspect-ratio: 1; } .pc-thumb img { height: 100%; } }
+.pc-thumb::after { content: ""; position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: rgba(0,0,0,.6) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 7v10l8-5z' fill='white'/%3E%3C/svg%3E") center/34px no-repeat; transition: background-color .2s; }
+.pc-thumb:hover::after { background-color: rgba(28,138,92,.9); }
+.pc-body > p:not(.pc-show):not(.pc-links) { margin: 0 0 18px; color: #4a5a53; }
 .pc-links a { color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--mint); font-weight: 600; }
 @media (max-width: 700px) { .pc-episode { grid-template-columns: 1fr; } .pc-episode img { width: 100%; height: auto; max-width: 260px; } }
 
