@@ -119,6 +119,16 @@
       rSlots.textContent = fmt(Math.ceil(slotsNeeded), 0) + ' cartridges';
       rSlotsDay.textContent = fmt(slotsPerDay, 0) + ' / day';
       rHours.textContent = fmt(totalHoursPerDay, 1) + ' hrs (' + fmt(totalDrives, 0) + ' drives incl. standby)';
+
+      // Hand the sizing results to the cost comparison (tco.js)
+      document.dispatchEvent(new CustomEvent('cozaint:calc', {
+        detail: {
+          totalTb: roundedTotalTb,
+          ltoCapacity: ltoCapacity,
+          cartridges: Math.ceil(slotsNeeded),
+          tapeDrives: totalDrives
+        }
+      }));
     }
 
     [camerasEl, resSelect, fpsEl, retentionEl, motionEl, bppEl, ltoEl, hoursEl, writeDrivesEl, standbyEl].forEach(function (el) {

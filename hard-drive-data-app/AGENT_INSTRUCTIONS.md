@@ -1,0 +1,60 @@
+# Monthly price update: instructions for the agent
+
+You are refreshing the storage prices that the Cozaint website cost calculator
+(`assessment.html` + `tco.js`) reads from `hard-drive-data-app/prices.json`.
+Run once a month. Work only inside the `cozaintcorp/cozaint-corporate-website`
+repo, and only change files in the `hard-drive-data-app/` folder.
+
+## 1. Collect current prices
+
+Use web search and fetch public pages. Prefer the same sources as last month
+(listed in `prices.json` under each `source_url`) so months stay comparable.
+Record new, US-dollar prices before tax and shipping.
+
+| Field | What to find | Rule |
+|---|---|---|
+| `hdd` | A current large enterprise hard drive (18 TB or bigger, new, e.g. Seagate Exos or WD Ultrastar) with a real listed price | Keep the same model as last month if it is still listed new; otherwise pick the closest current equivalent and say so in `label`. Set `usd_per_tb` = `price_usd / capacity_tb`, 2 decimals. Also update `market_median_usd_per_tb` if the tracker gives one. |
+| `lto` (12, 18, 30) | LTO-8, LTO-9, LTO-10 (30 TB) cartridge price range | `price_usd` = midpoint of low and high, 2 decimals. Never change `cozaint_cartridge_price_usd`; only a person sets it. |
+| `lto_drive` (12, 18, 30) | Tape drive price range for each generation | `price_usd` = midpoint, whole dollars. |
+| `cloud` | Wasabi pay-as-you-go price per TB per month | From wasabi.com if readable, otherwise a reliable summary. |
+| `electricity` | Latest US average commercial electricity price (EIA) | Dollars per kWh, 4 decimals. |
+| `market_trend.summary` | One or two plain sentences on where drive and tape prices are heading | With source URLs. |
+
+Set `checked` on each section to the date you actually saw the price. Set the
+top-level `updated` to today's date and `updated_by` to "Claude monthly agent".
+Do not change `schema_version`, `raid`, or the `watts` fields unless a
+datasheet for the new drive model gives a different figure.
+
+If a source cannot be reached, keep last month's value for that section,
+leave its old `checked` date, and mention it in the report.
+
+## 2. Check before publishing
+
+Save the old file first, then run:
+
+```
+cp hard-drive-data-app/prices.json /tmp/prices_old.json
+# ...write the new prices.json...
+python3 hard-drive-data-app/check_prices.py hard-drive-data-app/prices.json /tmp/prices_old.json
+```
+
+- **"OK"**: continue to step 3.
+- **"NOT SAFE TO PUBLISH"**: do not commit `prices.json`. Restore the old
+  file. Report each problem and the prices you found so a person can confirm
+  them. A price moving more than 30% in a month is held on purpose.
+
+## 3. Save and publish
+
+1. Add one row to `history.csv` with today's values (same column order).
+2. Add a dated section at the top of `market-notes.md`: what changed in prices,
+   and any new surveillance-storage products or competitor news worth knowing
+   (tape archives, disk appliances, cloud video retention). Keep it short and
+   paraphrased, with source links.
+3. Commit only the files in `hard-drive-data-app/` with the message
+   `Monthly price update YYYY-MM-DD` and push to `main`.
+
+## 4. Report
+
+Send the user a short plain-language summary: the main prices this month vs.
+last month, what the calculator's default example now shows for hard drives vs.
+tape, anything held for review, and any source that failed.

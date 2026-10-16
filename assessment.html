@@ -139,6 +139,19 @@
               <div><span>Drive-hours needed / day</span><strong id="rHours">—</strong></div>
             </div>
           </div>
+
+          <div class="calc-results tco-box" id="tcoBox">
+            <p class="calc-results-label">Cost comparison at today's prices</p>
+            <label for="tcoYears">Years to run the system</label>
+            <input type="number" id="tcoYears" min="1" max="20" value="5">
+            <div class="tco-grid">
+              <div><span>Hard drives</span><strong id="tcoHdd">—</strong><em id="tcoHddDetail"></em></div>
+              <div class="tco-tape"><span>LTO tape</span><strong id="tcoTape">—</strong><em id="tcoTapeDetail"></em></div>
+              <div><span>Cloud storage</span><strong id="tcoCloud">—</strong><em id="tcoCloudDetail"></em></div>
+            </div>
+            <p class="tco-savings" id="tcoSavings"></p>
+            <p class="tco-status" id="tcoStatus">Loading current prices…</p>
+          </div>
           <p class="calc-disclaimer">Planning estimate only. Nothing entered here is transmitted to Cozaint®. Results require validation by a Cozaint specialist before use in a final system design.</p>
         </div>
       </div>
@@ -269,6 +282,7 @@
 })();
 </script>
 <script src="calculator.js"></script>
+<script src="tco.js"></script>
 <script src="lead-config.js"></script>
 <script src="script.js"></script>
 <script src="nav.js"></script>
