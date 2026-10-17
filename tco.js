@@ -1,4 +1,4 @@
-// Cozaint storage cost comparison (hard drives vs. LTO tape vs. cloud)
+// Cozaint storage cost comparison: LTO tape vs. hard drives vs. cloud
 // Prices come from hard-drive-data-app/prices.json, refreshed monthly.
 // It tries the GitHub copy first (so monthly updates reach cozaint.com
 // without a new upload), then the copy that sits next to this page.
@@ -15,30 +15,33 @@
 
   function money(n) {
     if (!isFinite(n)) return '—';
-    return '$' + Math.round(n).toLocaleString();
+    return '$' + Math.round(n).toLocaleString('en-US');
   }
+  function money2(n) {
+    return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function num(n) { return Math.round(n).toLocaleString('en-US'); }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function el(id) { return document.getElementById(id); }
 
   function loadPrices(i) {
-    if (i >= SOURCES.length) {
-      showError();
-      return;
-    }
+    if (i >= SOURCES.length) { showError(); return; }
     fetch(SOURCES[i], { cache: 'no-cache' })
       .then(function (r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       })
       .then(function (data) {
-        if (!data || data.schema_version !== 1 || !data.hdd || !data.lto) throw new Error('bad data');
+        if (!data || data.schema_version !== 2 || !data.hdd || !data.lto || !data.tape_library) throw new Error('bad data');
         prices = data;
         render();
       })
-      .catch(function () {
-        loadPrices(i + 1);
-      });
+      .catch(function () { loadPrices(i + 1); });
   }
-
-  function el(id) { return document.getElementById(id); }
 
   function showError() {
     var box = el('tcoBox');
@@ -47,20 +50,57 @@
     if (msg) msg.textContent = 'Current prices could not be loaded. Please try again later.';
   }
 
+  // A RAID 6 disk system holding `tb` terabytes: drives, enclosures, servers, power.
+  function diskSystem(tb, years) {
+    var p = prices;
+    if (tb <= 0) return { tb: 0, rawTb: 0, drives: 0, enclosures: 0, servers: 0, replacements: 0, watts: 0 };
+    var rawTb = tb / p.raid.usable_fraction;
+    var g = p.raid.group_size;
+    var drives = Math.ceil(Math.ceil(rawTb / p.hdd.capacity_tb) / g) * g;
+    var enclosures = Math.ceil(drives / p.disk_enclosure.bays);
+    var servers = Math.max(1, Math.ceil(enclosures / p.server.enclosures_per_server));
+    var replacements = Math.ceil(drives * p.hdd.annual_failure_rate * years);
+    var watts = drives * p.hdd.watts + enclosures * p.disk_enclosure.watts + servers * p.server.watts;
+    return { tb: tb, rawTb: rawTb, drives: drives, enclosures: enclosures, servers: servers, replacements: replacements, watts: watts };
+  }
+
+  function powerCost(watts, years) {
+    var p = prices;
+    var kwh = watts * p.cooling.pue * HOURS_PER_YEAR * years / 1000;
+    return { kw: watts * p.cooling.pue / 1000, kwh: kwh, cost: kwh * p.electricity.usd_per_kwh };
+  }
+
+  function line(label, detail, amount) { return { label: label, detail: detail, amount: amount }; }
+
+  function sum(lines) {
+    return lines.reduce(function (t, l) { return t + l.amount; }, 0);
+  }
+
   function compute(calc, years) {
     var p = prices;
     var tb = calc.totalTb;
     var gen = String(calc.ltoCapacity);
+    var drivePrice = p.hdd.price_usd;
+    var hddName = p.hdd.capacity_tb + ' TB';
 
-    // Hard drives: RAID 6 overhead, drive cost, and power for the years chosen
-    var rawTb = tb / p.raid.usable_fraction;
-    var hddCount = Math.ceil(rawTb / p.hdd.capacity_tb);
-    var hddMedia = hddCount * p.hdd.price_usd;
-    var hddKwh = hddCount * p.hdd.watts * HOURS_PER_YEAR * years / 1000;
-    var hddPower = hddKwh * p.electricity.usd_per_kwh;
-    var hddTotal = hddMedia + hddPower;
+    // ---------- Hard drives only ----------
+    var d = diskSystem(tb, years);
+    var dPow = powerCost(d.watts, years);
+    var hddLines = [
+      line('Hard drives', num(d.drives) + ' × ' + money2(drivePrice) + ' (' + hddName + '). ' +
+        num(tb) + ' TB in RAID 6 needs ' + num(d.rawTb) + ' TB of raw disk, in groups of ' + p.raid.group_size + ' drives',
+        d.drives * drivePrice),
+      line('Disk enclosures', num(d.enclosures) + ' × ' + money2(p.disk_enclosure.price_usd) + ' (' + p.disk_enclosure.bays + ' drives each)',
+        d.enclosures * p.disk_enclosure.price_usd),
+      line('Storage servers', num(d.servers) + ' × ' + money2(p.server.price_usd) + ' (one per ' + p.server.enclosures_per_server + ' enclosures)',
+        d.servers * p.server.price_usd),
+      line('Replacement drives', num(d.replacements) + ' × ' + money2(drivePrice) + ' (' + (p.hdd.annual_failure_rate * 100).toFixed(2) + '% of drives fail each year, for ' + years + ' years)',
+        d.replacements * drivePrice),
+      line('Power and cooling', dPow.kw.toFixed(1) + ' kW around the clock for ' + years + ' years at ' + (p.electricity.usd_per_kwh * 100).toFixed(2) + '¢ per kWh, cooling included',
+        dPow.cost)
+    ];
 
-    // LTO tape: cartridges plus tape drives (stored cartridges use no power)
+    // ---------- LTO tape (with a small disk tier) ----------
     var cart = p.lto[gen] || p.lto['18'];
     var cartPrice = cart.price_usd;
     var usingCozaintPrice = false;
@@ -68,47 +108,95 @@
       cartPrice = p.lto.cozaint_cartridge_price_usd;
       usingCozaintPrice = true;
     }
-    var cartridges = Math.ceil(tb / calc.ltoCapacity);
-    var tapeMedia = cartridges * cartPrice;
-    var drive = (p.lto_drive && (p.lto_drive[gen] || p.lto_drive['18'])) || { price_usd: 0 };
-    var tapeDrives = calc.tapeDrives * drive.price_usd;
-    var tapeTotal = tapeMedia + tapeDrives;
+    var cartridges = tb > 0 ? Math.ceil(tb / calc.ltoCapacity) : 0;
+    var lib = p.tape_library;
+    var modules = Math.max(1, Math.ceil(cartridges / lib.slots_per_module));
+    var libraries = Math.ceil(modules / lib.max_modules_per_library);
+    var libraryCost = libraries * lib.base_module_price_usd + (modules - libraries) * lib.expansion_module_price_usd;
+    var tapeDrive = (p.lto_drive[gen] || p.lto_drive['18']).price_usd;
+    var tierTb = tb * p.tape_system.disk_tier_fraction;
+    var t = diskSystem(tierTb, years);
+    t.servers = Math.max(1, t.servers);
+    var tWatts = t.watts + (t.drives === 0 ? p.server.watts : 0) + libraries * lib.watts_per_library;
+    var tPow = powerCost(tWatts, years);
+    var tapeLines = [
+      line('LTO tape cartridges', num(cartridges) + ' × ' + money2(cartPrice) + ' (' + calc.ltoCapacity + ' TB each' +
+        (usingCozaintPrice ? ', Cozaint price' : '') + ')', cartridges * cartPrice),
+      line('Tape library', num(libraries) + (libraries === 1 ? ' library, ' : ' libraries, ') + num(modules) + ' modules, ' +
+        num(modules * lib.slots_per_module) + ' cartridge slots', libraryCost),
+      line('Tape drives', num(calc.tapeDrives) + ' × ' + money2(tapeDrive), calc.tapeDrives * tapeDrive),
+      line('Disk tier hard drives', num(t.drives) + ' × ' + money2(drivePrice) + ' (' + Math.round(p.tape_system.disk_tier_fraction * 100) +
+        '% of the video, ' + num(tierTb) + ' TB, kept on disk for instant playback)', t.drives * drivePrice),
+      line('Disk enclosures', num(t.enclosures) + ' × ' + money2(p.disk_enclosure.price_usd), t.enclosures * p.disk_enclosure.price_usd),
+      line('Server (runs the Cozaint software and disk tier)', num(t.servers) + ' × ' + money2(p.server.price_usd), t.servers * p.server.price_usd),
+      line('Replacement drives', num(t.replacements) + ' × ' + money2(drivePrice) + ' (disk tier only; tape cartridges are rated for decades)',
+        t.replacements * drivePrice),
+      line('Power and cooling', tPow.kw.toFixed(1) + ' kW around the clock for ' + years + ' years, cooling included. Cartridges on the shelf use no power',
+        tPow.cost)
+    ];
 
-    // Cloud: monthly storage fee for the years chosen
-    var cloudTotal = tb * p.cloud.usd_per_tb_month * 12 * years;
+    // ---------- Cloud ----------
+    var months = years * 12;
+    var cloudLines = [
+      line('Cloud storage', num(tb) + ' TB × ' + money2(p.cloud.usd_per_tb_month) + ' per TB per month × ' + months + ' months',
+        tb * p.cloud.usd_per_tb_month * months)
+    ];
 
     return {
-      tb: tb, years: years,
-      hddCount: hddCount, hddMedia: hddMedia, hddPower: hddPower, hddTotal: hddTotal,
-      cartridges: cartridges, cartPrice: cartPrice, usingCozaintPrice: usingCozaintPrice,
-      tapeMedia: tapeMedia, tapeDriveCount: calc.tapeDrives, tapeDrives: tapeDrives, tapeTotal: tapeTotal,
-      cloudTotal: cloudTotal
+      tb: tb, years: years, usingCozaintPrice: usingCozaintPrice,
+      tape: { lines: tapeLines, total: sum(tapeLines) },
+      hdd: { lines: hddLines, total: sum(hddLines) },
+      cloud: { lines: cloudLines, total: sum(cloudLines) }
     };
+  }
+
+  function table(title, part) {
+    var rows = part.lines.map(function (l) {
+      return '<tr><td><strong>' + esc(l.label) + '</strong><span>' + esc(l.detail) + '</span></td><td>' + money(l.amount) + '</td></tr>';
+    }).join('');
+    return '<table class="tco-table"><caption>' + esc(title) + '</caption><tbody>' + rows +
+      '<tr class="tco-total"><td>Total</td><td>' + money(part.total) + '</td></tr></tbody></table>';
+  }
+
+  function sourcesHtml() {
+    var p = prices;
+    var list = [
+      ['Hard drives', p.hdd], ['Disk enclosures', p.disk_enclosure], ['Servers', p.server],
+      ['Tape library', p.tape_library], ['Tape cartridges', p.lto], ['Tape drives', p.lto_drive],
+      ['Cloud', p.cloud], ['Electricity', p.electricity], ['Cooling', p.cooling]
+    ];
+    return list.map(function (x) {
+      return '<a href="' + esc(x[1].source_url) + '" target="_blank" rel="noopener">' + esc(x[0]) + '</a>';
+    }).join(' · ');
   }
 
   function render() {
     if (!prices || !lastCalc || !el('tcoBox')) return;
-    var years = parseFloat(el('tcoYears').value) || 5;
+    var years = Math.max(1, Math.min(20, parseFloat(el('tcoYears').value) || 5));
     var r = compute(lastCalc, years);
 
-    el('tcoHdd').textContent = money(r.hddTotal);
-    el('tcoHddDetail').textContent = r.hddCount.toLocaleString() + ' drives ' + money(r.hddMedia) +
-      ' + power ' + money(r.hddPower);
-    el('tcoTape').textContent = money(r.tapeTotal);
-    el('tcoTapeDetail').textContent = r.cartridges.toLocaleString() + ' cartridges ' + money(r.tapeMedia) +
-      ' + ' + r.tapeDriveCount + ' tape drives ' + money(r.tapeDrives);
-    el('tcoCloud').textContent = money(r.cloudTotal);
-    el('tcoCloudDetail').textContent = r.tb.toLocaleString() + ' TB for ' + years + ' years';
+    el('tcoTape').textContent = money(r.tape.total);
+    el('tcoHdd').textContent = money(r.hdd.total);
+    el('tcoCloud').textContent = money(r.cloud.total);
 
-    var saving = r.hddTotal - r.tapeTotal;
-    var pct = r.hddTotal > 0 ? Math.round(saving / r.hddTotal * 100) : 0;
+    var saving = r.hdd.total - r.tape.total;
+    var pct = r.hdd.total > 0 ? Math.round(saving / r.hdd.total * 100) : 0;
     el('tcoSavings').textContent = saving > 0
-      ? 'LTO tape saves ' + money(saving) + ' (' + pct + '%) compared with hard drives.'
+      ? 'LTO tape saves ' + money(saving) + ' (' + pct + '%) compared with hard drives over ' + years + ' years.'
       : 'At this size, hard drives cost less than tape.';
 
-    el('tcoStatus').textContent = 'Prices updated ' + prices.updated +
+    el('tcoBreakdown').innerHTML =
+      '<p class="tco-breakdown-title">* How these costs add up</p>' +
+      table('LTO tape (Cozaint two-tier system)', r.tape) +
+      table('Hard drives only', r.hdd) +
+      table('Cloud storage', r.cloud) +
+      '<p class="tco-notes">Prices updated ' + esc(prices.updated) +
       (r.usingCozaintPrice ? ' (Cozaint cartridge price)' : ' (market prices)') +
-      '. Not counted: disk servers and enclosures, the tape library chassis, cooling, and cloud download fees.';
+      '. Cooling adds ' + Math.round((prices.cooling.pue - 1) * 100) + '% to equipment power (industry average). ' +
+      'Not counted on any option: racks, network switches, software licenses, installation and support contracts. ' +
+      'Cloud also needs an on-site recorder, not counted. Sources: ' + sourcesHtml() + '.</p>';
+
+    el('tcoStatus').textContent = '';
   }
 
   document.addEventListener('cozaint:calc', function (e) {

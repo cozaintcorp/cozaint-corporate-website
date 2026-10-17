@@ -14,16 +14,22 @@ Record new, US-dollar prices before tax and shipping.
 | Field | What to find | Rule |
 |---|---|---|
 | `hdd` | A current large enterprise hard drive (18 TB or bigger, new, e.g. Seagate Exos or WD Ultrastar) with a real listed price | Keep the same model as last month if it is still listed new; otherwise pick the closest current equivalent and say so in `label`. Set `usd_per_tb` = `price_usd / capacity_tb`, 2 decimals. Also update `market_median_usd_per_tb` if the tracker gives one. |
+| `hdd.annual_failure_rate` | Backblaze's latest lifetime annualized failure rate (quarterly Drive Stats post) | As a fraction, e.g. 1.41% = `0.0141`. |
+| `disk_enclosure` | New, empty 60-bay 4U disk enclosure (JBOD), e.g. Supermicro 946SE1C-R1K66JBOD or WD Ultrastar Data60 | Same model as last month if still listed new. Keep `bays` and `watts` unless the model changes. |
+| `server` | Starting price of a new 2U rack server, e.g. Dell PowerEdge R760xs on dell.com | Same model as last month if still listed. |
+| `tape_library` | HPE MSL6480 base module (80 slots, no drives) and expansion module prices | Keep `slots_per_module`, `max_modules_per_library`, `watts_per_library` unless HPE changes them. |
 | `lto` (12, 18, 30) | LTO-8, LTO-9, LTO-10 (30 TB) cartridge price range | `price_usd` = midpoint of low and high, 2 decimals. Never change `cozaint_cartridge_price_usd`; only a person sets it. |
-| `lto_drive` (12, 18, 30) | Tape drive price range for each generation | `price_usd` = midpoint, whole dollars. |
+| `lto_drive` (12, 18, 30) | Tape drive price for each generation; for LTO-9, the HPE MSL LTO-9 SAS drive upgrade kit (R6Q75A) | Library drive kit price where listed, otherwise the midpoint of the drive price range, whole dollars. |
+| `cooling.pue` | Latest Uptime Institute global average PUE | Changes about once a year; keep it otherwise. |
 | `cloud` | Wasabi pay-as-you-go price per TB per month | From wasabi.com if readable, otherwise a reliable summary. |
 | `electricity` | Latest US average commercial electricity price (EIA) | Dollars per kWh, 4 decimals. |
 | `market_trend.summary` | One or two plain sentences on where drive and tape prices are heading | With source URLs. |
 
 Set `checked` on each section to the date you actually saw the price. Set the
 top-level `updated` to today's date and `updated_by` to "Claude monthly agent".
-Do not change `schema_version`, `raid`, or the `watts` fields unless a
-datasheet for the new drive model gives a different figure.
+Do not change `schema_version`, `raid`, `tape_system`, or the `watts` fields
+unless a datasheet for a new model gives a different figure. Never change
+`tape_system.disk_tier_fraction`; only a person sets it.
 
 If a source cannot be reached, keep last month's value for that section,
 leave its old `checked` date, and mention it in the report.

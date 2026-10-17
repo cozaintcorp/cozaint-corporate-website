@@ -20,7 +20,22 @@ CHECKS = [
     (("hdd", "price_usd"), 50, 3000),
     (("hdd", "usd_per_tb"), 5, 150),
     (("hdd", "watts"), 3, 20),
+    (("hdd", "annual_failure_rate"), 0.002, 0.10),
     (("raid", "usable_fraction"), 0.5, 1.0),
+    (("raid", "group_size"), 4, 30),
+    (("disk_enclosure", "bays"), 12, 120),
+    (("disk_enclosure", "price_usd"), 500, 40000),
+    (("disk_enclosure", "watts"), 20, 1000),
+    (("server", "price_usd"), 1500, 60000),
+    (("server", "enclosures_per_server"), 1, 16),
+    (("server", "watts"), 50, 2000),
+    (("tape_library", "base_module_price_usd"), 2000, 100000),
+    (("tape_library", "expansion_module_price_usd"), 1000, 60000),
+    (("tape_library", "slots_per_module"), 10, 200),
+    (("tape_library", "max_modules_per_library"), 1, 20),
+    (("tape_library", "watts_per_library"), 20, 2000),
+    (("cooling", "pue"), 1.0, 2.5),
+    (("tape_system", "disk_tier_fraction"), 0.0, 0.5),
     (("lto", "12", "price_usd"), 20, 400),
     (("lto", "18", "price_usd"), 30, 500),
     (("lto", "30", "price_usd"), 60, 1000),
@@ -53,8 +68,8 @@ def main():
 
     problems = []
 
-    if new.get("schema_version") != 1:
-        problems.append("schema_version must be 1")
+    if new.get("schema_version") != 2:
+        problems.append("schema_version must be 2")
     if not new.get("updated"):
         problems.append("missing 'updated' date")
 
@@ -83,7 +98,7 @@ def main():
             problems.append(f"hdd.usd_per_tb is {per_tb} but price/capacity is {price / cap:.2f}")
 
     # every price section needs a source
-    for section in ("hdd", "lto", "lto_drive", "cloud", "electricity"):
+    for section in ("hdd", "disk_enclosure", "server", "tape_library", "lto", "lto_drive", "cloud", "electricity", "cooling"):
         if not get(new, (section, "source_url")):
             problems.append(f"{section}: missing source_url")
 

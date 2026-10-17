@@ -23,14 +23,30 @@ uploading anything. If GitHub can't be reached, it uses the copy of
 
 ## What the comparison counts
 
-- **Hard drives:** enough drives for the storage needed in RAID 6 (12-drive
-  groups), plus electricity for those drives over the years chosen.
-- **LTO tape:** cartridges plus the tape drives the calculator already sizes.
-  Stored cartridges use no power.
-- **Cloud:** monthly storage fee for the years chosen.
+The page shows LTO tape, hard drives and cloud left to right. Each total has
+an asterisk that points to a "How these costs add up" box underneath, listing
+every line as quantity × current price.
 
-Not counted (for now): disk servers and enclosures, the tape library chassis,
-cooling, and cloud download fees.
+- **LTO tape (Cozaint two-tier system):** cartridges; HPE MSL6480 tape library
+  sized to hold every cartridge (80-slot modules, up to 7 per library); the
+  tape drives the calculator sizes; a disk tier holding 10% of the video for
+  instant playback (as in Cozaint's storage white paper) with its drives,
+  enclosures and replacement drives; one server; power and cooling. Stored
+  cartridges use no power.
+- **Hard drives only:** drives for the storage in RAID 6 (12-drive groups,
+  rounded up to full groups); 60-bay enclosures; one server per 4 enclosures;
+  replacement drives at Backblaze's failure rate; power and cooling.
+- **Cloud:** Wasabi monthly storage fee for the years chosen.
+- **Power and cooling:** equipment watts × cooling multiplier (data center
+  PUE, industry average 1.54) × hours × US business electricity price.
+
+Not counted on any option: racks, network switches, software licenses,
+installation and support contracts; the cloud option's on-site recorder.
+
+For smaller systems (at current prices, roughly under 1,000 TB over 5 years)
+hard drives come out cheaper, because the tape library, tape drives and server
+are a fixed starting cost of about $100,000. The page says
+so when that happens.
 
 ## Cozaint's own cartridge price
 

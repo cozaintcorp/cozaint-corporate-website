@@ -1,2 +1,3 @@
-date,hdd_usd_per_tb,hdd_market_median_usd_per_tb,lto8_cartridge_usd,lto9_cartridge_usd,lto10_cartridge_usd,lto9_drive_usd,cloud_usd_per_tb_month,electricity_usd_per_kwh
-2026-10-16,42.49,48.50,74.98,102.00,278.00,10600,6.99,0.1385
+date,hdd_usd_per_tb,hdd_market_median_usd_per_tb,lto8_cartridge_usd,lto9_cartridge_usd,lto10_cartridge_usd,lto9_drive_usd,cloud_usd_per_tb_month,electricity_usd_per_kwh,disk_enclosure_usd,server_usd,library_base_usd,library_expansion_usd,hdd_annual_failure_rate,pue
+2026-10-16,42.49,48.50,74.98,102.00,278.00,10600,6.99,0.1385,,,,,,
+2026-10-17,42.49,48.50,74.98,102.00,278.00,10824,6.99,0.1385,5800.74,15956.82,14986.00,7629.00,0.0141,1.54

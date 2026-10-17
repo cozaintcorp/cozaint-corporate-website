@@ -145,12 +145,13 @@
             <label for="tcoYears">Years to run the system</label>
             <input type="number" id="tcoYears" min="1" max="20" value="5">
             <div class="tco-grid">
-              <div><span>Hard drives</span><strong id="tcoHdd">—</strong><em id="tcoHddDetail"></em></div>
-              <div class="tco-tape"><span>LTO tape</span><strong id="tcoTape">—</strong><em id="tcoTapeDetail"></em></div>
-              <div><span>Cloud storage</span><strong id="tcoCloud">—</strong><em id="tcoCloudDetail"></em></div>
+              <div class="tco-tape"><span>LTO tape</span><strong><span id="tcoTape">—</span><sup>*</sup></strong></div>
+              <div><span>Hard drives</span><strong><span id="tcoHdd">—</span><sup>*</sup></strong></div>
+              <div><span>Cloud storage</span><strong><span id="tcoCloud">—</span><sup>*</sup></strong></div>
             </div>
             <p class="tco-savings" id="tcoSavings"></p>
             <p class="tco-status" id="tcoStatus">Loading current prices…</p>
+            <div class="tco-breakdown" id="tcoBreakdown"></div>
           </div>
           <p class="calc-disclaimer">Planning estimate only. Nothing entered here is transmitted to Cozaint®. Results require validation by a Cozaint specialist before use in a final system design.</p>
         </div>

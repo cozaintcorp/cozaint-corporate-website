@@ -1,10 +1,10 @@
 {
-  "schema_version": 1,
-  "updated": "2026-10-16",
-  "updated_by": "Claude (first run, done by hand while building the app)",
-  "notes": "Typical current price of a new, large-capacity product from public price trackers. US dollars, before tax and shipping. The website calculator reads this file.",
+  "schema_version": 2,
+  "updated": "2026-10-17",
+  "updated_by": "Claude (equipment prices added by hand)",
+  "notes": "Typical current price of a new product from public price listings. US dollars, before tax and shipping. The website calculator reads this file.",
   "hdd": {
-    "label": "Seagate Exos X20 18 TB, new (enterprise hard drive)",
+    "label": "Seagate Exos X20 18 TB enterprise hard drive, new",
     "capacity_tb": 18,
     "price_usd": 764.90,
     "usd_per_tb": 42.49,
@@ -12,13 +12,52 @@
     "watts_note": "Between Seagate Exos X24 write (8.2 W) and read (9.8 W) power; surveillance recording is mostly writes.",
     "market_median_usd_per_tb": 48.50,
     "market_median_note": "Median of 69 new enterprise-drive offers on Amazon US.",
+    "annual_failure_rate": 0.0141,
+    "annual_failure_rate_note": "Backblaze lifetime annualized failure rate across about 353,000 drives, through June 30, 2026.",
+    "annual_failure_rate_source_url": "https://backblaze.com/blog/backblaze-drive-stats-for-q2-2026",
     "source_name": "DatacenterDisk hard drive price tracker",
     "source_url": "https://datacenterdisk.com/price-forecast",
     "checked": "2026-10-16"
   },
   "raid": {
     "label": "RAID 6, 12-drive groups (10 data + 2 parity)",
+    "group_size": 12,
     "usable_fraction": 0.8333
+  },
+  "disk_enclosure": {
+    "label": "Supermicro 60-bay 4U disk enclosure (JBOD, 946SE1C-R1K66JBOD), new, empty",
+    "bays": 60,
+    "price_usd": 5800.74,
+    "watts": 200,
+    "watts_note": "Estimate for fans, expanders and power-supply losses, not counting the drives.",
+    "source_name": "SabrePC",
+    "source_url": "https://www.sabrepc.com/CSE-946SE1C-R1K66JBOD-Supermicro-S2582609",
+    "checked": "2026-10-17"
+  },
+  "server": {
+    "label": "Dell PowerEdge R760xs 2U server, starting configuration",
+    "price_usd": 15956.82,
+    "enclosures_per_server": 4,
+    "enclosures_note": "One server runs up to 4 disk enclosures (240 drives). Both systems need at least one server; on the tape side it runs MARCIA/askALICE and the disk tier.",
+    "watts": 350,
+    "watts_note": "Estimate of typical running power.",
+    "source_name": "Dell.com",
+    "source_url": "https://www.dell.com/en-us/shop/dell-poweredge-servers/new-poweredge-r760xs-rack-server/spd/poweredge-r760xs/amer_r760xs_16830_vi_vp",
+    "checked": "2026-10-17"
+  },
+  "tape_library": {
+    "label": "HPE StoreEver MSL6480 tape library (80-slot modules)",
+    "base_module_price_usd": 14986.00,
+    "expansion_module_price_usd": 7629.00,
+    "slots_per_module": 80,
+    "max_modules_per_library": 7,
+    "watts_per_library": 200,
+    "watts_note": "HPE QuickSpecs maximum for the library; cartridges on the shelf use no power.",
+    "source_name": "LTO World (QU625A base module, QU626A expansion module); HPE QuickSpecs",
+    "source_url": "https://ltoworld.com/products/hp-msl6480-scalable-base-module",
+    "source_url_2": "https://ltoworld.com/products/hp-msl6480-scalable-expansion-module",
+    "source_url_3": "https://www.hpe.com/us/en/collaterals/collateral.c04111416.html",
+    "checked": "2026-10-17"
   },
   "lto": {
     "12": { "label": "LTO-8 cartridge, 12 TB", "price_low_usd": 69.95, "price_high_usd": 80.00, "price_usd": 74.98 },
@@ -32,10 +71,10 @@
     "checked": "2026-09-17"
   },
   "lto_drive": {
-    "12": { "label": "LTO-8 internal tape drive", "price_low_usd": 4850, "price_high_usd": 8099, "price_usd": 6475 },
-    "18": { "label": "LTO-9 internal tape drive", "price_low_usd": 7699, "price_high_usd": 13500, "price_usd": 10600 },
-    "30": { "label": "LTO-10 external tape drive (no internal price listed)", "price_low_usd": 22165, "price_high_usd": 24950, "price_usd": 23558 },
-    "source_name": "TapeBackup.org LTO tape price tracker",
+    "12": { "label": "LTO-8 tape drive (internal drive price; library kit not listed)", "price_low_usd": 4850, "price_high_usd": 8099, "price_usd": 6475 },
+    "18": { "label": "HPE MSL LTO-9 SAS drive upgrade kit (R6Q75A)", "price_usd": 10824, "source_url": "https://store.ccnytech.com/products/hpe-msl-lto-9-45000-sas-drv-upg-1212471", "checked": "2026-10-17" },
+    "30": { "label": "LTO-10 tape drive (external drive price; library kit not listed)", "price_low_usd": 22165, "price_high_usd": 24950, "price_usd": 23558 },
+    "source_name": "TapeBackup.org LTO tape price tracker (LTO-8, LTO-10); CCNY Tech (LTO-9 library drive kit)",
     "source_url": "https://tapebackup.org/lto-tape-price-trend",
     "checked": "2026-09-17"
   },
@@ -52,6 +91,19 @@
     "source_name": "StartBusinessByState analysis of EIA retail electricity data",
     "source_url": "https://startbusinessbystate.com/?p=16487",
     "checked": "2026-10-16"
+  },
+  "cooling": {
+    "label": "Cooling, as a multiplier on equipment power (data center PUE)",
+    "pue": 1.54,
+    "note": "Uptime Institute 2025 global survey average: every 1 watt of equipment needs about 0.54 watts more for cooling and building power.",
+    "source_name": "Uptime Institute 2025 Global Data Center Survey (reported by mgrid.org)",
+    "source_url": "https://mgrid.org/2025/10/01/uptime-institute-data-center-pue-stagnation-2025-liquid-cooling/",
+    "checked": "2026-10-17"
+  },
+  "tape_system": {
+    "disk_tier_fraction": 0.10,
+    "disk_tier_note": "A small hard-drive tier holds the most recent video for instant playback; 10% of total storage, as in Cozaint's published storage white paper.",
+    "source_url": "https://cozaint.com/assets/video-surveillance-storage-white-paper.pdf"
   },
   "market_trend": {
     "summary": "Hard drive prices rose about 50% year over year by mid-2026 as AI data centers bought up supply; Western Digital and Seagate say capacity is sold out or fully allocated for 2026. LTO cartridge prices stayed roughly flat over the same period.",
