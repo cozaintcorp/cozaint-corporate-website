@@ -21,6 +21,7 @@
     return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
   function num(n) { return Math.round(n).toLocaleString('en-US'); }
+  function yrs(n) { return n + (n === 1 ? ' year' : ' years'); }
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
@@ -28,19 +29,49 @@
   }
   function el(id) { return document.getElementById(id); }
 
+  // A price file is used only if every number the comparison needs works out.
+  function usable(data) {
+    if (!data || data.schema_version !== 2) return false;
+    var keep = prices;
+    try {
+      prices = data;
+      var ok = true;
+      [12, 18, 30].forEach(function (gen) {
+        var r = compute({ totalTb: 500, ltoCapacity: gen, cartridges: 1, tapeDrives: 2 }, 5);
+        [r.tape, r.hdd, r.cloud].forEach(function (part) {
+          if (!(isFinite(part.total) && part.total > 0)) ok = false;
+          part.lines.forEach(function (l) { if (!isFinite(l.amount) || /NaN|undefined/.test(l.detail)) ok = false; });
+        });
+      });
+      return ok;
+    } catch (e) {
+      return false;
+    } finally {
+      prices = keep;
+    }
+  }
+
   function loadPrices(i) {
     if (i >= SOURCES.length) { showError(); return; }
-    fetch(SOURCES[i], { cache: 'no-cache' })
+    if (!window.fetch) { showError(); return; }
+    // Give up on a slow source after 6 seconds and try the next one.
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 6000) : null;
+    fetch(SOURCES[i], ctrl ? { cache: 'no-cache', signal: ctrl.signal } : { cache: 'no-cache' })
       .then(function (r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       })
       .then(function (data) {
-        if (!data || data.schema_version !== 2 || !data.hdd || !data.lto || !data.tape_library) throw new Error('bad data');
+        if (timer) clearTimeout(timer);
+        if (!usable(data)) throw new Error('bad data');
         prices = data;
         render();
       })
-      .catch(function () { loadPrices(i + 1); });
+      .catch(function () {
+        if (timer) clearTimeout(timer);
+        loadPrices(i + 1);
+      });
   }
 
   function showError() {
@@ -94,9 +125,9 @@
         d.enclosures * p.disk_enclosure.price_usd),
       line('Storage servers', num(d.servers) + ' × ' + money2(p.server.price_usd) + ' (one per ' + p.server.enclosures_per_server + ' enclosures)',
         d.servers * p.server.price_usd),
-      line('Replacement drives', num(d.replacements) + ' × ' + money2(drivePrice) + ' (' + (p.hdd.annual_failure_rate * 100).toFixed(2) + '% of drives fail each year, for ' + years + ' years)',
+      line('Replacement drives', num(d.replacements) + ' × ' + money2(drivePrice) + ' (' + (p.hdd.annual_failure_rate * 100).toFixed(2) + '% of drives fail each year, for ' + yrs(years) + ')',
         d.replacements * drivePrice),
-      line('Power and cooling', dPow.kw.toFixed(1) + ' kW around the clock for ' + years + ' years at ' + (p.electricity.usd_per_kwh * 100).toFixed(2) + '¢ per kWh, cooling included',
+      line('Power and cooling', dPow.kw.toFixed(1) + ' kW around the clock for ' + yrs(years) + ' at ' + (p.electricity.usd_per_kwh * 100).toFixed(2) + '¢ per kWh, cooling included',
         dPow.cost)
     ];
 
@@ -122,7 +153,7 @@
     var tapeLines = [
       line('LTO tape cartridges', num(cartridges) + ' × ' + money2(cartPrice) + ' (' + calc.ltoCapacity + ' TB each' +
         (usingCozaintPrice ? ', Cozaint price' : '') + ')', cartridges * cartPrice),
-      line('Tape library', num(libraries) + (libraries === 1 ? ' library, ' : ' libraries, ') + num(modules) + ' modules, ' +
+      line('Tape library', num(libraries) + (libraries === 1 ? ' library, ' : ' libraries, ') + num(modules) + (modules === 1 ? ' module, ' : ' modules, ') +
         num(modules * lib.slots_per_module) + ' cartridge slots', libraryCost),
       line('Tape drives', num(calc.tapeDrives) + ' × ' + money2(tapeDrive), calc.tapeDrives * tapeDrive),
       line('Disk tier hard drives', num(t.drives) + ' × ' + money2(drivePrice) + ' (' + Math.round(p.tape_system.disk_tier_fraction * 100) +
@@ -131,7 +162,7 @@
       line('Server (runs the Cozaint software and disk tier)', num(t.servers) + ' × ' + money2(p.server.price_usd), t.servers * p.server.price_usd),
       line('Replacement drives', num(t.replacements) + ' × ' + money2(drivePrice) + ' (disk tier only; tape cartridges are rated for decades)',
         t.replacements * drivePrice),
-      line('Power and cooling', tPow.kw.toFixed(1) + ' kW around the clock for ' + years + ' years, cooling included. Cartridges on the shelf use no power',
+      line('Power and cooling', tPow.kw.toFixed(1) + ' kW around the clock for ' + yrs(years) + ', cooling included. Cartridges on the shelf use no power',
         tPow.cost)
     ];
 
@@ -173,6 +204,15 @@
   function render() {
     if (!prices || !lastCalc || !el('tcoBox')) return;
     var years = Math.max(1, Math.min(20, parseFloat(el('tcoYears').value) || 5));
+    if (!(lastCalc.totalTb > 0)) {
+      el('tcoTape').textContent = '—';
+      el('tcoHdd').textContent = '—';
+      el('tcoCloud').textContent = '—';
+      el('tcoSavings').textContent = 'Enter the number of cameras and retention days above to see costs.';
+      el('tcoBreakdown').innerHTML = '';
+      el('tcoStatus').textContent = '';
+      return;
+    }
     var r = compute(lastCalc, years);
 
     el('tcoTape').textContent = money(r.tape.total);
@@ -182,7 +222,7 @@
     var saving = r.hdd.total - r.tape.total;
     var pct = r.hdd.total > 0 ? Math.round(saving / r.hdd.total * 100) : 0;
     el('tcoSavings').textContent = saving > 0
-      ? 'LTO tape saves ' + money(saving) + ' (' + pct + '%) compared with hard drives over ' + years + ' years.'
+      ? 'LTO tape saves ' + money(saving) + ' (' + pct + '%) compared with hard drives over ' + yrs(years) + '.'
       : 'At this size, hard drives cost less than tape.';
 
     el('tcoBreakdown').innerHTML =
