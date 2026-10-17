@@ -92,7 +92,8 @@
           </div>
 
           <label for="calcMotion">Motion percentage <span id="motionVal">24%</span></label>
-          <input type="range" id="calcMotion" min="1" max="100" value="24">
+          <input type="range" id="calcMotion" min="1" max="100" value="24" aria-describedby="calcMotionHelp">
+          <p class="calc-hint" id="calcMotionHelp">How much of the picture is usually moving. Quiet areas (hallways, storerooms, nights): <span style="white-space:nowrap">10–25%</span>. Typical offices and lobbies: <span style="white-space:nowrap">25–50%</span>. Busy places (retail floors, stations, roads): <span style="white-space:nowrap">50% or more</span>.</p>
 
           <details class="calc-advanced">
             <summary>Advanced settings</summary>
