@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "updated": "2026-10-17",
-  "updated_by": "Claude (equipment prices added by hand)",
+  "updated": "2026-10-18",
+  "updated_by": "Claude monthly agent",
   "notes": "Typical current price of a new product from public price listings. US dollars, before tax and shipping. The website calculator reads this file.",
   "hdd": {
     "label": "Seagate Exos X20 18 TB enterprise hard drive, new",
@@ -11,13 +11,13 @@
     "watts": 8.5,
     "watts_note": "Between Seagate Exos X24 write (8.2 W) and read (9.8 W) power; surveillance recording is mostly writes.",
     "market_median_usd_per_tb": 48.50,
-    "market_median_note": "Median of 69 new enterprise-drive offers on Amazon US.",
+    "market_median_note": "Median of 69 new enterprise-drive offers on Amazon US (as of 2026-10-16; the tracker did not report a new median on 2026-10-18).",
     "annual_failure_rate": 0.0141,
     "annual_failure_rate_note": "Backblaze lifetime annualized failure rate across about 353,000 drives, through June 30, 2026.",
     "annual_failure_rate_source_url": "https://backblaze.com/blog/backblaze-drive-stats-for-q2-2026",
     "source_name": "DatacenterDisk hard drive price tracker",
     "source_url": "https://datacenterdisk.com/price-forecast",
-    "checked": "2026-10-16"
+    "checked": "2026-10-18"
   },
   "raid": {
     "label": "RAID 6, 12-drive groups (10 data + 2 parity)",
@@ -32,7 +32,7 @@
     "watts_note": "Estimate for fans, expanders and power-supply losses, not counting the drives.",
     "source_name": "SabrePC",
     "source_url": "https://www.sabrepc.com/CSE-946SE1C-R1K66JBOD-Supermicro-S2582609",
-    "checked": "2026-10-17"
+    "checked": "2026-10-18"
   },
   "server": {
     "label": "Dell PowerEdge R760xs 2U server, starting configuration",
@@ -72,25 +72,25 @@
   },
   "lto_drive": {
     "12": { "label": "LTO-8 tape drive (internal drive price; library kit not listed)", "price_low_usd": 4850, "price_high_usd": 8099, "price_usd": 6475 },
-    "18": { "label": "HPE MSL LTO-9 SAS drive upgrade kit (R6Q75A)", "price_usd": 10824, "source_url": "https://store.ccnytech.com/products/hpe-msl-lto-9-45000-sas-drv-upg-1212471", "checked": "2026-10-17" },
+    "18": { "label": "HPE MSL LTO-9 SAS drive upgrade kit (R6Q75A)", "price_usd": 10824, "source_url": "https://store.ccnytech.com/products/hpe-msl-lto-9-45000-sas-drv-upg-1212471", "checked": "2026-10-18" },
     "30": { "label": "LTO-10 tape drive (external drive price; library kit not listed)", "price_low_usd": 22165, "price_high_usd": 24950, "price_usd": 23558 },
     "source_name": "TapeBackup.org LTO tape price tracker (LTO-8, LTO-10); CCNY Tech (LTO-9 library drive kit)",
     "source_url": "https://tapebackup.org/lto-tape-price-trend",
     "checked": "2026-09-17"
   },
   "cloud": {
-    "label": "Wasabi hot cloud storage, pay as you go",
-    "usd_per_tb_month": 6.99,
-    "source_name": "Subger summary of Wasabi pricing (verified 2026-03-18)",
-    "source_url": "https://subger.com/en/service/wasabi",
-    "checked": "2026-10-16"
+    "label": "Wasabi hot cloud storage, pay as you go (price in effect from July 1, 2026)",
+    "usd_per_tb_month": 7.99,
+    "source_name": "Wasabi documentation: May 2026 Wasabi pricing notice",
+    "source_url": "https://docs.wasabi.com/docs/may-2026-wasabi-pricing",
+    "checked": "2026-10-18"
   },
   "electricity": {
     "label": "US average commercial electricity price, 12 months ending July 2026 (EIA data)",
     "usd_per_kwh": 0.1385,
     "source_name": "StartBusinessByState analysis of EIA retail electricity data",
     "source_url": "https://startbusinessbystate.com/?p=16487",
-    "checked": "2026-10-16"
+    "checked": "2026-10-18"
   },
   "cooling": {
     "label": "Cooling, as a multiplier on equipment power (data center PUE)",
@@ -106,11 +106,12 @@
     "source_url": "https://cozaint.com/assets/video-surveillance-storage-white-paper.pdf"
   },
   "market_trend": {
-    "summary": "Hard drive prices rose about 50% year over year by mid-2026 as AI data centers bought up supply; Western Digital and Seagate say capacity is sold out or fully allocated for 2026. LTO cartridge prices stayed roughly flat over the same period.",
+    "summary": "Hard drive prices stay high after rising about 50% year over year by mid-2026, as AI data centers buy up supply; Western Digital and Seagate say capacity is sold out or fully allocated for 2026. LTO cartridge prices remain roughly flat (DatacenterDisk shows LTO media about +1% over 30 days), and Wasabi raised its pay-as-you-go cloud price from $6.99 to $7.99 per TB per month on July 1, 2026.",
     "sources": [
       "https://hddhunt.com/blog/why-hdd-prices-are-rising-2026/",
       "https://datacenterdisk.com/price-forecast",
-      "https://tapebackup.org/lto-tape-price-trend"
+      "https://datacenterdisk.com/trends/lto",
+      "https://docs.wasabi.com/docs/may-2026-wasabi-pricing"
     ]
   }
 }

@@ -2,6 +2,30 @@
 
 Newest month at the top. Written by the monthly price agent.
 
+## 2026-10-18
+
+**Prices.** Cloud storage went up: Wasabi's pay-as-you-go price rose from
+$6.99 to $7.99 per TB per month (about 14%) starting July 1, 2026, which the
+calculator now uses. The Seagate Exos X20 18 TB drive is unchanged at $764.90
+($42.49 per TB), and the HPE LTO-9 library drive kit is unchanged at $10,824.
+LTO media stays roughly flat (about +1% over 30 days on DatacenterDisk), while
+hard drives stay expensive because AI data centers are buying up supply. The
+Supermicro 60-bay enclosure still lists at $5,800.74 but shows out of stock.
+Sources: [Wasabi pricing notice](https://docs.wasabi.com/docs/may-2026-wasabi-pricing),
+[PricingSaaS change log](https://pricingsaas.com/companies/wasabi/diffs/2026W28),
+[DatacenterDisk Exos X](https://datacenterdisk.com/brand/seagate/exos-x),
+[DatacenterDisk LTO trends](https://datacenterdisk.com/trends/lto),
+[CCNY Tech](https://store.ccnytech.com/products/hpe-msl-lto-9-45000-sas-drv-upg-1212471)
+
+**Kept from last time (source not reachable this run).** LTO cartridge and
+LTO-8/LTO-10 drive prices (TapeBackup.org), tape library modules (LTO World)
+and the Dell server price (Dell.com showed no online price).
+
+**Competitors and alternatives.** Nothing new found this month. DatacenterDisk
+reports tape media at about $4.89 per TB against about $20 per TB for the
+cheapest SATA hard drives, roughly 4 times cheaper on media alone.
+[DatacenterDisk](https://datacenterdisk.com/reports/tape-renaissance-2026)
+
 ## 2026-10-16 (first entry)
 
 **Prices.** Hard drive prices rose about 50% year over year by mid-2026 as AI
