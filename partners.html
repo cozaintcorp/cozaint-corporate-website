@@ -44,7 +44,7 @@
 <main>
   <section class="page-hero">
     <div class="section-inner">
-      <p class="eyebrow">Technology Partners</p>
+      <p class="eyebrow">Partners</p>
       <h1>Built to work with the tools you already own.</h1>
       <p class="sub">Cozaint works alongside the video software, tape library and storage companies your team already relies on, so you add long-term video retention without ripping anything out.</p>
     </div>
@@ -52,11 +52,16 @@
 
   <section class="pt-section">
     <div class="section-inner">
-      <div class="pt-chips" role="tablist" aria-label="Filter partners">
-        <button type="button" class="pt-chip on" data-f="all">All partners</button>
-        <button type="button" class="pt-chip" data-f="vms">Video software and recorders</button>
-        <button type="button" class="pt-chip" data-f="tape">Tape libraries and servers</button>
-        <button type="button" class="pt-chip" data-f="media">Drives and media</button>
+      <div class="pt-tabs" role="tablist" aria-label="Partner types">
+        <button type="button" class="pt-tab on" role="tab" id="tabTech" aria-controls="ptTech" aria-selected="true" data-t="tech">Technology partners</button>
+        <button type="button" class="pt-tab" role="tab" id="tabResell" aria-controls="ptResell" aria-selected="false" data-t="resell">Reseller partners</button>
+      </div>
+
+      <div class="pt-panel" id="ptTech" role="tabpanel" aria-labelledby="tabTech">
+      <div class="pt-chips" aria-label="Filter technology partners">
+        <button type="button" class="pt-chip" data-f="vms" aria-pressed="false">Video software and recorders</button>
+        <button type="button" class="pt-chip" data-f="tape" aria-pressed="false">Tape libraries and servers</button>
+        <button type="button" class="pt-chip" data-f="media" aria-pressed="false">Drives and media</button>
       </div>
       <div class="pt-grid" id="ptGrid">
         <article class="pt-tile" data-c="vms">
@@ -130,6 +135,16 @@
           <p class="pt-text">LTO tape media for long-term video storage.</p>
         </article>
       </div>
+      </div>
+
+      <div class="pt-panel" id="ptResell" role="tabpanel" aria-labelledby="tabResell" hidden>
+        <div class="pt-resell">
+          <h2>Become a Cozaint reseller.</h2>
+          <p class="lead">We are building our reseller program for security integrators and IT resellers. If you sell or install video surveillance systems and want to offer your customers long-term video retention at a fraction of the cost of disk, we would like to talk.</p>
+          <p><a class="btn btn-primary" href="contact.html?product=reseller#quote">Apply to become a reseller</a></p>
+          <p class="pt-resell-note">The button opens our short request form with "Becoming a reseller" already selected. Tell us about your company and the customers you serve, and we will be in touch.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -150,7 +165,7 @@
       <p class="eyebrow">Become a partner</p>
       <h2>Make or sell something that works with video?</h2>
       <p class="lead">Tell us what you build. We are always looking for software, storage and integration companies to work with.</p>
-      <p><a class="btn btn-primary" href="contact.html#quote">Talk to us about partnering</a></p>
+      <p><a class="btn btn-primary" href="contact.html?product=partner#quote">Talk to us about partnering</a></p>
     </div>
   </section>
 
@@ -205,8 +220,16 @@
 <script src="script.js"></script>
 <script src="nav.js"></script>
 <script>
-(function(){var chips=document.querySelectorAll('.pt-chip'),tiles=document.querySelectorAll('.pt-tile');
-chips.forEach(function(c){c.addEventListener('click',function(){chips.forEach(function(x){x.classList.remove('on')});c.classList.add('on');var f=c.dataset.f;tiles.forEach(function(t){t.style.display=(f==='all'||t.dataset.c===f)?'':'none'})})})})();
+(function(){
+var tabs=document.querySelectorAll('.pt-tab'),chips=document.querySelectorAll('.pt-chip'),tiles=document.querySelectorAll('.pt-tile');
+function filter(f){chips.forEach(function(x){var on=x.dataset.f===f;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on?'true':'false')});
+ tiles.forEach(function(t){t.style.display=(!f||t.dataset.c===f)?'':'none'})}
+function show(t){tabs.forEach(function(x){var on=x.dataset.t===t;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false')});
+ document.getElementById('ptTech').hidden=(t!=='tech');document.getElementById('ptResell').hidden=(t!=='resell');if(t==='tech')filter(null)}
+tabs.forEach(function(x){x.addEventListener('click',function(){show(x.dataset.t)})});
+chips.forEach(function(c){c.addEventListener('click',function(){filter(c.classList.contains('on')?null:c.dataset.f)})});
+function fromHash(){if(location.hash==='#resellers')show('resell');}fromHash();window.addEventListener('hashchange',fromHash);
+})();
 </script>
 </body>
 </html>

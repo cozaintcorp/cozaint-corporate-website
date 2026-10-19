@@ -978,6 +978,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* Technology Partners page */
 .pt-section { padding: 56px 0 24px; }
+.pt-tabs { display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 2px solid rgba(15,46,36,.15); margin-bottom: 26px; }
+.pt-tab { background: transparent; border: 0; border-bottom: 3px solid transparent; margin-bottom: -2px; padding: 12px 18px; font: 700 18px var(--font-body); color: #5b6b64; cursor: pointer; }
+.pt-tab:hover { color: var(--ink); }
+.pt-tab.on { color: var(--forest); border-bottom-color: var(--mint); }
+.pt-resell { background: #fff; border: 1px solid rgba(15,46,36,.12); border-radius: 14px; padding: 36px; box-shadow: 0 10px 30px rgba(15,46,36,.06); max-width: 760px; }
+.pt-resell h2 { margin: 0 0 12px; }
+.pt-resell-note { margin: 14px 0 0; font-size: 14px; color: #5b6b64; }
 .pt-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
 .pt-chip { border: 1px solid rgba(15,46,36,.25); background: transparent; color: var(--ink); border-radius: 999px; padding: 10px 20px; font: 700 15px var(--font-body); cursor: pointer; }
 .pt-chip.on { background: var(--forest); border-color: var(--forest); color: #fff; }
