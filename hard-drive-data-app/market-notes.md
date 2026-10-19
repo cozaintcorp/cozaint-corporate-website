@@ -2,6 +2,33 @@
 
 Newest month at the top. Written by the monthly price agent.
 
+## 2026-10-19
+
+**Prices.** Mostly steady. The Seagate Exos X20 18 TB drive is unchanged at
+$764.90 ($42.49 per TB), but the median new enterprise drive edged up from
+$48.50 to $49.05 per TB, and DatacenterDisk's index shows enterprise drives
+about +2% over 30 days with no relief expected before 2027. LTO media stays
+roughly flat (about +0.5% over 30 days; an HPE LTO-9 cartridge lists at $99).
+The HPE LTO-9 library drive kit is unchanged at $10,824, Wasabi stays at $7.99
+per TB per month, and electricity at 13.85 cents per kWh. Cooling overhead
+improved slightly: Uptime Institute's 2026 survey puts the average PUE at 1.52
+(was 1.54). The Supermicro 60-bay enclosure still lists at $5,800.74, out of stock.
+Sources: [DatacenterDisk forecast](https://datacenterdisk.com/price-forecast),
+[DatacenterDisk LTO trends](https://datacenterdisk.com/trends/lto),
+[MaxMyBuild Exos X20](https://www.maxmybuild.com/storage/hard-drives/seagate-exos-x20/18tb),
+[Uptime Institute](https://intelligence.uptimeinstitute.com/resource/growing-pue-advantage-larger-data-centers),
+[Wasabi FAQs](https://docs.wasabi.com/docs/may-2026-wasabi-pricing-faqs),
+[CCNY Tech](https://store.ccnytech.com/products/hpe-msl-lto-9-45000-sas-drv-upg-1212471),
+[SabrePC](https://www.sabrepc.com/CSE-946SE1C-R1K66JBOD-Supermicro-S2582609)
+
+**Kept from last time (source not reachable this run).** LTO cartridge price
+ranges and LTO-8/LTO-10 drive prices (TapeBackup.org), tape library modules
+(LTO World) and the Dell R760xs server price (Dell.com showed no R760xs price).
+Backblaze has not yet published Q3 2026 drive stats, so the failure rate stays
+at 1.41%.
+
+**Competitors and alternatives.** Nothing new found this month.
+
 ## 2026-10-18
 
 **Prices.** Cloud storage went up: Wasabi's pay-as-you-go price rose from
