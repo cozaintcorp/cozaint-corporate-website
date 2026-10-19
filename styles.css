@@ -633,6 +633,60 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .tco-status { margin: 6px 0 0; font-size: 11px; color: var(--grey-400); }
 .tco-unavailable .tco-grid, .tco-unavailable .tco-savings { display: none; }
 
+/* Cost chart in the calculator's left column */
+.calc-grid { grid-template-rows: auto 1fr; }
+.calc-grid > .calc-intro { grid-column: 1; grid-row: 1; }
+.calc-grid > .calc-card { grid-column: 2; grid-row: 1 / span 2; }
+.calc-chart-col { grid-column: 1; grid-row: 2; align-self: start; position: sticky; top: 104px; }
+.tco-chart {
+  --tco-media: #008a5e; --tco-hardware: #3ecf8e; --tco-software: #2a78d6; --tco-power: #eb6834;
+  position: relative; background: var(--white); border: 1px solid var(--line); border-radius: 6px;
+  padding: 22px 22px 18px; box-shadow: 0 10px 30px rgba(13, 33, 27, 0.06);
+}
+.tco-chart[hidden] { display: none; }
+.tco-chart-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey-600); margin: 0 0 6px; }
+.tco-chart-hero { font-family: var(--font-body); font-weight: 700; font-size: clamp(36px, 4.2vw, 50px); line-height: 1.05; color: var(--ink); margin: 0; letter-spacing: -0.02em; }
+.tco-chart-sub { font-size: 14px; color: var(--grey-600); margin: 6px 0 18px; line-height: 1.45; }
+.tco-chart-sub strong { color: var(--ink); }
+.tco-bars { display: grid; gap: 14px; }
+.tco-bar-row { display: grid; grid-template-columns: 86px 1fr; gap: 4px 12px; align-items: center; }
+.tco-bar-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+.tco-bar-total { grid-column: 2; font-size: 13px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.tco-track { display: flex; height: 24px; min-width: 0; }
+.tco-seg {
+  height: 100%; margin-right: 2px; flex: 0 0 auto; cursor: pointer; outline: none;
+  transition: width 0.55s cubic-bezier(.2,.7,.2,1), opacity 0.15s ease;
+}
+.tco-seg:last-child { margin-right: 0; border-radius: 0 4px 4px 0; }
+.tco-seg.is-zero { margin-right: 0; }
+.tco-seg:hover, .tco-seg:focus-visible { opacity: 0.8; box-shadow: 0 0 0 2px var(--white), 0 0 0 3px var(--ink); }
+.tco-seg[data-cat="media"] { background: var(--tco-media); }
+.tco-seg[data-cat="hardware"] { background: var(--tco-hardware); }
+.tco-seg[data-cat="software"] { background: var(--tco-software); }
+.tco-seg[data-cat="power"] { background: var(--tco-power); }
+.tco-legend { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 16px 0 0; padding: 0; font-size: 12px; color: var(--grey-600); }
+.tco-legend li { display: flex; align-items: center; gap: 6px; }
+.tco-legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.tco-cloud { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; color: var(--grey-600); line-height: 1.5; }
+.tco-cloud strong { color: var(--ink); }
+.tco-chart-foot { font-size: 11px; color: var(--grey-400); margin: 10px 0 0; }
+.tco-tip {
+  position: absolute; z-index: 5; pointer-events: none; min-width: 180px; max-width: 260px;
+  background: var(--ink); color: var(--white); border-radius: 6px; padding: 10px 12px; font-size: 12px; line-height: 1.45;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+}
+.tco-tip strong { display: block; font-size: 16px; }
+.tco-tip span { color: #c7d3cc; }
+.tco-tip ul { margin: 6px 0 0; padding: 0; list-style: none; }
+.tco-tip li { display: flex; justify-content: space-between; gap: 12px; }
+@media (prefers-reduced-motion: reduce) { .tco-seg { transition: none; } }
+@media (max-width: 980px) {
+  .calc-grid { grid-template-rows: none; }
+  .calc-grid > .calc-intro, .calc-grid > .calc-card, .calc-chart-col { grid-column: auto; grid-row: auto; }
+  .calc-chart-col { position: static; order: 3; }
+  .calc-grid > .calc-card { order: 2; }
+}
+
 .validation-notice { background: var(--forest); }
 .validation-notice h2 { font-size: clamp(26px, 3vw, 34px); margin-bottom: 24px; }
 .validation-list { display: flex; flex-direction: column; gap: 12px; max-width: 70ch; }

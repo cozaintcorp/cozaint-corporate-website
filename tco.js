@@ -211,6 +211,160 @@
     }).join(' · ');
   }
 
+
+  // ---------- Chart in the left column ----------
+  var CATS = [
+    { key: 'media', name: 'Storage media' },
+    { key: 'hardware', name: 'Equipment' },
+    { key: 'software', name: 'Software' },
+    { key: 'power', name: 'Power and cooling' }
+  ];
+  function catOf(label) {
+    if (/power/i.test(label)) return 'power';
+    if (/^MARCIA base software/.test(label)) return 'software';
+    if (/cartridges|hard drives|replacement drives/i.test(label)) return 'media';
+    return 'hardware';
+  }
+  function grouped(part) {
+    var g = {};
+    CATS.forEach(function (c) { g[c.key] = { total: 0, items: [] }; });
+    part.lines.forEach(function (l) {
+      var c = catOf(l.label);
+      g[c].total += l.amount;
+      if (l.amount > 0) g[c].items.push(l);
+    });
+    return g;
+  }
+  function compact(n) {
+    if (n >= 1e6) return '$' + (n / 1e6).toFixed(n >= 1e7 ? 1 : 2).replace(/\.?0+$/, '') + 'M';
+    if (n >= 1e3) return '$' + Math.round(n / 1e3).toLocaleString('en-US') + 'K';
+    return money(n);
+  }
+  var chartBuilt = false;
+  var chartData = {};
+  function buildChart() {
+    var bars = el('tcoBars');
+    [['tape', 'LTO tape'], ['hdd', 'Hard drives']].forEach(function (sys) {
+      var row = document.createElement('div');
+      row.className = 'tco-bar-row';
+      var name = document.createElement('span');
+      name.className = 'tco-bar-name';
+      name.textContent = sys[1];
+      var track = document.createElement('div');
+      track.className = 'tco-track';
+      CATS.forEach(function (c) {
+        var seg = document.createElement('span');
+        seg.className = 'tco-seg';
+        seg.dataset.cat = c.key;
+        seg.dataset.sys = sys[0];
+        seg.tabIndex = 0;
+        seg.style.width = '0%';
+        seg.addEventListener('pointerenter', showTip);
+        seg.addEventListener('pointerleave', hideTip);
+        seg.addEventListener('focus', showTip);
+        seg.addEventListener('blur', hideTip);
+        track.appendChild(seg);
+      });
+      var total = document.createElement('span');
+      total.className = 'tco-bar-total';
+      total.id = 'tcoBarTotal-' + sys[0];
+      row.appendChild(name);
+      row.appendChild(track);
+      row.appendChild(total);
+      bars.appendChild(row);
+    });
+    var legend = el('tcoLegend');
+    CATS.forEach(function (c) {
+      var li = document.createElement('li');
+      var sw = document.createElement('i');
+      sw.style.background = 'var(--tco-' + c.key + ')';
+      li.appendChild(sw);
+      li.appendChild(document.createTextNode(c.name));
+      legend.appendChild(li);
+    });
+    chartBuilt = true;
+  }
+  function showTip(e) {
+    var seg = e.currentTarget, tip = el('tcoTip'), box = el('tcoChart');
+    var d = chartData[seg.dataset.sys];
+    if (!d) return;
+    var g = d.groups[seg.dataset.cat];
+    var cat = CATS.filter(function (c) { return c.key === seg.dataset.cat; })[0];
+    tip.textContent = '';
+    var strong = document.createElement('strong');
+    strong.textContent = money(g.total);
+    var sub = document.createElement('span');
+    sub.textContent = cat.name + ' · ' + d.name + ' (' + Math.round(g.total / d.total * 100) + '% of ' + money(d.total) + ')';
+    tip.appendChild(strong);
+    tip.appendChild(sub);
+    if (g.items.length > 1) {
+      var ul = document.createElement('ul');
+      g.items.forEach(function (l) {
+        var li = document.createElement('li');
+        var a = document.createElement('span'); a.textContent = l.label;
+        var b = document.createElement('span'); b.textContent = money(l.amount);
+        li.appendChild(a); li.appendChild(b); ul.appendChild(li);
+      });
+      tip.appendChild(ul);
+    }
+    tip.hidden = false;
+    var sr = seg.getBoundingClientRect(), br = box.getBoundingClientRect();
+    var left = sr.left - br.left + sr.width / 2 - tip.offsetWidth / 2;
+    left = Math.max(8, Math.min(left, br.width - tip.offsetWidth - 8));
+    tip.style.left = left + 'px';
+    tip.style.top = (sr.top - br.top - tip.offsetHeight - 10) + 'px';
+  }
+  function hideTip() { el('tcoTip').hidden = true; }
+
+  function renderChart(r) {
+    var box = el('tcoChart');
+    if (!box) return;
+    if (!r) { box.hidden = true; return; }
+    if (!chartBuilt) buildChart();
+    box.hidden = false;
+    chartData = {
+      tape: { name: 'LTO tape', total: r.tape.total, groups: grouped(r.tape) },
+      hdd: { name: 'Hard drives', total: r.hdd.total, groups: grouped(r.hdd) }
+    };
+    var max = Math.max(r.tape.total, r.hdd.total);
+    ['tape', 'hdd'].forEach(function (sys) {
+      var d = chartData[sys];
+      var segs = el('tcoBars').querySelectorAll('.tco-seg[data-sys="' + sys + '"]');
+      Array.prototype.forEach.call(segs, function (seg) {
+        var g = d.groups[seg.dataset.cat];
+        var pct = max > 0 ? g.total / max * 100 : 0;
+        seg.style.width = (g.total > 0 ? Math.max(pct, 0.6) : 0) + '%';
+        seg.classList.toggle('is-zero', !(g.total > 0));
+        seg.setAttribute('aria-label', d.name + ', ' + CATS.filter(function (c) { return c.key === seg.dataset.cat; })[0].name + ': ' + money(g.total));
+        if (!(g.total > 0)) seg.tabIndex = -1; else seg.tabIndex = 0;
+      });
+      el('tcoBarTotal-' + sys).textContent = money(d.total);
+    });
+    var saving = r.hdd.total - r.tape.total;
+    var pct = r.hdd.total > 0 ? Math.round(saving / r.hdd.total * 100) : 0;
+    var sub = el('tcoChartSub');
+    sub.textContent = '';
+    if (saving > 0) {
+      el('tcoChartHero').textContent = money(saving);
+      sub.appendChild(document.createTextNode('saved with LTO tape over ' + yrs(r.years) + ', '));
+      var s1 = document.createElement('strong'); s1.textContent = pct + '% less';
+      sub.appendChild(s1);
+      sub.appendChild(document.createTextNode(' than hard drives, for ' + num(r.tb) + ' TB of video.'));
+    } else {
+      el('tcoChartHero').textContent = money(-saving);
+      sub.appendChild(document.createTextNode('less with hard drives over ' + yrs(r.years) + ' at this size (' + num(r.tb) + ' TB). Tape pulls ahead as storage grows.'));
+    }
+    var note = el('tcoCloudNote');
+    note.textContent = '';
+    var times = r.tape.total > 0 ? r.cloud.total / r.tape.total : 0;
+    note.appendChild(document.createTextNode('Cloud storage for the same video: '));
+    var s2 = document.createElement('strong'); s2.textContent = money(r.cloud.total);
+    note.appendChild(s2);
+    note.appendChild(document.createTextNode(times >= 1.1
+      ? ', about ' + times.toFixed(1) + ' times the LTO tape system (too large to draw on this scale).'
+      : '.'));
+  }
+
   function render() {
     if (!prices || !lastCalc || !el('tcoBox')) return;
     var years = Math.max(1, Math.min(20, parseFloat(el('tcoYears').value) || 5));
@@ -221,6 +375,7 @@
       el('tcoSavings').textContent = 'Enter the number of cameras and retention days above to see costs.';
       el('tcoBreakdown').innerHTML = '';
       el('tcoStatus').textContent = '';
+      renderChart(null);
       return;
     }
     var r = compute(lastCalc, years);
@@ -243,10 +398,11 @@
       '<p class="tco-notes">Prices updated ' + esc(prices.updated) +
       (r.usingCozaintPrice ? ' (tape cartridges at Cozaint list price; everything else at market prices)' : ' (market prices)') +
       '. Cooling adds ' + Math.round((prices.cooling.pue - 1) * 100) + '% to equipment power (industry average). ' +
-      'Not counted on any option: racks, network switches, software licenses, installation and support contracts. ' +
+      'Not counted on any option: racks, network switches, video management (VMS) licenses, installation and support contracts. ' +
       'Cloud also needs an on-site recorder, not counted. Sources: ' + sourcesHtml() + '.</p>';
 
     el('tcoStatus').textContent = '';
+    renderChart(r);
   }
 
   document.addEventListener('cozaint:calc', function (e) {
