@@ -135,7 +135,11 @@
     var cart = p.lto[gen] || p.lto['18'];
     var cartPrice = cart.price_usd;
     var usingCozaintPrice = false;
-    if (gen === '18' && typeof p.lto.cozaint_cartridge_price_usd === 'number') {
+    var cozaintPrices = p.lto.cozaint_cartridge_prices_usd;
+    if (cozaintPrices && typeof cozaintPrices[gen] === 'number' && cozaintPrices[gen] > 0) {
+      cartPrice = cozaintPrices[gen];
+      usingCozaintPrice = true;
+    } else if (gen === '18' && typeof p.lto.cozaint_cartridge_price_usd === 'number') {
       cartPrice = p.lto.cozaint_cartridge_price_usd;
       usingCozaintPrice = true;
     }
@@ -151,8 +155,8 @@
     var tWatts = t.watts + (t.drives === 0 ? p.server.watts : 0) + libraries * lib.watts_per_library;
     var tPow = powerCost(tWatts, years);
     var tapeLines = [
-      line('LTO tape cartridges', num(cartridges) + ' × ' + money2(cartPrice) + ' (' + calc.ltoCapacity + ' TB each' +
-        (usingCozaintPrice ? ', Cozaint price' : '') + ')', cartridges * cartPrice),
+      line(usingCozaintPrice ? 'Cozaint Certified LTO tape cartridges' : 'LTO tape cartridges', num(cartridges) + ' × ' + money2(cartPrice) + ' (' + calc.ltoCapacity + ' TB each' +
+        (usingCozaintPrice ? ', Cozaint list price' : '') + ')', cartridges * cartPrice),
       line('Tape library', num(libraries) + (libraries === 1 ? ' library, ' : ' libraries, ') + num(modules) + (modules === 1 ? ' module, ' : ' modules, ') +
         num(modules * lib.slots_per_module) + ' cartridge slots', libraryCost),
       line('Tape drives', num(calc.tapeDrives) + ' × ' + money2(tapeDrive), calc.tapeDrives * tapeDrive),
@@ -231,7 +235,7 @@
       table('Hard drives only', r.hdd) +
       table('Cloud storage', r.cloud) +
       '<p class="tco-notes">Prices updated ' + esc(prices.updated) +
-      (r.usingCozaintPrice ? ' (Cozaint cartridge price)' : ' (market prices)') +
+      (r.usingCozaintPrice ? ' (tape cartridges at Cozaint list price; everything else at market prices)' : ' (market prices)') +
       '. Cooling adds ' + Math.round((prices.cooling.pue - 1) * 100) + '% to equipment power (industry average). ' +
       'Not counted on any option: racks, network switches, software licenses, installation and support contracts. ' +
       'Cloud also needs an on-site recorder, not counted. Sources: ' + sourcesHtml() + '.</p>';

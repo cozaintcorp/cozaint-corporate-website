@@ -6,11 +6,11 @@
   "hdd": {
     "label": "Seagate Exos X20 18 TB enterprise hard drive, new",
     "capacity_tb": 18,
-    "price_usd": 764.90,
+    "price_usd": 764.9,
     "usd_per_tb": 42.49,
     "watts": 8.5,
     "watts_note": "Between Seagate Exos X24 write (8.2 W) and read (9.8 W) power; surveillance recording is mostly writes.",
-    "market_median_usd_per_tb": 48.50,
+    "market_median_usd_per_tb": 48.5,
     "market_median_note": "Median of 69 new enterprise-drive offers on Amazon US (as of 2026-10-16; the tracker did not report a new median on 2026-10-18).",
     "annual_failure_rate": 0.0141,
     "annual_failure_rate_note": "Backblaze lifetime annualized failure rate across about 353,000 drives, through June 30, 2026.",
@@ -47,8 +47,8 @@
   },
   "tape_library": {
     "label": "HPE StoreEver MSL6480 tape library (80-slot modules)",
-    "base_module_price_usd": 14986.00,
-    "expansion_module_price_usd": 7629.00,
+    "base_module_price_usd": 14986.0,
+    "expansion_module_price_usd": 7629.0,
     "slots_per_module": 80,
     "max_modules_per_library": 7,
     "watts_per_library": 200,
@@ -60,20 +60,57 @@
     "checked": "2026-10-17"
   },
   "lto": {
-    "12": { "label": "LTO-8 cartridge, 12 TB", "price_low_usd": 69.95, "price_high_usd": 80.00, "price_usd": 74.98 },
-    "18": { "label": "LTO-9 cartridge, 18 TB", "price_low_usd": 92.45, "price_high_usd": 111.55, "price_usd": 102.00 },
-    "30": { "label": "LTO-10 cartridge, 30 TB", "price_low_usd": 256.00, "price_high_usd": 299.99, "price_usd": 278.00 },
+    "12": {
+      "label": "LTO-8 cartridge, 12 TB",
+      "price_low_usd": 69.95,
+      "price_high_usd": 80.0,
+      "price_usd": 74.98
+    },
+    "18": {
+      "label": "LTO-9 cartridge, 18 TB",
+      "price_low_usd": 92.45,
+      "price_high_usd": 111.55,
+      "price_usd": 102.0
+    },
+    "30": {
+      "label": "LTO-10 cartridge, 30 TB",
+      "price_low_usd": 256.0,
+      "price_high_usd": 299.99,
+      "price_usd": 278.0
+    },
     "price_rule": "price_usd is the midpoint of the low and high listed prices.",
-    "cozaint_cartridge_price_usd": null,
-    "cozaint_note": "If Cozaint sets its own price for Cozaint/Fujifilm cartridges, put it in cozaint_cartridge_price_usd (LTO-9) and the calculator uses it instead of the market price.",
+    "cozaint_cartridge_price_usd": 349.0,
+    "cozaint_cartridge_prices_usd": {
+      "12": 299.0,
+      "18": 349.0,
+      "30": 599.0,
+      "40": 729.0
+    },
+    "cozaint_price_source": "Cozaint price list (MSRP): COZLTO8MED $299, COZLTO9MED $349, COZLTO10AMED $599, COZLTO10BMED (LTO-10 40 TB) $729. Supplied by Omar, 2026-10-19.",
+    "cozaint_note": "Cozaint Certified cartridge prices set by Cozaint. When present, the calculator uses cozaint_cartridge_prices_usd for each LTO generation instead of the market price (cozaint_cartridge_price_usd is the LTO-9 price, kept for older copies of tco.js). Only a person changes these; the monthly agent never does.",
     "source_name": "TapeBackup.org LTO tape price tracker",
     "source_url": "https://tapebackup.org/lto-tape-price-trend",
     "checked": "2026-09-17"
   },
   "lto_drive": {
-    "12": { "label": "LTO-8 tape drive (internal drive price; library kit not listed)", "price_low_usd": 4850, "price_high_usd": 8099, "price_usd": 6475 },
-    "18": { "label": "HPE MSL LTO-9 SAS drive upgrade kit (R6Q75A)", "price_usd": 10824, "source_url": "https://store.ccnytech.com/products/hpe-msl-lto-9-45000-sas-drv-upg-1212471", "checked": "2026-10-18" },
-    "30": { "label": "LTO-10 tape drive (external drive price; library kit not listed)", "price_low_usd": 22165, "price_high_usd": 24950, "price_usd": 23558 },
+    "12": {
+      "label": "LTO-8 tape drive (internal drive price; library kit not listed)",
+      "price_low_usd": 4850,
+      "price_high_usd": 8099,
+      "price_usd": 6475
+    },
+    "18": {
+      "label": "HPE MSL LTO-9 SAS drive upgrade kit (R6Q75A)",
+      "price_usd": 10824,
+      "source_url": "https://store.ccnytech.com/products/hpe-msl-lto-9-45000-sas-drv-upg-1212471",
+      "checked": "2026-10-18"
+    },
+    "30": {
+      "label": "LTO-10 tape drive (external drive price; library kit not listed)",
+      "price_low_usd": 22165,
+      "price_high_usd": 24950,
+      "price_usd": 23558
+    },
     "source_name": "TapeBackup.org LTO tape price tracker (LTO-8, LTO-10); CCNY Tech (LTO-9 library drive kit)",
     "source_url": "https://tapebackup.org/lto-tape-price-trend",
     "checked": "2026-09-17"
@@ -101,7 +138,7 @@
     "checked": "2026-10-17"
   },
   "tape_system": {
-    "disk_tier_fraction": 0.10,
+    "disk_tier_fraction": 0.1,
     "disk_tier_note": "A small hard-drive tier holds the most recent video for instant playback; 10% of total storage, as in Cozaint's published storage white paper.",
     "source_url": "https://cozaint.com/assets/video-surveillance-storage-white-paper.pdf"
   },

@@ -106,6 +106,19 @@ def main():
     if cozaint is not None and not (isinstance(cozaint, (int, float)) and cozaint > 0):
         problems.append("lto.cozaint_cartridge_price_usd must be null or a positive number")
 
+    cmap = get(new, ("lto", "cozaint_cartridge_prices_usd"))
+    if cmap is not None:
+        if not isinstance(cmap, dict):
+            problems.append("lto.cozaint_cartridge_prices_usd must be a list of prices by generation")
+        else:
+            for gen, val in cmap.items():
+                if not (isinstance(val, (int, float)) and not isinstance(val, bool) and val > 0):
+                    problems.append(f"lto.cozaint_cartridge_prices_usd.{gen} must be a positive number")
+    if old is not None:
+        for key in ("cozaint_cartridge_price_usd", "cozaint_cartridge_prices_usd"):
+            if get(old, ("lto", key)) != get(new, ("lto", key)):
+                problems.append(f"lto.{key} changed; only a person may change Cozaint prices")
+
     if problems:
         print("NOT SAFE TO PUBLISH:")
         for p in problems:
