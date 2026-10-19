@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var form = document.getElementById('assessment-form');
   if (form) {
     var LEAD_EMAIL = (window.COZAINT_LEAD && window.COZAINT_LEAD.email) || 'info@cozaint.com';
-    // The EspoCRM Lead Capture address is set in lead-config.js.
+    // Where leads go is set in lead-config.js (the Google lead box address).
     var LEAD_ENDPOINT = (window.COZAINT_LEAD && window.COZAINT_LEAD.endpoint) || '';
     var status = document.getElementById('formStatus');
     var src = (new URLSearchParams(location.search).get('product') || 'assessment');
@@ -39,23 +39,13 @@ document.addEventListener('DOMContentLoaded', function () {
       var originalText = button.textContent;
       button.textContent = 'Sending...';
       button.disabled = true;
-      if (!LEAD_ENDPOINT) { fallback(data); button.textContent = originalText; button.disabled = false; return; }
-      var parts = data.name.split(/\s+/);
-      var first = parts.length > 1 ? parts.slice(0, -1).join(' ') : null;
-      var last = parts.length > 1 ? parts[parts.length - 1] : parts[0];
-      var payload = {
-        firstName: first, lastName: last, emailAddress: data.email, phoneNumber: data.phone || null,
-        accountName: data.company,
-        description: 'Goal: ' + data.improve + '\nFrom: ' + data.source + '\n' + data.calc
-      };
       if (data.website) { form.reset(); button.textContent = originalText; button.disabled = false; return; }
-      fetch(LEAD_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload)
-      }).then(function (r) { return { ok: r.status === 200 }; })
-        .then(function (res) {
-          if (!res.ok) throw new Error('send failed');
+      if (!LEAD_ENDPOINT || !window.COZAINT_LEAD.send) { fallback(data); button.textContent = originalText; button.disabled = false; return; }
+      window.COZAINT_LEAD.send({
+        form: 'assessment', name: data.name, email: data.email, phone: data.phone, company: data.company,
+        interest: data.improve, message: '', calc: data.calc, source: data.source, website: data.website
+      })
+        .then(function () {
           status.className = 'form-status ok';
           status.textContent = 'Thank you. A Cozaint specialist will be in touch shortly.';
           form.reset();

@@ -1,4 +1,4 @@
-// Contact page form: sends to EspoCRM Lead Capture (see lead-config.js), or falls back to email.
+// Contact page form: sends to the Google lead box (see lead-config.js), or falls back to email.
 document.addEventListener('DOMContentLoaded', function () {
   var form = document.getElementById('contact-form');
   if (!form) return;
@@ -25,17 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
       interest: sel.options[sel.selectedIndex].text, message: v('cMessage'), trap: form.querySelector('[name=website]').value };
     var btn = form.querySelector('button[type="submit"]'); var label = btn.textContent;
     if (d.trap) { form.reset(); return; }
-    if (!ENDPOINT) { fallback(d); return; }
+    if (!ENDPOINT || !cfg.send) { fallback(d); return; }
     btn.textContent = 'Sending...'; btn.disabled = true;
-    var parts = d.name.split(/\s+/);
-    var payload = {
-      firstName: parts.length > 1 ? parts.slice(0, -1).join(' ') : null,
-      lastName: parts.length > 1 ? parts[parts.length - 1] : parts[0],
-      emailAddress: d.email, phoneNumber: d.phone || null, accountName: d.company || null,
-      description: 'Interested in: ' + d.interest + '\nFrom: contact page\n\n' + d.message
-    };
-    fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) })
-      .then(function (r) { if (r.status !== 200) throw new Error('send failed'); })
+    cfg.send({ form: 'contact', name: d.name, email: d.email, phone: d.phone, company: d.company,
+      interest: d.interest, message: d.message, website: d.trap })
       .then(function () {
         status.className = 'form-status ok';
         status.textContent = 'Thank you. A Cozaint specialist will be in touch shortly.';
