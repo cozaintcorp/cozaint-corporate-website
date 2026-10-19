@@ -118,6 +118,8 @@ def main():
         for key in ("cozaint_cartridge_price_usd", "cozaint_cartridge_prices_usd"):
             if get(old, ("lto", key)) != get(new, ("lto", key)):
                 problems.append(f"lto.{key} changed; only a person may change Cozaint prices")
+        if get(old, ("cozaint_software",)) != get(new, ("cozaint_software",)):
+            problems.append("cozaint_software changed; only a person may change Cozaint prices")
 
     if problems:
         print("NOT SAFE TO PUBLISH:")

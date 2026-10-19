@@ -142,6 +142,13 @@
     "disk_tier_note": "A small hard-drive tier holds the most recent video for instant playback; 10% of total storage, as in Cozaint's published storage white paper.",
     "source_url": "https://cozaint.com/assets/video-surveillance-storage-white-paper.pdf"
   },
+  "cozaint_software": {
+    "label": "MARCIA video surveillance storage base software (COZMARBASE-001)",
+    "marcia_base_usd": 599.0,
+    "quantity": 1,
+    "note": "Cozaint list price (MSRP). One copy per tape system. Only a person changes this; the monthly agent never does.",
+    "source_name": "Cozaint price list (MSRP), supplied by Omar 2026-10-19"
+  },
   "market_trend": {
     "summary": "Hard drive prices stay high after rising about 50% year over year by mid-2026, as AI data centers buy up supply; Western Digital and Seagate say capacity is sold out or fully allocated for 2026. LTO cartridge prices remain roughly flat (DatacenterDisk shows LTO media about +1% over 30 days), and Wasabi raised its pay-as-you-go cloud price from $6.99 to $7.99 per TB per month on July 1, 2026.",
     "sources": [

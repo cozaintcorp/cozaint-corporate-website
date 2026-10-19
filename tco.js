@@ -163,12 +163,18 @@
       line('Disk tier hard drives', num(t.drives) + ' × ' + money2(drivePrice) + ' (' + Math.round(p.tape_system.disk_tier_fraction * 100) +
         '% of the video, ' + num(tierTb) + ' TB, kept on disk for instant playback)', t.drives * drivePrice),
       line('Disk enclosures', num(t.enclosures) + ' × ' + money2(p.disk_enclosure.price_usd), t.enclosures * p.disk_enclosure.price_usd),
+      // MARCIA base software at Cozaint list price, when the price file has it
+      p.cozaint_software && p.cozaint_software.marcia_base_usd > 0 ?
+        line('MARCIA base software', (p.cozaint_software.quantity || 1) + ' × ' + money2(p.cozaint_software.marcia_base_usd) + ' (Cozaint list price)',
+          (p.cozaint_software.quantity || 1) * p.cozaint_software.marcia_base_usd) : null,
       line('Server (runs the Cozaint software and disk tier)', num(t.servers) + ' × ' + money2(p.server.price_usd), t.servers * p.server.price_usd),
       line('Replacement drives', num(t.replacements) + ' × ' + money2(drivePrice) + ' (disk tier only; tape cartridges are rated for decades)',
         t.replacements * drivePrice),
       line('Power and cooling', tPow.kw.toFixed(1) + ' kW around the clock for ' + yrs(years) + ', cooling included. Cartridges on the shelf use no power',
         tPow.cost)
     ];
+
+    tapeLines = tapeLines.filter(function (l) { return l; });
 
     // ---------- Cloud ----------
     var months = years * 12;
