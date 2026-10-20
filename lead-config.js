@@ -5,7 +5,7 @@
 // While endpoint is empty, forms offer an email to `email` instead.
 window.COZAINT_LEAD = {
   email: 'info@cozaint.com',
-  endpoint: '',
+  endpoint: 'https://script.google.com/macros/s/AKfycbyDxTqV-PiWTE-LB24jJuUAhaUp5GqLm2aLiVYZwlKnjxELg6gHPUD5gV6INlFSzeGy-Q/exec',
 
   // Sends one lead to the lead box. Resolves when the box confirms it saved the
   // lead; rejects otherwise (the form then shows the email/phone fallback).
