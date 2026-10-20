@@ -163,7 +163,19 @@
     "tape_reformat_usd": 30.0,
     "tape_reformat_is_example": true,
     "note": "Cozaint charges this per cartridge to reformat a full tape so it can be reused once its retention period has passed. $30 is an EXAMPLE price until Cozaint confirms the real one; set tape_reformat_is_example to false then. Set tape_reformat_usd to 0 to leave it out. Only a person changes this section; the monthly agent never does.",
-    "source_name": "Example figure from Omar, 2026-10-20 (to be confirmed)"
+    "source_name": "Example figure from Omar, 2026-10-20 (to be confirmed)",
+    "volume_discounts": [
+      {
+        "min_cartridges": 100,
+        "percent_off": 5
+      },
+      {
+        "min_cartridges": 500,
+        "percent_off": 10
+      }
+    ],
+    "volume_discounts_is_example": true,
+    "volume_discounts_note": "Discount on Cozaint cartridges by order size: the highest tier the cartridge count reaches applies to all cartridges. These tiers are EXAMPLES until Cozaint confirms the real ones; set volume_discounts_is_example to false then. Use an empty list [] for no discount."
   },
   "market_trend": {
     "summary": "Hard drive prices keep edging up: DatacenterDisk's matched-model index shows enterprise drives about +2% over 30 days, with no relief expected before 2027 as AI data centers absorb supply. LTO cartridge prices stay roughly flat (about +0.5% over 30 days), and Wasabi's pay-as-you-go cloud price remains $7.99 per TB per month since July 1, 2026.",

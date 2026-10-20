@@ -15,7 +15,8 @@
 
   function money(n) {
     if (!isFinite(n)) return '—';
-    return '$' + Math.round(n).toLocaleString('en-US');
+    var r = Math.round(n);
+    return (r < 0 ? '−$' : '$') + Math.abs(r).toLocaleString('en-US');
   }
   function money2(n) {
     return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -154,6 +155,30 @@
     if (!(retentionDays > 0) || days <= retentionDays) return 0;
     return Math.ceil(cartridges * (days - retentionDays) / retentionDays);
   }
+  // Volume discount on Cozaint cartridges: the highest tier reached applies to every cartridge.
+  function discountTier(cartridges) {
+    var s = prices.cozaint_services, best = null;
+    if (!s || !Array.isArray(s.volume_discounts)) return null;
+    s.volume_discounts.forEach(function (t) {
+      if (t && t.min_cartridges > 0 && t.percent_off > 0 && t.percent_off < 100 && cartridges >= t.min_cartridges &&
+          (!best || t.min_cartridges > best.min_cartridges)) best = t;
+    });
+    return best;
+  }
+  function discountLine(cartridges, cartPrice) {
+    var s = prices.cozaint_services;
+    if (!s || !Array.isArray(s.volume_discounts) || !s.volume_discounts.length) return null;
+    var ex = s.volume_discounts_is_example ? ', example discount' : '';
+    var t = discountTier(cartridges);
+    if (!t) {
+      var first = s.volume_discounts.slice().sort(function (a, b) { return a.min_cartridges - b.min_cartridges; })[0];
+      return line('Volume discount on cartridges ***', 'None. ' + num(cartridges) + ' cartridges is below the first discount level (' +
+        first.percent_off + '% off at ' + num(first.min_cartridges) + ' or more' + ex + ')', 0);
+    }
+    return line('Volume discount on cartridges ***', t.percent_off + '% off ' + num(cartridges) + ' cartridges (' + num(t.min_cartridges) +
+      ' or more qualify' + ex + ')', -Math.round(cartridges * cartPrice * t.percent_off) / 100);
+  }
+
   function reformatLine(cartridges, retentionDays, years) {
     var price = reformatPrice();
     if (!price || !(retentionDays > 0)) return null;
@@ -223,6 +248,7 @@
     var tapeLines = [
       line(usingCozaintPrice ? 'Cozaint Certified LTO tape cartridges' : 'LTO tape cartridges', num(cartridges) + ' × ' + money2(cartPrice) + ' (' + calc.ltoCapacity + ' TB each' +
         (usingCozaintPrice ? ', Cozaint list price' : '') + ')', cartridges * cartPrice),
+      usingCozaintPrice ? discountLine(cartridges, cartPrice) : null,
       reformatLine(cartridges, calc.retentionDays, years),
       line('Tape library', num(libraries) + (libraries === 1 ? ' library, ' : ' libraries, ') + num(modules) + (modules === 1 ? ' module, ' : ' modules, ') +
         num(modules * lib.slots_per_module) + ' cartridge slots', libraryCost),
@@ -268,18 +294,28 @@
       '<tr class="tco-total"><td>Total</td><td>' + money(part.total) + '</td></tr></tbody></table>';
   }
 
+  function volumeNoteHtml() {
+    var s = prices.cozaint_services;
+    if (!s || !Array.isArray(s.volume_discounts) || !s.volume_discounts.length) return '';
+    var tiers = s.volume_discounts.slice().sort(function (a, b) { return a.min_cartridges - b.min_cartridges; })
+      .map(function (t) { return t.percent_off + '% off at ' + num(t.min_cartridges) + ' or more'; });
+    return '<p><strong>Volume pricing.</strong> Larger cartridge orders get a discount on the Cozaint list price: ' + tiers.join(', ') +
+      (s.volume_discounts_is_example ? ' (example levels, to be confirmed)' : '') + '. The highest level reached applies to every cartridge in the order.</p>';
+  }
+
   // The *** note: how tape reuse and the reformatting charge are counted.
   function reuseNote(r) {
     var price = reformatPrice();
     if (!price || !(lastCalc && lastCalc.retentionDays > 0)) return '';
-    return '<div class="tco-footnote"><p><strong>*** Reusing tapes.</strong> The calculator buys enough cartridges to hold the ' +
+    return '<div class="tco-footnote"><p><strong>*** Cozaint tape pricing: reuse and volume.</strong> The calculator buys enough cartridges to hold the ' +
       'retention period (' + num(lastCalc.retentionDays) + ' days). When video on a cartridge is older than that, the cartridge ' +
       'is reformatted and reused instead of buying a new one. Cozaint charges ' + money2(price) + ' per cartridge to reformat' +
       (reformatIsExample() ? ' (example price, to be confirmed)' : '') + '.</p>' +
       '<p>Reformats = cartridges × (days the system runs − retention days) ÷ retention days. Short retention means more reuse: ' +
       'with 1 year of retention over 5 years, each cartridge is reformatted about 4 times. With retention as long as the whole period, none are.</p>' +
+      volumeNoteHtml() +
       '<p>A customer who would rather keep every full tape can buy new cartridges instead of reformatting. Hard drives overwrite old video at no charge, ' +
-      'so this line appears on the tape side only.</p></div>';
+      'so the reformatting charge appears on the tape side only.</p></div>';
   }
 
   // The ** note: where the drive failure and wear-out figures come from.
@@ -325,7 +361,7 @@
   function catOf(label) {
     if (/power/i.test(label)) return 'power';
     if (/^MARCIA base software/.test(label)) return 'software';
-    if (/cartridges|hard drives|replacement drives|reformatting/i.test(label)) return 'media';
+    if (/cartridges|hard drives|replacement drives|reformatting|discount/i.test(label)) return 'media';
     return 'hardware';
   }
   function grouped(part) {
