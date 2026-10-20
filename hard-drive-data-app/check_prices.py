@@ -21,6 +21,8 @@ CHECKS = [
     (("hdd", "usd_per_tb"), 5, 150),
     (("hdd", "watts"), 3, 20),
     (("hdd", "annual_failure_rate"), 0.002, 0.10),
+    (("hdd", "service_life_years"), 3, 10),
+    (("lto", "archival_life_years"), 15, 50),
     (("raid", "usable_fraction"), 0.5, 1.0),
     (("raid", "group_size"), 4, 30),
     (("disk_enclosure", "bays"), 12, 120),

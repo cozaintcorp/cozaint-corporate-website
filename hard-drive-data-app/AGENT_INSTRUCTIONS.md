@@ -30,6 +30,11 @@ top-level `updated` to today's date and `updated_by` to "Claude monthly agent".
 Do not change `schema_version`, `raid`, `tape_system`, or the `watts` fields
 unless a datasheet for a new model gives a different figure. Never change
 `tape_system.disk_tier_fraction`; only a person sets it.
+Keep `hdd.service_life_years`, `hdd.manufacturer_mtbf_hours`, `hdd.manufacturer_afr`,
+`lto.archival_life_years` and their notes and source links as they are, unless
+the drive model changes (then take the new model's warranty years and MTBF
+from its datasheet). When Backblaze publishes new drive stats, update
+`hdd.annual_failure_rate` from their lifetime table total and refresh its note.
 
 If a source cannot be reached, keep last month's value for that section,
 leave its old `checked` date, and mention it in the report.

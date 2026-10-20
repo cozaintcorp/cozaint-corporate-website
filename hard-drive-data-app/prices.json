@@ -15,6 +15,13 @@
     "annual_failure_rate": 0.0141,
     "annual_failure_rate_note": "Backblaze lifetime annualized failure rate across about 353,000 drives, through June 30, 2026.",
     "annual_failure_rate_source_url": "https://backblaze.com/blog/backblaze-drive-stats-for-q2-2026",
+    "annual_failure_rate_formula": "Annualized failure rate = drive failures / (drive days / 365) x 100 (Backblaze method, from real drives running 24x7).",
+    "manufacturer_mtbf_hours": 2500000,
+    "manufacturer_afr": 0.0035,
+    "manufacturer_afr_note": "Seagate Exos X20 rating: 2.5 million hours MTBF = 0.35% AFR at full 24x7 use (AFR = 1 - e^(-8760 / MTBF)). Shown for comparison only; the calculator uses the real-world Backblaze rate.",
+    "service_life_years": 5,
+    "service_life_note": "Enterprise drives carry a 5-year warranty (Seagate Exos X20) and are planned for 3 to 5 years of 24x7 service. To keep video longer, every drive is replaced at the end of each 5-year life.",
+    "service_life_source_url": "https://www.storagereview.com/review/seagate-exos-x20-20tb-enterprise-hdd-review",
     "source_name": "DatacenterDisk hard drive price tracker",
     "source_url": "https://datacenterdisk.com/price-forecast",
     "checked": "2026-10-19"
@@ -90,7 +97,10 @@
     "cozaint_note": "Cozaint Certified cartridge prices set by Cozaint. When present, the calculator uses cozaint_cartridge_prices_usd for each LTO generation instead of the market price (cozaint_cartridge_price_usd is the LTO-9 price, kept for older copies of tco.js). Only a person changes these; the monthly agent never does.",
     "source_name": "TapeBackup.org LTO tape price tracker",
     "source_url": "https://tapebackup.org/lto-tape-price-trend",
-    "checked": "2026-09-17"
+    "checked": "2026-09-17",
+    "archival_life_years": 30,
+    "archival_life_note": "LTO cartridges are designed for a 30-year archival life (Overland-Tandberg LTO media data sheet).",
+    "archival_life_source_url": "https://www.overlandtandberg.com/products/neo-tape/lto-media/"
   },
   "lto_drive": {
     "12": {

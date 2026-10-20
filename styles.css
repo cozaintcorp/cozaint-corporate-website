@@ -1145,3 +1145,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* Three side-by-side columns that stack on phones (ALICE1 features) */
 .three-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; margin-top: 48px; }
 @media (max-width: 900px) { .three-cols { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
+.tco-footnote { font-size: 12px; color: var(--grey-600); line-height: 1.55; margin: 4px 0 12px; padding: 12px 14px; border-left: 3px solid #008a5e; background: rgba(0,138,94,.06); border-radius: 4px; }
+.tco-footnote p { margin: 0 0 6px; }
+.tco-footnote p:last-child { margin-bottom: 0; }
+.tco-footnote a { color: inherit; text-decoration: underline; }
+.tco-formula { font-family: ui-monospace, Menlo, Consolas, monospace; overflow-wrap: anywhere; background: rgba(0,0,0,.05); padding: 1px 5px; border-radius: 3px; }

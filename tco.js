@@ -84,15 +84,47 @@
   // A RAID 6 disk system holding `tb` terabytes: drives, enclosures, servers, power.
   function diskSystem(tb, years) {
     var p = prices;
-    if (tb <= 0) return { tb: 0, rawTb: 0, drives: 0, enclosures: 0, servers: 0, replacements: 0, watts: 0 };
+    if (tb <= 0) return { tb: 0, rawTb: 0, drives: 0, enclosures: 0, servers: 0, replacements: 0, refreshes: 0, refreshDrives: 0, watts: 0 };
     var rawTb = tb / p.raid.usable_fraction;
     var g = p.raid.group_size;
     var drives = Math.ceil(Math.ceil(rawTb / p.hdd.capacity_tb) / g) * g;
     var enclosures = Math.ceil(drives / p.disk_enclosure.bays);
     var servers = Math.max(1, Math.ceil(enclosures / p.server.enclosures_per_server));
+    // Random failures during service: annualized failure rate x drives x years.
     var replacements = Math.ceil(drives * p.hdd.annual_failure_rate * years);
+    // Wear-out: every drive is replaced when it reaches its service life, if the
+    // system keeps running past that point (e.g. life 5: replaced at years 5, 10, 15).
+    var refreshes = Math.max(0, Math.ceil(years / serviceLife()) - 1);
     var watts = drives * p.hdd.watts + enclosures * p.disk_enclosure.watts + servers * p.server.watts;
-    return { tb: tb, rawTb: rawTb, drives: drives, enclosures: enclosures, servers: servers, replacements: replacements, watts: watts };
+    return { tb: tb, rawTb: rawTb, drives: drives, enclosures: enclosures, servers: servers, replacements: replacements,
+      refreshes: refreshes, refreshDrives: drives * refreshes, watts: watts };
+  }
+
+  function tapeLife() {
+    var l = prices.lto && prices.lto.archival_life_years;
+    return typeof l === 'number' && l >= 1 ? l : 30;
+  }
+
+  function serviceLife() {
+    var l = prices.hdd.service_life_years;
+    return typeof l === 'number' && l >= 1 ? l : 5;
+  }
+
+  // "at the end of year 5" / "at years 5 and 10" / "at years 5, 10 and 15"
+  function refreshYears(n) {
+    var life = serviceLife(), list = [];
+    for (var i = 1; i <= n; i++) list.push(i * life);
+    if (list.length === 1) return 'at the end of year ' + list[0];
+    return 'at years ' + list.slice(0, -1).join(', ') + ' and ' + list[list.length - 1];
+  }
+
+  function wearOutLine(sys, drivePrice, years) {
+    var life = serviceLife();
+    var detail = sys.refreshes > 0
+      ? num(sys.drives) + ' drives × ' + sys.refreshes + (sys.refreshes === 1 ? ' replacement' : ' replacements') + ' × ' + money2(drivePrice) +
+        '. Every drive reaches its ' + life + '-year rated life and is replaced ' + refreshYears(sys.refreshes)
+      : 'None within ' + yrs(years) + '. Drives are rated for ' + life + ' years of 24/7 use; keep the video longer and every drive must be replaced';
+    return line('Replacement drives: worn out **', detail, sys.refreshDrives * drivePrice);
   }
 
   function powerCost(watts, years) {
@@ -125,8 +157,9 @@
         d.enclosures * p.disk_enclosure.price_usd),
       line('Storage servers', num(d.servers) + ' × ' + money2(p.server.price_usd) + ' (one per ' + p.server.enclosures_per_server + ' enclosures)',
         d.servers * p.server.price_usd),
-      line('Replacement drives', num(d.replacements) + ' × ' + money2(drivePrice) + ' (' + (p.hdd.annual_failure_rate * 100).toFixed(2) + '% of drives fail each year, for ' + yrs(years) + ')',
+      line('Replacement drives: failures **', num(d.replacements) + ' × ' + money2(drivePrice) + ' (' + (p.hdd.annual_failure_rate * 100).toFixed(2) + '% of drives fail each year, for ' + yrs(years) + ')',
         d.replacements * drivePrice),
+      wearOutLine(d, drivePrice, years),
       line('Power and cooling', dPow.kw.toFixed(1) + ' kW around the clock for ' + yrs(years) + ' at ' + (p.electricity.usd_per_kwh * 100).toFixed(2) + '¢ per kWh, cooling included',
         dPow.cost)
     ];
@@ -168,8 +201,10 @@
         line('MARCIA base software', (p.cozaint_software.quantity || 1) + ' × ' + money2(p.cozaint_software.marcia_base_usd) + ' (Cozaint list price)',
           (p.cozaint_software.quantity || 1) * p.cozaint_software.marcia_base_usd) : null,
       line('Server (runs the Cozaint software and disk tier)', num(t.servers) + ' × ' + money2(p.server.price_usd), t.servers * p.server.price_usd),
-      line('Replacement drives', num(t.replacements) + ' × ' + money2(drivePrice) + ' (disk tier only; tape cartridges are rated for decades)',
+      line('Replacement drives: failures **', num(t.replacements) + ' × ' + money2(drivePrice) + ' (disk tier only. Tape cartridges do not spin, so they do not wear out this way)',
         t.replacements * drivePrice),
+      t.drives > 0 ? wearOutLine(t, drivePrice, years) : null,
+      line('Replacement cartridges **', 'None. LTO cartridges are rated for ' + tapeLife() + ' years in archive, far longer than this ' + years + '-year period', 0),
       line('Power and cooling', tPow.kw.toFixed(1) + ' kW around the clock for ' + yrs(years) + ', cooling included. Cartridges on the shelf use no power',
         tPow.cost)
     ];
@@ -197,6 +232,26 @@
     }).join('');
     return '<table class="tco-table"><caption>' + esc(title) + '</caption><tbody>' + rows +
       '<tr class="tco-total"><td>Total</td><td>' + money(part.total) + '</td></tr></tbody></table>';
+  }
+
+  // The ** note: where the drive failure and wear-out figures come from.
+  function failureNote() {
+    var h = prices.hdd;
+    var afr = (h.annual_failure_rate * 100).toFixed(2) + '%';
+    var link = function (url, text) {
+      return url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(text) + '</a>' : esc(text);
+    };
+    return '<div class="tco-footnote"><p><strong>** How drive failures are counted.</strong> Hard drives spin 24 hours a day and wear out; ' +
+      'tape cartridges sit still on a shelf until needed. The calculator counts two kinds of drive replacement:</p>' +
+      '<p><strong>1. Failures during service.</strong> Drives × annualized failure rate × years. The rate comes from the industry-standard formula ' +
+      '<span class="tco-formula">failure rate = failures ÷ (drive-days ÷ 365) × 100</span>, measured by ' +
+      link(h.annual_failure_rate_source_url, 'Backblaze') + ' on about 350,000 drives running around the clock: ' + afr + ' a year.' +
+      (h.manufacturer_afr ? ' Manufacturers quote a lower lab figure (' + (h.manufacturer_afr * 100).toFixed(2) +
+        '% from a ' + (h.manufacturer_mtbf_hours / 1e6) + ' million hour MTBF rating); the calculator uses the real-world rate.' : '') + '</p>' +
+      '<p><strong>2. Worn-out drives.</strong> Enterprise drives are rated and warrantied for ' + serviceLife() + ' years of 24/7 use (' +
+      link(h.service_life_source_url, 'Seagate Exos X20') + '). Video kept longer than that needs every drive replaced, which the calculator adds for each ' +
+      serviceLife() + '-year period. LTO cartridges are designed for a ' + tapeLife() + '-year archival life (' +
+      link(prices.lto.archival_life_source_url, 'LTO media data sheet') + '), so the video on tape needs no replacement media.</p></div>';
   }
 
   function sourcesHtml() {
@@ -395,6 +450,7 @@
       table('LTO tape (Cozaint two-tier system)', r.tape) +
       table('Hard drives only', r.hdd) +
       table('Cloud storage', r.cloud) +
+      failureNote() +
       '<p class="tco-notes">Prices updated ' + esc(prices.updated) +
       (r.usingCozaintPrice ? ' (tape cartridges at Cozaint list price; everything else at market prices)' : ' (market prices)') +
       '. Cooling adds ' + Math.round((prices.cooling.pue - 1) * 100) + '% to equipment power (industry average). ' +
