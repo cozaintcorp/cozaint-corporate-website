@@ -139,6 +139,39 @@
     return lines.reduce(function (t, l) { return t + l.amount; }, 0);
   }
 
+  // Tape reuse: once video on a cartridge is older than the retention period,
+  // the cartridge is reformatted (Cozaint charge) and reused instead of buying a new one.
+  function reformatPrice() {
+    var s = prices.cozaint_services;
+    return s && typeof s.tape_reformat_usd === 'number' && s.tape_reformat_usd > 0 ? s.tape_reformat_usd : 0;
+  }
+  function reformatIsExample() {
+    var s = prices.cozaint_services;
+    return !!(s && s.tape_reformat_is_example);
+  }
+  function reformatCount(cartridges, retentionDays, years) {
+    var days = years * 365;
+    if (!(retentionDays > 0) || days <= retentionDays) return 0;
+    return Math.ceil(cartridges * (days - retentionDays) / retentionDays);
+  }
+  function reformatLine(cartridges, retentionDays, years) {
+    var price = reformatPrice();
+    if (!price || !(retentionDays > 0)) return null;
+    var n = reformatCount(cartridges, retentionDays, years);
+    var each = money2(price) + (reformatIsExample() ? ' (example price)' : ' (Cozaint price)');
+    var detail;
+    if (n > 0) {
+      var times = (years * 365 - retentionDays) / retentionDays;
+      detail = num(n) + ' reformats × ' + each + '. The ' + num(cartridges) + ' cartridges fill up after ' + num(retentionDays) +
+        ' days; after that the oldest are reformatted and reused, about ' + (Math.round(times * 10) / 10) +
+        (Math.round(times * 10) / 10 === 1 ? ' time' : ' times') + ' each over ' + yrs(years);
+    } else {
+      detail = 'None. Video is kept ' + num(retentionDays) + ' days, so no cartridge needs reusing within ' + yrs(years) +
+        '. When it does, reformatting is ' + money2(price) + ' per cartridge' + (reformatIsExample() ? ' (example price)' : '');
+    }
+    return line('Tape reformatting for reuse ***', detail, n * price);
+  }
+
   function compute(calc, years) {
     var p = prices;
     var tb = calc.totalTb;
@@ -190,6 +223,7 @@
     var tapeLines = [
       line(usingCozaintPrice ? 'Cozaint Certified LTO tape cartridges' : 'LTO tape cartridges', num(cartridges) + ' × ' + money2(cartPrice) + ' (' + calc.ltoCapacity + ' TB each' +
         (usingCozaintPrice ? ', Cozaint list price' : '') + ')', cartridges * cartPrice),
+      reformatLine(cartridges, calc.retentionDays, years),
       line('Tape library', num(libraries) + (libraries === 1 ? ' library, ' : ' libraries, ') + num(modules) + (modules === 1 ? ' module, ' : ' modules, ') +
         num(modules * lib.slots_per_module) + ' cartridge slots', libraryCost),
       line('Tape drives', num(calc.tapeDrives) + ' × ' + money2(tapeDrive), calc.tapeDrives * tapeDrive),
@@ -232,6 +266,20 @@
     }).join('');
     return '<table class="tco-table"><caption>' + esc(title) + '</caption><tbody>' + rows +
       '<tr class="tco-total"><td>Total</td><td>' + money(part.total) + '</td></tr></tbody></table>';
+  }
+
+  // The *** note: how tape reuse and the reformatting charge are counted.
+  function reuseNote(r) {
+    var price = reformatPrice();
+    if (!price || !(lastCalc && lastCalc.retentionDays > 0)) return '';
+    return '<div class="tco-footnote"><p><strong>*** Reusing tapes.</strong> The calculator buys enough cartridges to hold the ' +
+      'retention period (' + num(lastCalc.retentionDays) + ' days). When video on a cartridge is older than that, the cartridge ' +
+      'is reformatted and reused instead of buying a new one. Cozaint charges ' + money2(price) + ' per cartridge to reformat' +
+      (reformatIsExample() ? ' (example price, to be confirmed)' : '') + '.</p>' +
+      '<p>Reformats = cartridges × (days the system runs − retention days) ÷ retention days. Short retention means more reuse: ' +
+      'with 1 year of retention over 5 years, each cartridge is reformatted about 4 times. With retention as long as the whole period, none are.</p>' +
+      '<p>A customer who would rather keep every full tape can buy new cartridges instead of reformatting. Hard drives overwrite old video at no charge, ' +
+      'so this line appears on the tape side only.</p></div>';
   }
 
   // The ** note: where the drive failure and wear-out figures come from.
@@ -277,7 +325,7 @@
   function catOf(label) {
     if (/power/i.test(label)) return 'power';
     if (/^MARCIA base software/.test(label)) return 'software';
-    if (/cartridges|hard drives|replacement drives/i.test(label)) return 'media';
+    if (/cartridges|hard drives|replacement drives|reformatting/i.test(label)) return 'media';
     return 'hardware';
   }
   function grouped(part) {
@@ -451,6 +499,7 @@
       table('Hard drives only', r.hdd) +
       table('Cloud storage', r.cloud) +
       failureNote() +
+      reuseNote(r) +
       '<p class="tco-notes">Prices updated ' + esc(prices.updated) +
       (r.usingCozaintPrice ? ' (tape cartridges at Cozaint list price; everything else at market prices)' : ' (market prices)') +
       '. Cooling adds ' + Math.round((prices.cooling.pue - 1) * 100) + '% to equipment power (industry average). ' +

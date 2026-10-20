@@ -126,7 +126,8 @@
           totalTb: roundedTotalTb,
           ltoCapacity: ltoCapacity,
           cartridges: Math.ceil(slotsNeeded),
-          tapeDrives: totalDrives
+          tapeDrives: totalDrives,
+          retentionDays: retentionDays
         }
       }));
     }
