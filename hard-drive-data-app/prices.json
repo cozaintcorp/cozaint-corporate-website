@@ -132,6 +132,67 @@
     "source_url": "https://docs.wasabi.com/docs/may-2026-wasabi-pricing",
     "checked": "2026-10-19"
   },
+  "cloud_providers": {
+    "label": "Other major cloud storage providers, standard (hot) storage tier, US East / primary US region, pay as you go",
+    "rule": "The calculator averages these providers together with Wasabi (the cloud section). Each provider charges per TB per month by volume step: up_to_tb is the top of the step (null = no limit). Prices are per GB per month x 1,000.",
+    "providers": [
+      {
+        "name": "Amazon S3 Standard",
+        "region": "US East (N. Virginia)",
+        "tiers": [
+          {
+            "up_to_tb": 50,
+            "usd_per_tb_month": 23.0
+          },
+          {
+            "up_to_tb": 500,
+            "usd_per_tb_month": 22.0
+          },
+          {
+            "up_to_tb": null,
+            "usd_per_tb_month": 21.0
+          }
+        ],
+        "source_name": "CloudBurn: Amazon S3 pricing (updated 2026-10-12)",
+        "source_url": "https://cloudburn.io/blog/amazon-s3-pricing",
+        "checked": "2026-10-21"
+      },
+      {
+        "name": "Microsoft Azure Blob Storage, Hot tier (LRS)",
+        "region": "East US 2",
+        "tiers": [
+          {
+            "up_to_tb": 50,
+            "usd_per_tb_month": 18.4
+          },
+          {
+            "up_to_tb": 500,
+            "usd_per_tb_month": 17.66
+          },
+          {
+            "up_to_tb": null,
+            "usd_per_tb_month": 16.93
+          }
+        ],
+        "source_name": "N2WS: Azure storage costs (updated October 2026)",
+        "source_url": "https://n2ws.com/blog/microsoft-azure-cloud-services/azure-storage-costs",
+        "checked": "2026-10-21"
+      },
+      {
+        "name": "Google Cloud Storage, Standard (single region)",
+        "region": "Iowa (us-central1)",
+        "tiers": [
+          {
+            "up_to_tb": null,
+            "usd_per_tb_month": 20.0
+          }
+        ],
+        "source_name": "Google Cloud Storage pricing",
+        "source_url": "https://cloud.google.com/storage/pricing",
+        "checked": "2026-10-21"
+      }
+    ]
+  },
   "electricity": {
     "label": "US average commercial electricity price, 12 months ending July 2026 (EIA data)",
     "usd_per_kwh": 0.1385,

@@ -36,6 +36,18 @@ the drive model changes (then take the new model's warranty years and MTBF
 from its datasheet). When Backblaze publishes new drive stats, update
 `hdd.annual_failure_rate` from their lifetime table total and refresh its note.
 
+## Cloud providers (`cloud` and `cloud_providers.providers`)
+
+The website prices cloud storage as the AVERAGE of Wasabi (the `cloud`
+section, as before) and the providers in `cloud_providers.providers`
+(Amazon S3 Standard, Microsoft Azure Blob Hot LRS, Google Cloud Storage
+Standard). Each month re-check every provider's standard (hot) storage
+price, pay as you go, in its US East / primary US region, from the
+provider's own pricing page or a pricing guide dated within the last 3
+months. Record each volume step as `up_to_tb` (top of the step in TB;
+null for the last step) and `usd_per_tb_month` (price per GB per month
+x 1,000). Update `checked`, and mention any change in the report.
+
 ## Complete surveillance systems (`surveillance_systems.systems`)
 
 The website compares Cozaint MARCIA with the AVERAGE price per TB of raw disk

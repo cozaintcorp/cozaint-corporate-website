@@ -32,7 +32,7 @@
 
   // A price file is used only if every number the comparison needs works out.
   function usable(data) {
-    if (!data || data.schema_version !== 2 || !data.cozaint_hardware || !data.surveillance_systems) return false;
+    if (!data || data.schema_version !== 2 || !data.cozaint_hardware || !data.surveillance_systems || !data.cloud_providers) return false;
     var keep = prices;
     try {
       prices = data;
@@ -190,6 +190,34 @@
     return list.reduce(function (t, x) { return t + x.price_usd / x.raw_tb; }, 0) / list.length;
   }
 
+  // ---------- Cloud: Wasabi (cloud section) plus the other providers ----------
+  // Monthly cost of storing `tb` with stepped prices [{up_to_tb, usd_per_tb_month}].
+  function steppedMonthly(tiers, tb) {
+    var left = tb, from = 0, cost = 0;
+    for (var i = 0; i < tiers.length && left > 0; i++) {
+      var top = tiers[i].up_to_tb == null ? Infinity : tiers[i].up_to_tb;
+      var amt = Math.min(left, top - from);
+      cost += amt * tiers[i].usd_per_tb_month;
+      left -= amt; from = top;
+    }
+    return cost;
+  }
+  function cloudProviders() {
+    var list = [{ name: 'Wasabi', tiers: [{ up_to_tb: null, usd_per_tb_month: prices.cloud.usd_per_tb_month }],
+      source_url: prices.cloud.source_url, source_name: prices.cloud.source_name, region: 'pay as you go' }];
+    var c = prices.cloud_providers;
+    (c && Array.isArray(c.providers) ? c.providers : []).forEach(function (x) {
+      if (x && Array.isArray(x.tiers) && x.tiers.length && x.tiers.every(function (t) { return t.usd_per_tb_month > 0; })) list.push(x);
+    });
+    return list;
+  }
+  // Average price per TB per month across providers, for this amount of video.
+  function cloudAvgPerTb(tb) {
+    var list = cloudProviders();
+    var per = list.map(function (x) { return tb > 0 ? steppedMonthly(x.tiers, tb) / tb : x.tiers[0].usd_per_tb_month; });
+    return { list: list, per: per, perTb: per.reduce(function (a, b) { return a + b; }, 0) / list.length };
+  }
+
   function compute(calc, years) {
     var p = prices;
     var tb = calc.totalTb;
@@ -256,11 +284,12 @@
         tPow.cost)
     ].filter(function (l) { return l; });
 
-    // ---------- Cloud ----------
+    // ---------- Cloud (average of several providers) ----------
     var months = years * 12;
+    var cloudAvg = cloudAvgPerTb(tb);
     var cloudLines = [
-      line('Cloud storage', num(tb) + ' TB × ' + money2(p.cloud.usd_per_tb_month) + ' per TB per month × ' + months + ' months',
-        tb * p.cloud.usd_per_tb_month * months)
+      line('Cloud storage †', num(tb) + ' TB × ' + money2(cloudAvg.perTb) + ' per TB per month (average of ' + cloudAvg.list.length +
+        ' cloud providers at this size) × ' + months + ' months', tb * cloudAvg.perTb * months)
     ];
 
     return {
@@ -293,6 +322,21 @@
         '<p><span class="tco-formula">renewals = cartridges × (days of ownership − retention days) ÷ retention days</span>. ' +
         'When the years of ownership equal the retention period, no cartridge is reused and there is no renewal charge.</p>' : '') +
       '</div>';
+  }
+
+  // † Average cloud price
+  function cloudNote(r) {
+    var a = cloudAvgPerTb(r.tb);
+    var items = a.list.map(function (x, i) {
+      var steps = x.tiers.length > 1 ? ' (' + x.tiers.map(function (t) { return money2(t.usd_per_tb_month) + (t.up_to_tb == null ? ' above that' : ' up to ' + num(t.up_to_tb) + ' TB'); }).join(', ') + ')' : '';
+      return '<li>' + link(x.source_url, x.name) + ': ' + money2(a.per[i]) + ' per TB per month at ' + num(r.tb) + ' TB' + steps + '</li>';
+    }).join('');
+    return '<div class="tco-footnote"><p><strong>† Average cloud price.</strong> Cloud storage is priced as the average of ' + a.list.length +
+      ' providers\' standard storage, pay as you go, at the amount of video in this system (some providers charge less per TB as the amount grows):</p>' +
+      '<ul class="tco-list">' + items + '</ul>' +
+      '<p>Average: <strong>' + money2(a.perTb) + ' per TB per month</strong>. Not counted: the on-site recorder the cameras still need, ' +
+      'the internet connection needed to upload video from every camera around the clock, download (retrieval) fees some providers charge, ' +
+      'and minimum-storage or early-deletion fees. The real cloud cost is therefore higher. Prices are refreshed every month.</p></div>';
   }
 
   // **** Average complete surveillance system
@@ -333,7 +377,7 @@
     var p = prices;
     var list = [
       ['Disk tier hard drives', p.hdd], ['Disk enclosure', p.disk_enclosure], ['Server', p.server],
-      ['Cloud', p.cloud], ['Electricity', p.electricity], ['Cooling', p.cooling]
+      ['Electricity', p.electricity], ['Cooling', p.cooling]
     ];
     return list.map(function (x) {
       return '<a href="' + esc(x[1].source_url) + '" target="_blank" rel="noopener">' + esc(x[0]) + '</a>';
@@ -491,7 +535,7 @@
     var note = el('tcoCloudNote');
     note.textContent = '';
     var times = r.tape.total > 0 ? r.cloud.total / r.tape.total : 0;
-    note.appendChild(document.createTextNode('Cloud storage for the same video: '));
+    note.appendChild(document.createTextNode('Cloud storage for the same video (average of ' + cloudProviders().length + ' providers): '));
     var s2 = document.createElement('strong'); s2.textContent = money(r.cloud.total);
     note.appendChild(s2);
     note.appendChild(document.createTextNode(times >= 1.1
@@ -540,10 +584,11 @@
       failureNote() +
       cozaintNote(r) +
       systemsNote() +
+      cloudNote(r) +
       '<p class="tco-notes">Prices updated ' + esc(prices.updated) + ' (Cozaint products at Cozaint list price; everything else at market or reseller prices)' +
       '. Cooling adds ' + Math.round((prices.cooling.pue - 1) * 100) + '% to equipment power (industry average). ' +
       'Not counted on any option: racks, network switches, video management (VMS) licenses, installation and support contracts. ' +
-      'Cloud also needs an on-site recorder, not counted. Sources: ' + sourcesHtml() + '.</p>';
+      'Sources: ' + sourcesHtml() + '.</p>';
 
     el('tcoStatus').textContent = '';
     renderChart(r);

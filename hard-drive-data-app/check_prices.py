@@ -147,6 +147,30 @@ def main():
             if a_new and a_old and abs(a_new - a_old) / a_old > MAX_MONTHLY_CHANGE:
                 problems.append(f"average complete system price moved from ${a_old:.0f} to ${a_new:.0f} per TB (more than 30%)")
 
+    provs = get(new, ("cloud_providers", "providers"))
+    if not isinstance(provs, list) or len(provs) < 2:
+        problems.append("cloud_providers.providers must list at least 2 providers besides Wasabi")
+    else:
+        for i, x in enumerate(provs):
+            tiers = x.get("tiers") if isinstance(x, dict) else None
+            if not isinstance(tiers, list) or not tiers:
+                problems.append(f"cloud_providers.providers[{i}] has no price tiers"); continue
+            for t in tiers:
+                v = t.get("usd_per_tb_month") if isinstance(t, dict) else None
+                if not (isinstance(v, (int, float)) and not isinstance(v, bool) and 2 <= v <= 100):
+                    problems.append(f"cloud_providers.providers[{i}] ({x.get('name')}) has a price outside $2-$100 per TB per month")
+            if tiers[-1].get("up_to_tb") is not None:
+                problems.append(f"cloud_providers.providers[{i}] ({x.get('name')}) last price step must have up_to_tb null")
+            if not x.get("source_url"):
+                problems.append(f"cloud_providers.providers[{i}] ({x.get('name')}) has no source_url")
+        if old is not None:
+            def first(lst):
+                return {y.get("name"): y["tiers"][0]["usd_per_tb_month"] for y in (lst or []) if isinstance(y, dict) and y.get("tiers")}
+            o, n = first(get(old, ("cloud_providers", "providers"))), first(provs)
+            for name in set(o) & set(n):
+                if o[name] and abs(n[name] - o[name]) / o[name] > MAX_MONTHLY_CHANGE:
+                    problems.append(f"{name} cloud price moved from ${o[name]} to ${n[name]} per TB (more than 30%)")
+
     if problems:
         print("NOT SAFE TO PUBLISH:")
         for p in problems:
