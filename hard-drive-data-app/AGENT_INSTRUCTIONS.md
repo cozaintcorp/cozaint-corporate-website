@@ -18,7 +18,7 @@ Record new, US-dollar prices before tax and shipping.
 | `disk_enclosure` | New, empty 60-bay 4U disk enclosure (JBOD), e.g. Supermicro 946SE1C-R1K66JBOD or WD Ultrastar Data60 | Same model as last month if still listed new. Keep `bays` and `watts` unless the model changes. |
 | `server` | Starting price of a new 2U rack server, e.g. Dell PowerEdge R760xs on dell.com | Same model as last month if still listed. |
 | `tape_library` | HPE MSL6480 base module (80 slots, no drives) and expansion module prices | Keep `slots_per_module`, `max_modules_per_library`, `watts_per_library` unless HPE changes them. |
-| `lto` (12, 18, 30) | LTO-8, LTO-9, LTO-10 (30 TB) cartridge price range | `price_usd` = midpoint of low and high, 2 decimals. Never change `cozaint_cartridge_price_usd`, `cozaint_cartridge_prices_usd` or `cozaint_price_source`; only a person sets Cozaint's prices, and the same goes for the whole `cozaint_software` section (MARCIA base software) and the `cozaint_services` section (tape reformatting charge) (the safety check blocks any change to them). The market prices are still recorded every month for comparison. |
+| `lto` (12, 18, 30) | LTO-8, LTO-9, LTO-10 (30 TB) cartridge price range | `price_usd` = midpoint of low and high, 2 decimals. Never change `cozaint_cartridge_price_usd`, `cozaint_cartridge_prices_usd` or `cozaint_price_source`; only a person sets Cozaint's prices, and the same goes for the whole `cozaint_software` section (MARCIA base software) the `cozaint_hardware` section (MARCIA libraries, drives, SAS parts) and the `cozaint_services` section (Media Lifecycle Renewal) (the safety check blocks any change to them). The market prices are still recorded every month for comparison. |
 | `lto_drive` (12, 18, 30) | Tape drive price for each generation; for LTO-9, the HPE MSL LTO-9 SAS drive upgrade kit (R6Q75A) | Library drive kit price where listed, otherwise the midpoint of the drive price range, whole dollars. |
 | `cooling.pue` | Latest Uptime Institute global average PUE | Changes about once a year; keep it otherwise. |
 | `cloud` | Wasabi pay-as-you-go price per TB per month | From wasabi.com if readable, otherwise a reliable summary. |
@@ -35,6 +35,24 @@ Keep `hdd.service_life_years`, `hdd.manufacturer_mtbf_hours`, `hdd.manufacturer_
 the drive model changes (then take the new model's warranty years and MTBF
 from its datasheet). When Backblaze publishes new drive stats, update
 `hdd.annual_failure_rate` from their lifetime table total and refresh its note.
+
+## Complete surveillance systems (`surveillance_systems.systems`)
+
+The website compares Cozaint MARCIA with the AVERAGE price per TB of raw disk
+across complete, ready-made video surveillance storage systems (recorders or
+video servers sold with drives, e.g. BCDVideo, Hanwha Wisenet WAVE, Avigilon,
+Milestone Husky, Genetec Streamvault). Each month:
+
+- Re-check every listed system at its `source_url`. Update `price_usd` and
+  `checked` when the listing shows a new price. If a listing is gone or shows
+  no price, replace it with the same model from another US reseller, or drop it.
+- Add any new complete system you find with a published US price and a stated
+  raw capacity (TB); aim for 5 to 10 systems from at least 3 makers.
+- Never add a do-it-yourself build, loose drives, an empty chassis or a bare
+  disk shelf (JBOD); the comparison must be complete system vs. complete system.
+- Each entry needs `name`, `raw_tb`, `price_usd`, `source_name`, `source_url`,
+  `checked`. The safety check holds the update if the average moves more than 30%.
+- Mention in the report which systems changed, were added or were dropped.
 
 If a source cannot be reached, keep last month's value for that section,
 leave its old `checked` date, and mention it in the report.

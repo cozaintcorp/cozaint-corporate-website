@@ -159,23 +159,157 @@
     "note": "Cozaint list price (MSRP). One copy per tape system. Only a person changes this; the monthly agent never does.",
     "source_name": "Cozaint price list (MSRP), supplied by Omar 2026-10-19"
   },
-  "cozaint_services": {
-    "tape_reformat_usd": 30.0,
-    "tape_reformat_is_example": true,
-    "note": "Cozaint charges this per cartridge to reformat a full tape so it can be reused once its retention period has passed. $30 is an EXAMPLE price until Cozaint confirms the real one; set tape_reformat_is_example to false then. Set tape_reformat_usd to 0 to leave it out. Only a person changes this section; the monthly agent never does.",
-    "source_name": "Example figure from Omar, 2026-10-20 (to be confirmed)",
-    "volume_discounts": [
+  "cozaint_hardware": {
+    "label": "Cozaint MARCIA LTO library hardware and connectivity, MSRP",
+    "libraries": [
       {
-        "min_cartridges": 100,
-        "percent_off": 5
+        "sku": "COZ-MAR-LIB24",
+        "name": "24-slot MARCIA LTO library",
+        "slots": 24,
+        "price_usd": 2999.0,
+        "lto_generations": [
+          "12",
+          "18"
+        ],
+        "expansion": null
       },
       {
-        "min_cartridges": 500,
-        "percent_off": 10
+        "sku": "COZ-MAR-LIB40",
+        "name": "40-slot MARCIA LTO library",
+        "slots": 40,
+        "price_usd": 5199.0,
+        "lto_generations": [
+          "12",
+          "18",
+          "30",
+          "40"
+        ],
+        "expansion": {
+          "sku": "COZ-MAR-EXP40",
+          "name": "40-slot expansion module",
+          "slots": 40,
+          "price_usd": 4771.0
+        }
+      },
+      {
+        "sku": "COZ-MAR-LIB80",
+        "name": "80-slot MARCIA LTO library",
+        "slots": 80,
+        "price_usd": 9399.0,
+        "lto_generations": [
+          "12",
+          "18",
+          "30",
+          "40"
+        ],
+        "expansion": {
+          "sku": "COZ-MAR-EXP80",
+          "name": "80-slot expansion module",
+          "slots": 80,
+          "price_usd": 9365.0
+        }
       }
     ],
-    "volume_discounts_is_example": true,
-    "volume_discounts_note": "Discount on Cozaint cartridges by order size: the highest tier the cartridge count reaches applies to all cartridges. These tiers are EXAMPLES until Cozaint confirms the real ones; set volume_discounts_is_example to false then. Use an empty list [] for no discount."
+    "drives": {
+      "12": {
+        "sku": "COZ-MAR-DRV-08",
+        "name": "LTO-8 SAS library drive",
+        "price_usd": 10618.0
+      },
+      "18": {
+        "sku": "COZ-MAR-DRV-09",
+        "name": "LTO-9 SAS library drive",
+        "price_usd": 16149.0
+      },
+      "30": {
+        "sku": "COZ-MAR-DRV-10",
+        "name": "LTO-10 SAS library drive",
+        "price_usd": 30620.0
+      },
+      "40": {
+        "sku": "COZ-MAR-DRV-10",
+        "name": "LTO-10 SAS library drive",
+        "price_usd": 30620.0
+      }
+    },
+    "sas_hba": {
+      "sku": "COZ-MAR-HBA-SAS",
+      "name": "SAS host bus adapter, 8 ports",
+      "price_usd": 199.0,
+      "ports": 8
+    },
+    "sas_cable": {
+      "sku": "COZ-MAR-CBL-SAS",
+      "name": "2-meter SAS cable, one per drive",
+      "price_usd": 99.0
+    },
+    "note": "Cozaint MSRP from the MARCIA reseller price list (effective October 2026). MSRP only; the reseller column is confidential and is never used here. Libraries are sold without drives. Only a person changes this section; the monthly agent never does.",
+    "source_name": "Cozaint MARCIA price list (MSRP), effective October 2026, supplied by Omar 2026-10-21"
+  },
+  "cozaint_services": {
+    "media_renewal_usd": {
+      "12": 99.0,
+      "18": 119.0,
+      "30": 199.0,
+      "40": 249.0
+    },
+    "media_renewal_skus": {
+      "12": "COZLTO8REF",
+      "18": "COZLTO9REF",
+      "30": "COZLTO10AREF",
+      "40": "COZLTO10BREF"
+    },
+    "note": "MARCIA Media Lifecycle Renewal (MSRP): charged each time a cartridge is automatically erased, reinitialized and returned to recording after its retention cycle. Only a person changes this section; the monthly agent never does.",
+    "source_name": "Cozaint MARCIA price list (MSRP), effective October 2026"
+  },
+  "surveillance_systems": {
+    "label": "Complete video surveillance storage systems (recorders / video servers with drives), reseller prices",
+    "rule": "The calculator uses the average price per TB of raw disk across these systems. Only complete systems with drives, a published US price and a stated capacity belong here; never a do-it-yourself build or a bare disk shelf.",
+    "systems": [
+      {
+        "name": "BCDVideo BCD226X-EVS enterprise video server",
+        "raw_tb": 288,
+        "price_usd": 41168.0,
+        "source_name": "SHI",
+        "source_url": "https://www.shi.com/product/45370044",
+        "checked": "2026-10-20"
+      },
+      {
+        "name": "BCDVideo BCD228X-PVS professional video server",
+        "raw_tb": 528,
+        "price_usd": 89949.6,
+        "source_name": "SHI",
+        "source_url": "https://texas.gs.shi.com/product/51745105/PROFESSIONAL-2U-28-BAY-VIDEO-RECORDING-SERVER-DUAL-INTEL-XEON-SILVER-4514Y",
+        "checked": "2026-10-20"
+      },
+      {
+        "name": "BCDVideo BCD104-EVS video server",
+        "raw_tb": 48,
+        "price_usd": 13151.0,
+        "source_name": "SHI",
+        "source_url": "https://www.shi.com/product/46359701",
+        "checked": "2026-10-20"
+      },
+      {
+        "name": "Hanwha Vision Wisenet WAVE WRR-P-S202L1 recorder",
+        "raw_tb": 48,
+        "price_usd": 16291.48,
+        "source_name": "123SecurityProducts",
+        "source_url": "https://www.123securityproducts.com/wrrps202l148tb.html",
+        "checked": "2026-10-20"
+      },
+      {
+        "name": "Avigilon NVR6 Premium recorder",
+        "raw_tb": 160,
+        "price_usd": 57115.99,
+        "source_name": "CDW",
+        "source_url": "https://www.cdw.com/product/avigilon-nvr6-prm-160tb-s22/8358433",
+        "checked": "2026-10-20"
+      }
+    ],
+    "source_name": "Reseller listings (SHI, CDW, 123SecurityProducts)",
+    "source_url": "https://www.shi.com/product/45370044",
+    "checked": "2026-10-20"
   },
   "market_trend": {
     "summary": "Hard drive prices keep edging up: DatacenterDisk's matched-model index shows enterprise drives about +2% over 30 days, with no relief expected before 2027 as AI data centers absorb supply. LTO cartridge prices stay roughly flat (about +0.5% over 30 days), and Wasabi's pay-as-you-go cloud price remains $7.99 per TB per month since July 1, 2026.",

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261020a">
+<link rel="stylesheet" href="styles.css?v=20261021a">
 </head>
 <body>
 
@@ -65,7 +65,7 @@
           <p class="tco-chart-eyebrow">Your system at a glance</p>
           <p class="tco-chart-hero" id="tcoChartHero">—</p>
           <p class="tco-chart-sub" id="tcoChartSub"></p>
-          <div class="tco-bars" id="tcoBars" role="group" aria-label="Cost of LTO tape and hard drive systems by type of cost"></div>
+          <div class="tco-bars" id="tcoBars" role="group" aria-label="Cost of the Cozaint MARCIA system and the average complete hard drive surveillance system by type of cost"></div>
           <ul class="tco-legend" id="tcoLegend"></ul>
           <div class="tco-cloud" id="tcoCloudNote"></div>
           <p class="tco-chart-foot">Point at a bar for details. Every line of the math is in the cost breakdown under the calculator.</p>
@@ -121,6 +121,7 @@
                   <option value="12">LTO-8 — 12 TB / cartridge</option>
                   <option value="18" selected>LTO-9 — 18 TB / cartridge</option>
                   <option value="30">LTO-10 — 30 TB / cartridge</option>
+                  <option value="40">LTO-10 — 40 TB / cartridge</option>
                 </select>
               </div>
             </div>
@@ -156,11 +157,12 @@
 
           <div class="calc-results tco-box" id="tcoBox">
             <p class="calc-results-label">Cost comparison at today's prices</p>
-            <label for="tcoYears">Years to run the system</label>
-            <input type="number" id="tcoYears" min="1" max="20" value="5">
+            <label for="tcoYears">Years you own the system</label>
+            <input type="number" id="tcoYears" min="1" max="20" value="2" aria-describedby="tcoYearsHelp">
+            <p class="calc-hint" id="tcoYearsHelp">Costs are added up over this period. It is different from retention: retention is how long each day's video is kept; ownership is how long the system runs and keeps recording. It starts out matching your retention.</p>
             <div class="tco-grid">
-              <div class="tco-tape"><span>LTO tape</span><strong><span id="tcoTape">—</span><sup>*</sup></strong></div>
-              <div><span>Hard drives</span><strong><span id="tcoHdd">—</span><sup>*</sup></strong></div>
+              <div class="tco-tape"><span>Cozaint MARCIA (LTO tape)</span><strong><span id="tcoTape">—</span><sup>*</sup></strong></div>
+              <div><span>Hard drive surveillance system (average)</span><strong><span id="tcoHdd">—</span><sup>*</sup></strong></div>
               <div><span>Cloud storage</span><strong><span id="tcoCloud">—</span><sup>*</sup></strong></div>
             </div>
             <p class="tco-savings" id="tcoSavings"></p>
@@ -297,7 +299,7 @@
 })();
 </script>
 <script src="calculator.js?v=20261020b"></script>
-<script src="tco.js?v=20261020c"></script>
+<script src="tco.js?v=20261021b"></script>
 <script src="lead-config.js?v=20261019"></script>
 <script src="script.js?v=20261019"></script>
 <script src="nav.js"></script>

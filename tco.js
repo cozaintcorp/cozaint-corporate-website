@@ -1,4 +1,4 @@
-// Cozaint storage cost comparison: LTO tape vs. hard drives vs. cloud
+// Cozaint storage cost comparison: Cozaint MARCIA (LTO tape) vs. the average complete hard drive surveillance system vs. cloud
 // Prices come from hard-drive-data-app/prices.json, refreshed monthly.
 // It tries the GitHub copy first (so monthly updates reach cozaint.com
 // without a new upload), then the copy that sits next to this page.
@@ -32,13 +32,13 @@
 
   // A price file is used only if every number the comparison needs works out.
   function usable(data) {
-    if (!data || data.schema_version !== 2) return false;
+    if (!data || data.schema_version !== 2 || !data.cozaint_hardware || !data.surveillance_systems) return false;
     var keep = prices;
     try {
       prices = data;
       var ok = true;
       [12, 18, 30].forEach(function (gen) {
-        var r = compute({ totalTb: 500, ltoCapacity: gen, cartridges: 1, tapeDrives: 2 }, 5);
+        var r = compute({ totalTb: 500, ltoCapacity: gen, cartridges: 1, tapeDrives: 2, retentionDays: 365 }, 5);
         [r.tape, r.hdd, r.cloud].forEach(function (part) {
           if (!(isFinite(part.total) && part.total > 0)) ok = false;
           part.lines.forEach(function (l) { if (!isFinite(l.amount) || /NaN|undefined/.test(l.detail)) ok = false; });
@@ -140,61 +140,54 @@
     return lines.reduce(function (t, l) { return t + l.amount; }, 0);
   }
 
-  // Tape reuse: once video on a cartridge is older than the retention period,
-  // the cartridge is reformatted (Cozaint charge) and reused instead of buying a new one.
-  function reformatPrice() {
-    var s = prices.cozaint_services;
-    return s && typeof s.tape_reformat_usd === 'number' && s.tape_reformat_usd > 0 ? s.tape_reformat_usd : 0;
+  function link(url, text) {
+    return url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(text) + '</a>' : esc(text);
   }
-  function reformatIsExample() {
-    var s = prices.cozaint_services;
-    return !!(s && s.tape_reformat_is_example);
+
+  // ---------- Cozaint prices (MSRP from the MARCIA price list) ----------
+  function cozCartridgePrice(gen) {
+    var m = prices.lto.cozaint_cartridge_prices_usd;
+    if (m && m[gen] > 0) return m[gen];
+    return (prices.lto[gen] || prices.lto['18']).price_usd;
   }
-  function reformatCount(cartridges, retentionDays, years) {
+  function renewalPrice(gen) {
+    var s = prices.cozaint_services;
+    return s && s.media_renewal_usd && s.media_renewal_usd[gen] > 0 ? s.media_renewal_usd[gen] : 0;
+  }
+  // Cheapest Cozaint library set-up with enough slots for this tape generation.
+  function cozLibrary(slots, gen) {
+    var best = null;
+    (prices.cozaint_hardware.libraries || []).forEach(function (lib) {
+      if (lib.lto_generations && lib.lto_generations.indexOf(gen) < 0) return;
+      var exp = 0;
+      if (slots > lib.slots) {
+        if (!lib.expansion) return;
+        exp = Math.ceil((slots - lib.slots) / lib.expansion.slots);
+      }
+      var cost = lib.price_usd + exp * (lib.expansion ? lib.expansion.price_usd : 0);
+      if (!best || cost < best.cost) best = { lib: lib, exp: exp, cost: cost, slots: lib.slots + exp * (lib.expansion ? lib.expansion.slots : 0) };
+    });
+    return best;
+  }
+  function cozDrive(gen) {
+    var d = prices.cozaint_hardware.drives;
+    return d[gen] || d['18'];
+  }
+  function renewalCount(cartridges, retentionDays, years) {
     var days = years * 365;
     if (!(retentionDays > 0) || days <= retentionDays) return 0;
     return Math.ceil(cartridges * (days - retentionDays) / retentionDays);
   }
-  // Volume discount on Cozaint cartridges: the highest tier reached applies to every cartridge.
-  function discountTier(cartridges) {
-    var s = prices.cozaint_services, best = null;
-    if (!s || !Array.isArray(s.volume_discounts)) return null;
-    s.volume_discounts.forEach(function (t) {
-      if (t && t.min_cartridges > 0 && t.percent_off > 0 && t.percent_off < 100 && cartridges >= t.min_cartridges &&
-          (!best || t.min_cartridges > best.min_cartridges)) best = t;
-    });
-    return best;
-  }
-  function discountLine(cartridges, cartPrice) {
-    var s = prices.cozaint_services;
-    if (!s || !Array.isArray(s.volume_discounts) || !s.volume_discounts.length) return null;
-    var ex = s.volume_discounts_is_example ? ', example discount' : '';
-    var t = discountTier(cartridges);
-    if (!t) {
-      var first = s.volume_discounts.slice().sort(function (a, b) { return a.min_cartridges - b.min_cartridges; })[0];
-      return line('Volume discount on cartridges ***', 'None. ' + num(cartridges) + ' cartridges is below the first discount level (' +
-        first.percent_off + '% off at ' + num(first.min_cartridges) + ' or more' + ex + ')', 0);
-    }
-    return line('Volume discount on cartridges ***', t.percent_off + '% off ' + num(cartridges) + ' cartridges (' + num(t.min_cartridges) +
-      ' or more qualify' + ex + ')', -Math.round(cartridges * cartPrice * t.percent_off) / 100);
-  }
 
-  function reformatLine(cartridges, retentionDays, years) {
-    var price = reformatPrice();
-    if (!price || !(retentionDays > 0)) return null;
-    var n = reformatCount(cartridges, retentionDays, years);
-    var each = money2(price) + (reformatIsExample() ? ' (example price)' : ' (Cozaint price)');
-    var detail;
-    if (n > 0) {
-      var times = (years * 365 - retentionDays) / retentionDays;
-      detail = num(n) + ' reformats × ' + each + '. The ' + num(cartridges) + ' cartridges fill up after ' + num(retentionDays) +
-        ' days; after that the oldest are reformatted and reused, about ' + (Math.round(times * 10) / 10) +
-        (Math.round(times * 10) / 10 === 1 ? ' time' : ' times') + ' each over ' + yrs(years);
-    } else {
-      detail = 'None. Video is kept ' + num(retentionDays) + ' days, so no cartridge needs reusing within ' + yrs(years) +
-        '. When it does, reformatting is ' + money2(price) + ' per cartridge' + (reformatIsExample() ? ' (example price)' : '');
-    }
-    return line('Tape reformatting for reuse ***', detail, n * price);
+  // ---------- Average complete video surveillance storage system ----------
+  function systemsList() {
+    var s = prices.surveillance_systems;
+    return (s && Array.isArray(s.systems) ? s.systems : []).filter(function (x) { return x && x.price_usd > 0 && x.raw_tb > 0; });
+  }
+  function avgPerRawTb() {
+    var list = systemsList();
+    if (!list.length) return NaN;
+    return list.reduce(function (t, x) { return t + x.price_usd / x.raw_tb; }, 0) / list.length;
   }
 
   function compute(calc, years) {
@@ -202,74 +195,66 @@
     var tb = calc.totalTb;
     var gen = String(calc.ltoCapacity);
     var drivePrice = p.hdd.price_usd;
-    var hddName = p.hdd.capacity_tb + ' TB';
 
-    // ---------- Hard drives only ----------
+    // ---------- Average complete hard drive surveillance system ----------
     var d = diskSystem(tb, years);
     var dPow = powerCost(d.watts, years);
+    var avg = avgPerRawTb();
+    var nSys = systemsList().length;
     var hddLines = [
-      line('Hard drives', num(d.drives) + ' × ' + money2(drivePrice) + ' (' + hddName + '). ' +
-        num(tb) + ' TB in RAID 6 needs ' + num(d.rawTb) + ' TB of raw disk, in groups of ' + p.raid.group_size + ' drives',
-        d.drives * drivePrice),
-      line('Disk enclosures', num(d.enclosures) + ' × ' + money2(p.disk_enclosure.price_usd) + ' (' + p.disk_enclosure.bays + ' drives each)',
-        d.enclosures * p.disk_enclosure.price_usd),
-      line('Storage servers', num(d.servers) + ' × ' + money2(p.server.price_usd) + ' (one per ' + p.server.enclosures_per_server + ' enclosures)',
-        d.servers * p.server.price_usd),
-      line('Replacement drives: failures **', num(d.replacements) + ' × ' + money2(drivePrice) + ' (' + (p.hdd.annual_failure_rate * 100).toFixed(2) + '% of drives fail each year, for ' + yrs(years) + ')',
-        d.replacements * drivePrice),
+      line('Complete surveillance storage system ****', num(tb) + ' TB of video needs ' + num(d.rawTb) + ' TB of raw disk (RAID 6) × ' + money2(avg) +
+        ' per TB, the average price of ' + nSys + ' complete video surveillance storage systems', d.rawTb * avg),
+      line('Replacement drives: failures **', 'Included: assumed covered by the system warranty', 0),
       wearOutLine(d, drivePrice, years),
-      line('Power and cooling', dPow.kw.toFixed(1) + ' kW around the clock for ' + yrs(years) + ' at ' + (p.electricity.usd_per_kwh * 100).toFixed(2) + '¢ per kWh, cooling included',
+      line('Power and cooling', 'About ' + dPow.kw.toFixed(1) + ' kW around the clock for ' + yrs(years) + ' at ' + (p.electricity.usd_per_kwh * 100).toFixed(2) + '¢ per kWh, cooling included',
         dPow.cost)
     ];
 
-    // ---------- LTO tape (with a small disk tier) ----------
-    var cart = p.lto[gen] || p.lto['18'];
-    var cartPrice = cart.price_usd;
-    var usingCozaintPrice = false;
-    var cozaintPrices = p.lto.cozaint_cartridge_prices_usd;
-    if (cozaintPrices && typeof cozaintPrices[gen] === 'number' && cozaintPrices[gen] > 0) {
-      cartPrice = cozaintPrices[gen];
-      usingCozaintPrice = true;
-    } else if (gen === '18' && typeof p.lto.cozaint_cartridge_price_usd === 'number') {
-      cartPrice = p.lto.cozaint_cartridge_price_usd;
-      usingCozaintPrice = true;
-    }
+    // ---------- Cozaint MARCIA (LTO tape with a 10% disk tier) ----------
+    var cartPrice = cozCartridgePrice(gen);
     var cartridges = tb > 0 ? Math.ceil(tb / calc.ltoCapacity) : 0;
-    var lib = p.tape_library;
-    var modules = Math.max(1, Math.ceil(cartridges / lib.slots_per_module));
-    var libraries = Math.ceil(modules / lib.max_modules_per_library);
-    var libraryCost = libraries * lib.base_module_price_usd + (modules - libraries) * lib.expansion_module_price_usd;
-    var tapeDrive = (p.lto_drive[gen] || p.lto_drive['18']).price_usd;
+    var lib = cozLibrary(Math.max(1, cartridges), gen);
+    var drv = cozDrive(gen);
+    var nDrives = calc.tapeDrives;
+    var hw = p.cozaint_hardware;
+    var hbas = Math.max(1, Math.ceil(nDrives / (hw.sas_hba.ports || 8)));
+    var renewals = renewalCount(cartridges, calc.retentionDays, years);
+    var renew = renewalPrice(gen);
+    var tierPct = Math.round(p.tape_system.disk_tier_fraction * 100);
     var tierTb = tb * p.tape_system.disk_tier_fraction;
     var t = diskSystem(tierTb, years);
     t.servers = Math.max(1, t.servers);
-    var tWatts = t.watts + (t.drives === 0 ? p.server.watts : 0) + libraries * lib.watts_per_library;
+    var tWatts = t.watts + (t.drives === 0 ? p.server.watts : 0) + p.tape_library.watts_per_library;
     var tPow = powerCost(tWatts, years);
+    var marcia = p.cozaint_software && p.cozaint_software.marcia_base_usd > 0 ? p.cozaint_software.marcia_base_usd : 0;
+    var renewDetail;
+    if (renewals > 0) {
+      var times = Math.round((years * 365 - calc.retentionDays) / calc.retentionDays * 10) / 10;
+      renewDetail = num(renewals) + ' renewals × ' + money2(renew) + '. The ' + num(cartridges) + ' cartridges fill up after ' + num(calc.retentionDays) +
+        ' days; after that each is erased and reused about ' + times + (times === 1 ? ' time' : ' times') + ' over ' + yrs(years);
+    } else {
+      renewDetail = 'None. Video is kept ' + num(calc.retentionDays) + ' days, so no cartridge is reused within ' + yrs(years) + ' (' + money2(renew) + ' per cartridge when it is)';
+    }
     var tapeLines = [
-      line(usingCozaintPrice ? 'Cozaint Certified LTO tape cartridges' : 'LTO tape cartridges', num(cartridges) + ' × ' + money2(cartPrice) + ' (' + calc.ltoCapacity + ' TB each' +
-        (usingCozaintPrice ? ', Cozaint list price' : '') + ')', cartridges * cartPrice),
-      usingCozaintPrice ? discountLine(cartridges, cartPrice) : null,
-      reformatLine(cartridges, calc.retentionDays, years),
-      line('Tape library', num(libraries) + (libraries === 1 ? ' library, ' : ' libraries, ') + num(modules) + (modules === 1 ? ' module, ' : ' modules, ') +
-        num(modules * lib.slots_per_module) + ' cartridge slots', libraryCost),
-      line('Tape drives', num(calc.tapeDrives) + ' × ' + money2(tapeDrive), calc.tapeDrives * tapeDrive),
-      line('Disk tier hard drives', num(t.drives) + ' × ' + money2(drivePrice) + ' (' + Math.round(p.tape_system.disk_tier_fraction * 100) +
-        '% of the video, ' + num(tierTb) + ' TB, kept on disk for instant playback)', t.drives * drivePrice),
-      line('Disk enclosures', num(t.enclosures) + ' × ' + money2(p.disk_enclosure.price_usd), t.enclosures * p.disk_enclosure.price_usd),
-      // MARCIA base software at Cozaint list price, when the price file has it
-      p.cozaint_software && p.cozaint_software.marcia_base_usd > 0 ?
-        line('MARCIA base software', (p.cozaint_software.quantity || 1) + ' × ' + money2(p.cozaint_software.marcia_base_usd) + ' (Cozaint list price)',
-          (p.cozaint_software.quantity || 1) * p.cozaint_software.marcia_base_usd) : null,
-      line('Server (runs the Cozaint software and disk tier)', num(t.servers) + ' × ' + money2(p.server.price_usd), t.servers * p.server.price_usd),
+      line('Cozaint Certified LTO cartridges ***', num(cartridges) + ' × ' + money2(cartPrice) + ' (' + calc.ltoCapacity + ' TB each)', cartridges * cartPrice),
+      renew > 0 ? line('MARCIA Media Lifecycle Renewal ***', renewDetail, renewals * renew) : null,
+      line('MARCIA LTO library ***', lib.lib.name + ' (' + lib.lib.sku + ')' + (lib.exp ? ' + ' + lib.exp + ' × ' + lib.lib.expansion.name + (lib.exp > 1 ? 's' : '') + ' (' + lib.lib.expansion.sku + ')' : '') +
+        ', ' + num(lib.slots) + ' cartridge slots', lib.cost),
+      line('LTO library drives ***', num(nDrives) + ' × ' + money2(drv.price_usd) + ' (' + drv.name + ', ' + drv.sku + ')', nDrives * drv.price_usd),
+      line('SAS connectivity ***', hbas + ' × ' + money2(hw.sas_hba.price_usd) + ' adapter + ' + num(nDrives) + ' × ' + money2(hw.sas_cable.price_usd) + ' cables',
+        hbas * hw.sas_hba.price_usd + nDrives * hw.sas_cable.price_usd),
+      marcia ? line('MARCIA base software ***', '1 × ' + money2(marcia), marcia) : null,
+      line(tierPct + '% disk tier: hard drives', num(t.drives) + ' × ' + money2(drivePrice) + ' (' + num(tierTb) + ' TB, ' + tierPct +
+        '% of the video, kept on disk for instant playback; market price)', t.drives * drivePrice),
+      line(tierPct + '% disk tier: enclosure', num(t.enclosures) + ' × ' + money2(p.disk_enclosure.price_usd) + ' (market price)', t.enclosures * p.disk_enclosure.price_usd),
+      line(tierPct + '% disk tier: server', num(t.servers) + ' × ' + money2(p.server.price_usd) + ' (runs MARCIA and the disk tier; market price)', t.servers * p.server.price_usd),
       line('Replacement drives: failures **', num(t.replacements) + ' × ' + money2(drivePrice) + ' (disk tier only. Tape cartridges do not spin, so they do not wear out this way)',
         t.replacements * drivePrice),
       t.drives > 0 ? wearOutLine(t, drivePrice, years) : null,
       line('Replacement cartridges **', 'None. LTO cartridges are rated for ' + tapeLife() + ' years in archive, far longer than this ' + years + '-year period', 0),
       line('Power and cooling', tPow.kw.toFixed(1) + ' kW around the clock for ' + yrs(years) + ', cooling included. Cartridges on the shelf use no power',
         tPow.cost)
-    ];
-
-    tapeLines = tapeLines.filter(function (l) { return l; });
+    ].filter(function (l) { return l; });
 
     // ---------- Cloud ----------
     var months = years * 12;
@@ -279,7 +264,7 @@
     ];
 
     return {
-      tb: tb, years: years, usingCozaintPrice: usingCozaintPrice,
+      tb: tb, years: years, cartridges: cartridges, renewals: renewals,
       tape: { lines: tapeLines, total: sum(tapeLines) },
       hdd: { lines: hddLines, total: sum(hddLines) },
       cloud: { lines: cloudLines, total: sum(cloudLines) }
@@ -294,55 +279,60 @@
       '<tr class="tco-total"><td>Total</td><td>' + money(part.total) + '</td></tr></tbody></table>';
   }
 
-  function volumeNoteHtml() {
-    var s = prices.cozaint_services;
-    if (!s || !Array.isArray(s.volume_discounts) || !s.volume_discounts.length) return '';
-    var tiers = s.volume_discounts.slice().sort(function (a, b) { return a.min_cartridges - b.min_cartridges; })
-      .map(function (t) { return t.percent_off + '% off at ' + num(t.min_cartridges) + ' or more'; });
-    return '<p><strong>Volume pricing.</strong> Larger cartridge orders get a discount on the Cozaint list price: ' + tiers.join(', ') +
-      (s.volume_discounts_is_example ? ' (example levels, to be confirmed)' : '') + '. The highest level reached applies to every cartridge in the order.</p>';
+  // *** Cozaint pricing and Media Lifecycle Renewal
+  function cozaintNote(r) {
+    var ret = lastCalc && lastCalc.retentionDays > 0 ? lastCalc.retentionDays : 0;
+    var gen = lastCalc ? String(lastCalc.ltoCapacity) : '18';
+    var renew = renewalPrice(gen);
+    return '<div class="tco-footnote"><p><strong>*** Cozaint pricing.</strong> Everything Cozaint sells is shown at Cozaint list price (MSRP): ' +
+      'Cozaint Certified LTO media, the MARCIA LTO library and expansion modules, LTO library drives, SAS connectivity and MARCIA base software. ' +
+      'Libraries are sold without drives. The ' + Math.round(prices.tape_system.disk_tier_fraction * 100) + '% disk tier (drives, enclosure and server) is not a Cozaint product, so it is shown at market price.</p>' +
+      (renew > 0 ? '<p><strong>MARCIA Media Lifecycle Renewal.</strong> The calculator buys enough cartridges to hold the retention period' +
+        (ret ? ' (' + num(ret) + ' days)' : '') + '. When video on a cartridge is older than that, MARCIA automatically erases and reinitializes the cartridge ' +
+        'and returns it to recording; Cozaint charges ' + money2(renew) + ' per cartridge each time (MSRP for this tape generation).</p>' +
+        '<p><span class="tco-formula">renewals = cartridges × (days of ownership − retention days) ÷ retention days</span>. ' +
+        'When the years of ownership equal the retention period, no cartridge is reused and there is no renewal charge.</p>' : '') +
+      '</div>';
   }
 
-  // The *** note: how tape reuse and the reformatting charge are counted.
-  function reuseNote(r) {
-    var price = reformatPrice();
-    if (!price || !(lastCalc && lastCalc.retentionDays > 0)) return '';
-    return '<div class="tco-footnote"><p><strong>*** Cozaint tape pricing: reuse and volume.</strong> The calculator buys enough cartridges to hold the ' +
-      'retention period (' + num(lastCalc.retentionDays) + ' days). When video on a cartridge is older than that, the cartridge ' +
-      'is reformatted and reused instead of buying a new one. Cozaint charges ' + money2(price) + ' per cartridge to reformat' +
-      (reformatIsExample() ? ' (example price, to be confirmed)' : '') + '.</p>' +
-      '<p>Reformats = cartridges × (days the system runs − retention days) ÷ retention days. Short retention means more reuse: ' +
-      'with 1 year of retention over 5 years, each cartridge is reformatted about 4 times. With retention as long as the whole period, none are.</p>' +
-      volumeNoteHtml() +
-      '<p>A customer who would rather keep every full tape can buy new cartridges instead of reformatting. Hard drives overwrite old video at no charge, ' +
-      'so the reformatting charge appears on the tape side only.</p></div>';
+  // **** Average complete surveillance system
+  function systemsNote() {
+    var list = systemsList();
+    var items = list.map(function (x) {
+      return '<li>' + link(x.source_url, x.name) + ': ' + money(x.price_usd) + ' for ' + num(x.raw_tb) + ' TB = ' + money2(x.price_usd / x.raw_tb) +
+        ' per TB (' + esc(x.source_name) + ')</li>';
+    }).join('');
+    return '<div class="tco-footnote"><p><strong>**** Average complete surveillance system.</strong> The hard drive option is priced as a complete, ready-made ' +
+      'video surveillance storage system (recorder or video server with drives, operating system and warranty), the way customers actually buy one, ' +
+      'not as a do-it-yourself build from parts. Its price is the average price per TB of raw disk across ' + list.length + ' complete systems sold by US resellers:</p>' +
+      '<ul class="tco-list">' + items + '</ul>' +
+      '<p>Average: <strong>' + money2(avgPerRawTb()) + ' per TB of raw disk</strong>. The video needs about 20% more raw disk than its size, ' +
+      'because RAID 6 uses 2 of every 12 drives for protection. Competitor prices are discounted reseller prices, while Cozaint is at full list price, ' +
+      'so the comparison leans in the competitors\' favor. The average is refreshed every month.</p></div>';
   }
 
-  // The ** note: where the drive failure and wear-out figures come from.
+  // ** note: where the drive failure and wear-out figures come from.
   function failureNote() {
     var h = prices.hdd;
     var afr = (h.annual_failure_rate * 100).toFixed(2) + '%';
-    var link = function (url, text) {
-      return url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(text) + '</a>' : esc(text);
-    };
     return '<div class="tco-footnote"><p><strong>** How drive failures are counted.</strong> Hard drives spin 24 hours a day and wear out; ' +
       'tape cartridges sit still on a shelf until needed. The calculator counts two kinds of drive replacement:</p>' +
       '<p><strong>1. Failures during service.</strong> Drives × annualized failure rate × years. The rate comes from the industry-standard formula ' +
       '<span class="tco-formula">failure rate = failures ÷ (drive-days ÷ 365) × 100</span>, measured by ' +
       link(h.annual_failure_rate_source_url, 'Backblaze') + ' on about 350,000 drives running around the clock: ' + afr + ' a year.' +
       (h.manufacturer_afr ? ' Manufacturers quote a lower lab figure (' + (h.manufacturer_afr * 100).toFixed(2) +
-        '% from a ' + (h.manufacturer_mtbf_hours / 1e6) + ' million hour MTBF rating); the calculator uses the real-world rate.' : '') + '</p>' +
+        '% from a ' + (h.manufacturer_mtbf_hours / 1e6) + ' million hour MTBF rating); the calculator uses the real-world rate.' : '') +
+      ' This is counted for the Cozaint disk tier. For the complete surveillance system it is assumed covered by the system warranty.</p>' +
       '<p><strong>2. Worn-out drives.</strong> Enterprise drives are rated and warrantied for ' + serviceLife() + ' years of 24/7 use (' +
-      link(h.service_life_source_url, 'Seagate Exos X20') + '). Video kept longer than that needs every drive replaced, which the calculator adds for each ' +
-      serviceLife() + '-year period. LTO cartridges are designed for a ' + tapeLife() + '-year archival life (' +
+      link(h.service_life_source_url, 'Seagate Exos X20') + '). Systems owned longer than that need every drive replaced, which the calculator adds for each ' +
+      serviceLife() + '-year period (drives only, at market price). LTO cartridges are designed for a ' + tapeLife() + '-year archival life (' +
       link(prices.lto.archival_life_source_url, 'LTO media data sheet') + '), so the video on tape needs no replacement media.</p></div>';
   }
 
   function sourcesHtml() {
     var p = prices;
     var list = [
-      ['Hard drives', p.hdd], ['Disk enclosures', p.disk_enclosure], ['Servers', p.server],
-      ['Tape library', p.tape_library], ['Tape cartridges', p.lto], ['Tape drives', p.lto_drive],
+      ['Disk tier hard drives', p.hdd], ['Disk enclosure', p.disk_enclosure], ['Server', p.server],
       ['Cloud', p.cloud], ['Electricity', p.electricity], ['Cooling', p.cooling]
     ];
     return list.map(function (x) {
@@ -361,7 +351,7 @@
   function catOf(label) {
     if (/power/i.test(label)) return 'power';
     if (/^MARCIA base software/.test(label)) return 'software';
-    if (/cartridges|hard drives|replacement drives|reformatting|discount/i.test(label)) return 'media';
+    if (/cartridges|disk tier: hard drives|replacement drives|renewal/i.test(label)) return 'media';
     return 'hardware';
   }
   function grouped(part) {
@@ -383,7 +373,7 @@
   var chartData = {};
   function buildChart() {
     var bars = el('tcoBars');
-    [['tape', 'LTO tape'], ['hdd', 'Hard drives']].forEach(function (sys) {
+    [['tape', 'Cozaint MARCIA'], ['hdd', 'HDD system (avg.)']].forEach(function (sys) {
       var row = document.createElement('div');
       row.className = 'tco-bar-row';
       var name = document.createElement('span');
@@ -462,8 +452,8 @@
     if (!chartBuilt) buildChart();
     box.hidden = false;
     chartData = {
-      tape: { name: 'LTO tape', total: r.tape.total, groups: grouped(r.tape) },
-      hdd: { name: 'Hard drives', total: r.hdd.total, groups: grouped(r.hdd) }
+      tape: { name: 'Cozaint MARCIA', total: r.tape.total, groups: grouped(r.tape) },
+      hdd: { name: 'Average complete HDD surveillance system', total: r.hdd.total, groups: grouped(r.hdd) }
     };
     var max = Math.max(r.tape.total, r.hdd.total);
     ['tape', 'hdd'].forEach(function (sys) {
@@ -485,13 +475,13 @@
     sub.textContent = '';
     if (saving > 0) {
       el('tcoChartHero').textContent = money(saving);
-      sub.appendChild(document.createTextNode('saved with LTO tape over ' + yrs(r.years) + ', '));
+      sub.appendChild(document.createTextNode('saved with Cozaint MARCIA over ' + yrs(r.years) + ' of ownership, '));
       var s1 = document.createElement('strong'); s1.textContent = pct + '% less';
       sub.appendChild(s1);
-      sub.appendChild(document.createTextNode(' than hard drives, for ' + num(r.tb) + ' TB of video.'));
+      sub.appendChild(document.createTextNode(' than the average complete hard drive surveillance system, for ' + num(r.tb) + ' TB of video.'));
     } else {
       el('tcoChartHero').textContent = money(-saving);
-      sub.appendChild(document.createTextNode('less with hard drives over ' + yrs(r.years) + ' at this size (' + num(r.tb) + ' TB). Tape pulls ahead as storage grows.'));
+      sub.appendChild(document.createTextNode('less with the average hard drive system over ' + yrs(r.years) + ' at this size (' + num(r.tb) + ' TB).'));
     }
     var note = el('tcoCloudNote');
     note.textContent = '';
@@ -500,12 +490,20 @@
     var s2 = document.createElement('strong'); s2.textContent = money(r.cloud.total);
     note.appendChild(s2);
     note.appendChild(document.createTextNode(times >= 1.1
-      ? ', about ' + times.toFixed(1) + ' times the LTO tape system (too large to draw on this scale).'
+      ? ', about ' + times.toFixed(1) + ' times the Cozaint MARCIA system.'
       : '.'));
+  }
+
+  // Years of ownership follow the retention period until the visitor changes them.
+  var yearsTouched = false;
+  function syncYears() {
+    if (yearsTouched || !lastCalc || !(lastCalc.retentionDays > 0)) return;
+    el('tcoYears').value = Math.max(1, Math.min(20, Math.round(lastCalc.retentionDays / 365)));
   }
 
   function render() {
     if (!prices || !lastCalc || !el('tcoBox')) return;
+    syncYears();
     var years = Math.max(1, Math.min(20, parseFloat(el('tcoYears').value) || 5));
     if (!(lastCalc.totalTb > 0)) {
       el('tcoTape').textContent = '—';
@@ -526,18 +524,18 @@
     var saving = r.hdd.total - r.tape.total;
     var pct = r.hdd.total > 0 ? Math.round(saving / r.hdd.total * 100) : 0;
     el('tcoSavings').textContent = saving > 0
-      ? 'LTO tape saves ' + money(saving) + ' (' + pct + '%) compared with hard drives over ' + yrs(years) + '.'
-      : 'At this size, hard drives cost less than tape.';
+      ? 'Cozaint MARCIA saves ' + money(saving) + ' (' + pct + '%) compared with the average complete hard drive surveillance system over ' + yrs(years) + ' of ownership.'
+      : 'At this size, the average hard drive system costs less than Cozaint MARCIA.';
 
     el('tcoBreakdown').innerHTML =
       '<p class="tco-breakdown-title">* How these costs add up</p>' +
-      table('LTO tape (Cozaint two-tier system)', r.tape) +
-      table('Hard drives only', r.hdd) +
+      table('Cozaint MARCIA (LTO tape with a ' + Math.round(prices.tape_system.disk_tier_fraction * 100) + '% disk tier)', r.tape) +
+      table('Average complete hard drive surveillance system', r.hdd) +
       table('Cloud storage', r.cloud) +
       failureNote() +
-      reuseNote(r) +
-      '<p class="tco-notes">Prices updated ' + esc(prices.updated) +
-      (r.usingCozaintPrice ? ' (tape cartridges at Cozaint list price; everything else at market prices)' : ' (market prices)') +
+      cozaintNote(r) +
+      systemsNote() +
+      '<p class="tco-notes">Prices updated ' + esc(prices.updated) + ' (Cozaint products at Cozaint list price; everything else at market or reseller prices)' +
       '. Cooling adds ' + Math.round((prices.cooling.pue - 1) * 100) + '% to equipment power (industry average). ' +
       'Not counted on any option: racks, network switches, video management (VMS) licenses, installation and support contracts. ' +
       'Cloud also needs an on-site recorder, not counted. Sources: ' + sourcesHtml() + '.</p>';
@@ -553,7 +551,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     if (!el('tcoBox')) return;
-    el('tcoYears').addEventListener('input', render);
+    el('tcoYears').addEventListener('input', function () { yearsTouched = true; render(); });
     el('tcoYears').addEventListener('change', render);
     loadPrices(0);
   });

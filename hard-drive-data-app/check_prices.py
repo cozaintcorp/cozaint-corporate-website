@@ -120,9 +120,32 @@ def main():
         for key in ("cozaint_cartridge_price_usd", "cozaint_cartridge_prices_usd"):
             if get(old, ("lto", key)) != get(new, ("lto", key)):
                 problems.append(f"lto.{key} changed; only a person may change Cozaint prices")
-        for sec in ("cozaint_software", "cozaint_services"):
+        for sec in ("cozaint_software", "cozaint_hardware", "cozaint_services"):
             if get(old, (sec,)) != get(new, (sec,)):
                 problems.append(f"{sec} changed; only a person may change Cozaint prices")
+
+    systems = get(new, ("surveillance_systems", "systems"))
+    if not isinstance(systems, list) or len(systems) < 3:
+        problems.append("surveillance_systems.systems must list at least 3 complete systems")
+    else:
+        for i, x in enumerate(systems):
+            ok = isinstance(x, dict) and all(isinstance(x.get(k), (int, float)) and not isinstance(x.get(k), bool) and x.get(k) > 0
+                                            for k in ("price_usd", "raw_tb"))
+            if not ok:
+                problems.append(f"surveillance_systems.systems[{i}] needs a positive price_usd and raw_tb")
+                continue
+            per_tb = x["price_usd"] / x["raw_tb"]
+            if not 30 <= per_tb <= 1000:
+                problems.append(f"surveillance_systems.systems[{i}] ({x.get('name')}) is ${per_tb:.0f} per TB, outside $30-$1000")
+            if not x.get("source_url"):
+                problems.append(f"surveillance_systems.systems[{i}] ({x.get('name')}) has no source_url")
+        if old is not None:
+            def avg(lst):
+                v = [y["price_usd"] / y["raw_tb"] for y in lst if isinstance(y, dict) and y.get("price_usd") and y.get("raw_tb")]
+                return sum(v) / len(v) if v else None
+            a_new, a_old = avg(systems), avg(get(old, ("surveillance_systems", "systems")) or [])
+            if a_new and a_old and abs(a_new - a_old) / a_old > MAX_MONTHLY_CHANGE:
+                problems.append(f"average complete system price moved from ${a_old:.0f} to ${a_new:.0f} per TB (more than 30%)")
 
     if problems:
         print("NOT SAFE TO PUBLISH:")
