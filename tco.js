@@ -472,16 +472,21 @@
     var saving = r.hdd.total - r.tape.total;
     var pct = r.hdd.total > 0 ? Math.round(saving / r.hdd.total * 100) : 0;
     var sub = el('tcoChartSub');
+    var save = el('tcoSave');
     sub.textContent = '';
     if (saving > 0) {
+      save.classList.remove('is-neg');
+      el('tcoSaveLabel').textContent = 'You save with Cozaint MARCIA';
       el('tcoChartHero').textContent = money(saving);
-      sub.appendChild(document.createTextNode('saved with Cozaint MARCIA over ' + yrs(r.years) + ' of ownership, '));
-      var s1 = document.createElement('strong'); s1.textContent = pct + '% less';
-      sub.appendChild(s1);
-      sub.appendChild(document.createTextNode(' than the average complete hard drive surveillance system, for ' + num(r.tb) + ' TB of video.'));
+      el('tcoSavePct').textContent = pct + '% lower cost';
+      sub.appendChild(document.createTextNode('Savings over ' + yrs(r.years) + ' of ownership, for ' + num(r.tb) +
+        ' TB of video, compared with the average complete hard drive surveillance system.'));
     } else {
+      save.classList.add('is-neg');
+      el('tcoSaveLabel').textContent = 'At this size, the average hard drive system costs less by';
       el('tcoChartHero').textContent = money(-saving);
-      sub.appendChild(document.createTextNode('less with the average hard drive system over ' + yrs(r.years) + ' at this size (' + num(r.tb) + ' TB).'));
+      el('tcoSavePct').textContent = '';
+      sub.appendChild(document.createTextNode('Over ' + yrs(r.years) + ' of ownership, for ' + num(r.tb) + ' TB of video.'));
     }
     var note = el('tcoCloudNote');
     note.textContent = '';
