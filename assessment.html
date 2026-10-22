@@ -82,7 +82,6 @@
           <div class="tco-bars" id="tcoBars" role="group" aria-label="Cost of the Cozaint MARCIA system and the average complete hard drive surveillance system by type of cost"></div>
           <ul class="tco-legend" id="tcoLegend"></ul>
           <div class="tco-cloud" id="tcoCloudNote"></div>
-          <button type="button" class="btn btn-primary tco-pdf-btn" data-report>Download PDF report</button>
           <p class="tco-chart-foot">Point at a bar for details. Every line of the math is in the cost breakdown under the calculator.</p>
           <div class="tco-tip" id="tcoTip" role="status" hidden></div>
         </div>
@@ -122,6 +121,12 @@
           <label for="calcMotion">Motion percentage <span id="motionVal">24%</span></label>
           <input type="range" id="calcMotion" min="1" max="100" value="24" aria-describedby="calcMotionHelp">
           <p class="calc-hint" id="calcMotionHelp">How much of the picture is usually moving. Quiet areas (hallways, storerooms, nights): <span style="white-space:nowrap">10–25%</span>. Typical offices and lobbies: <span style="white-space:nowrap">25–50%</span>. Busy places (retail floors, stations, roads): <span style="white-space:nowrap">50% or more</span>.</p>
+
+          <div class="tco-report">
+            <button type="button" class="btn btn-primary tco-pdf-btn" data-report>Download PDF report</button>
+            <p class="calc-hint">A takeaway handout with the customer name, these numbers, the savings and the full cost breakdown. It is created on this device; nothing is sent to Cozaint.</p>
+            <p class="tco-report-msg" id="tcoReportMsg" role="status"></p>
+          </div>
 
           <details class="calc-advanced">
             <summary>Advanced settings</summary>
@@ -181,11 +186,6 @@
               <div><span>Cloud storage (average)</span><strong><span id="tcoCloud">—</span><sup>*</sup></strong></div>
             </div>
             <p class="tco-savings" id="tcoSavings"></p>
-            <div class="tco-report">
-              <button type="button" class="btn btn-primary tco-pdf-btn" data-report>Download PDF report</button>
-              <p class="calc-hint">A takeaway handout with the customer name, these numbers, the savings and the full cost breakdown. It is created on this device; nothing is sent to Cozaint.</p>
-              <p class="tco-report-msg" id="tcoReportMsg" role="status"></p>
-            </div>
             <p class="tco-status" id="tcoStatus">Loading current prices…</p>
             <div class="tco-breakdown" id="tcoBreakdown"></div>
           </div>
