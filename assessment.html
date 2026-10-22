@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261021c">
+<link rel="stylesheet" href="styles.css?v=20261022a">
 <!-- Microsoft Clarity (visitor analytics). Runs only on cozaint.com, not on the review copy. -->
 <script type="text/javascript">
   if (/(^|\.)cozaint\.com$/.test(location.hostname)) {
@@ -82,6 +82,7 @@
           <div class="tco-bars" id="tcoBars" role="group" aria-label="Cost of the Cozaint MARCIA system and the average complete hard drive surveillance system by type of cost"></div>
           <ul class="tco-legend" id="tcoLegend"></ul>
           <div class="tco-cloud" id="tcoCloudNote"></div>
+          <button type="button" class="btn btn-primary tco-pdf-btn" data-report>Download PDF report</button>
           <p class="tco-chart-foot">Point at a bar for details. Every line of the math is in the cost breakdown under the calculator.</p>
           <div class="tco-tip" id="tcoTip" role="status" hidden></div>
         </div>
@@ -180,6 +181,11 @@
               <div><span>Cloud storage (average)</span><strong><span id="tcoCloud">—</span><sup>*</sup></strong></div>
             </div>
             <p class="tco-savings" id="tcoSavings"></p>
+            <div class="tco-report">
+              <button type="button" class="btn btn-primary tco-pdf-btn" data-report>Download PDF report</button>
+              <p class="calc-hint">A takeaway handout with the customer name, these numbers, the savings and the full cost breakdown. It is created on this device; nothing is sent to Cozaint.</p>
+              <p class="tco-report-msg" id="tcoReportMsg" role="status"></p>
+            </div>
             <p class="tco-status" id="tcoStatus">Loading current prices…</p>
             <div class="tco-breakdown" id="tcoBreakdown"></div>
           </div>
@@ -187,6 +193,7 @@
         </div>
       </div>
     </div>
+    <a class="tco-mbar is-empty" id="tcoMbar" href="#tcoChart" aria-label="Back to the savings summary"><span id="tcoMbarText"></span><span class="tco-mbar-go" aria-hidden="true">View ↑</span></a>
   </section>
 
   <!-- VALIDATION NOTICE -->
@@ -313,7 +320,8 @@
 })();
 </script>
 <script src="calculator.js?v=20261020b"></script>
-<script src="tco.js?v=20261021e"></script>
+<script src="tco.js?v=20261022a"></script>
+<script src="report.js?v=20261022a"></script>
 <script src="lead-config.js?v=20261019"></script>
 <script src="script.js?v=20261019"></script>
 <script src="nav.js"></script>

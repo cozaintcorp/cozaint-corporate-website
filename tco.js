@@ -492,7 +492,8 @@
   function renderChart(r) {
     var box = el('tcoChart');
     if (!box) return;
-    if (!r) { box.hidden = true; return; }
+    if (!r) { box.hidden = true; if (el('tcoMbar')) el('tcoMbar').classList.add('is-empty'); return; }
+    if (el('tcoMbar')) el('tcoMbar').classList.remove('is-empty');
     if (!chartBuilt) buildChart();
     box.hidden = false;
     chartData = {
@@ -531,6 +532,13 @@
       el('tcoChartHero').textContent = money(-saving);
       el('tcoSavePct').textContent = '';
       sub.appendChild(document.createTextNode('Over ' + yrs(r.years) + ' of ownership, for ' + num(r.tb) + ' TB of video.'));
+    }
+    var bar = el('tcoMbar');
+    if (bar) {
+      bar.classList.toggle('is-neg', !(saving > 0));
+      el('tcoMbarText').textContent = saving > 0
+        ? 'You save ' + money(saving) + ' (' + pct + '%) with Cozaint MARCIA'
+        : 'Hard drives cost ' + money(-saving) + ' less at this size';
     }
     var note = el('tcoCloudNote');
     note.textContent = '';
@@ -592,7 +600,21 @@
 
     el('tcoStatus').textContent = '';
     renderChart(r);
+    window.COZAINT_TCO.last = { r: r, calc: lastCalc, years: years };
+    document.dispatchEvent(new CustomEvent('cozaint:tco', { detail: window.COZAINT_TCO.last }));
   }
+
+  // Shared with report.js (PDF handout): the latest result and the price notes.
+  window.COZAINT_TCO = {
+    last: null,
+    prices: function () { return prices; },
+    systems: function () { return systemsList(); },
+    avgPerRawTb: function () { return avgPerRawTb(); },
+    cloud: function (tb) { return cloudAvgPerTb(tb); },
+    serviceLife: function () { return serviceLife(); },
+    tapeLife: function () { return tapeLife(); },
+    renewalPrice: function (gen) { return renewalPrice(String(gen)); }
+  };
 
   document.addEventListener('cozaint:calc', function (e) {
     lastCalc = e.detail;
@@ -602,6 +624,18 @@
   document.addEventListener('DOMContentLoaded', function () {
     if (!el('tcoBox')) return;
     el('tcoYears').addEventListener('input', function () { yearsTouched = true; render(); });
+    // Phones: show the savings bar while the chart is off screen and the calculator card is on screen.
+    var mbar = el('tcoMbar'), chart = el('tcoChart'), section = document.querySelector('#calculator .calc-card');
+    if (mbar && chart && section && window.IntersectionObserver) {
+      var chartVisible = true, sectionVisible = false;
+      var update = function () { mbar.classList.toggle('is-shown', !chartVisible && sectionVisible); };
+      new IntersectionObserver(function (es) { chartVisible = es[0].isIntersecting; update(); }).observe(chart);
+      new IntersectionObserver(function (es) { sectionVisible = es[0].isIntersecting; update(); }).observe(section);
+      mbar.addEventListener('click', function (e) {
+        e.preventDefault();
+        chart.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
     el('tcoYears').addEventListener('change', render);
     loadPrices(0);
   });
