@@ -100,10 +100,18 @@
     doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(GREY[0], GREY[1], GREY[2]);
     text(dateText, W - M, y + 8, { align: 'right' });
     y += 46;
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.setTextColor(FOREST[0], FOREST[1], FOREST[2]);
-    text('Video Storage Cost Assessment', M, y); y += 20;
+    if (name) {
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(GREEN[0], GREEN[1], GREEN[2]);
+      text('SAVINGS REPORT FOR', M, y); y += 24;
+      doc.setFontSize(24); doc.setTextColor(FOREST[0], FOREST[1], FOREST[2]);
+      doc.splitTextToSize(clean(name), W - 2 * M).slice(0, 2).forEach(function (ln) { doc.text(ln, M, y); y += 26; });
+      y -= 6;
+    } else {
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(24); doc.setTextColor(FOREST[0], FOREST[1], FOREST[2]);
+      text('Video Storage Savings Report', M, y); y += 20;
+    }
     doc.setFont('helvetica', 'normal'); doc.setFontSize(11); doc.setTextColor(GREY[0], GREY[1], GREY[2]);
-    text(name ? 'Prepared for ' + name : 'Prepared with the Cozaint storage calculator', M, y); y += 22;
+    text('Video storage cost assessment prepared by Cozaint', M, y); y += 22;
 
     // ---------- Savings box ----------
     var saving = r.hdd.total - r.tape.total;
@@ -254,7 +262,7 @@
 
     var safe = (name || 'Customer').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 40) || 'Customer';
     var iso = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-    doc.save('Cozaint_Storage_Assessment_' + safe + '_' + iso + '.pdf');
+    doc.save('Cozaint_Savings_Report_' + safe + '_' + iso + '.pdf');
   }
 
   function onClick(e) {
