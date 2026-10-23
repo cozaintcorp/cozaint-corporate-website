@@ -342,13 +342,14 @@
   // **** Average complete surveillance system
   function systemsNote() {
     var list = systemsList();
-    var items = list.map(function (x) {
-      return '<li>' + link(x.source_url, x.name) + ': ' + money(x.price_usd) + ' for ' + num(x.raw_tb) + ' TB = ' + money2(x.price_usd / x.raw_tb) +
-        ' per TB (' + esc(x.source_name) + ')</li>';
+    // Providers are shown by number, not by name (several are Cozaint partners).
+    var items = list.map(function (x, i) {
+      return '<li>Verified current system provider ' + (i + 1) + ': ' + money(x.price_usd) + ' for ' + num(x.raw_tb) + ' TB = ' + money2(x.price_usd / x.raw_tb) +
+        ' per TB</li>';
     }).join('');
     return '<div class="tco-footnote"><p><strong>**** Average complete surveillance system.</strong> The hard drive option is priced as a complete, ready-made ' +
       'video surveillance storage system (recorder or video server with drives, operating system and warranty), the way customers actually buy one, ' +
-      'not as a do-it-yourself build from parts. Its price is the average price per TB of raw disk across ' + list.length + ' complete systems sold by US resellers:</p>' +
+      'not as a do-it-yourself build from parts. Its price is the average price per TB of raw disk across ' + list.length + ' complete systems from verified current system providers, at US reseller prices:</p>' +
       '<ul class="tco-list">' + items + '</ul>' +
       '<p>Average: <strong>' + money2(avgPerRawTb()) + ' per TB of raw disk</strong>. The video needs about 20% more raw disk than its size, ' +
       'because RAID 6 uses 2 of every 12 drives for protection. Competitor prices are discounted reseller prices, while Cozaint is at full list price, ' +

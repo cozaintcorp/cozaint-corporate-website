@@ -234,9 +234,9 @@
         'renewals = cartridges x (days of ownership - retention days) / retention days.' : ''));
     y += 4;
     para('**** Average complete hard drive surveillance system. Priced as a complete, ready-made video surveillance storage system (recorder or video server with drives), ' +
-      'at the average price per TB of raw disk across these systems from US resellers (' + money2(T.avgPerRawTb()) + ' per TB). RAID 6 needs about 20% more raw disk than the video stored.');
-    T.systems().forEach(function (x) {
-      para('   ' + x.name + ': ' + money(x.price_usd) + ' for ' + num(x.raw_tb) + ' TB = ' + money2(x.price_usd / x.raw_tb) + ' per TB (' + x.source_name + ', ' + site(x.source_url) + ')', 8);
+      'at the average price per TB of raw disk across systems from verified current system providers, at US reseller prices (' + money2(T.avgPerRawTb()) + ' per TB). RAID 6 needs about 20% more raw disk than the video stored.');
+    T.systems().forEach(function (x, i) {
+      para('   Verified current system provider ' + (i + 1) + ': ' + money(x.price_usd) + ' for ' + num(x.raw_tb) + ' TB = ' + money2(x.price_usd / x.raw_tb) + ' per TB', 8);
     });
     y += 4;
     var ca = T.cloud(r.tb);
