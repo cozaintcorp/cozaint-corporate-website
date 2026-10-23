@@ -59,6 +59,7 @@
     var fpsEl = document.getElementById('calcFps');
     var retentionEl = document.getElementById('calcRetention');
     var motionEl = document.getElementById('calcMotion');
+    var bitrateEl = document.getElementById('calcBitrate');
     var motionValEl = document.getElementById('motionVal');
     var bppEl = document.getElementById('calcBpp');
     var ltoEl = document.getElementById('calcLto');
@@ -78,7 +79,7 @@
       var res = RESOLUTIONS[parseInt(resSelect.value, 10)] || RESOLUTIONS[14];
       var fps = parseFloat(fpsEl.value) || 0;
       var retentionDays = parseFloat(retentionEl.value) || 0;
-      var motionPct = Math.min(100, Math.max(1, parseFloat(motionEl.value) || 1)); // typed box: keep within 1-100%
+      var motionPct = Math.min(100, Math.max(1, parseFloat(motionEl.value) || 1));
       var bpp = parseFloat(bppEl.value) || 0.15;
       var ltoCapacity = parseFloat(ltoEl.value) || 18;
       var hoursPerCartridge = parseFloat(hoursEl.value) || 7;
@@ -95,6 +96,12 @@
       var bitrateWithFactor = baselineMbps * factor;
       var bitrateWithMotionPct = bitrateWithFactor * motionPct / 100;
       var bitrateKbps = bitrateWithMotionPct * 1000;
+
+      // A bit rate typed by the visitor (kilobits per second) replaces the calculated one.
+      var enteredKbps = bitrateEl ? parseFloat(bitrateEl.value) : NaN;
+      var bitrateEntered = enteredKbps > 0;
+      if (bitrateEl) bitrateEl.placeholder = fmt(bitrateKbps, 1); // grey hint = the calculated value
+      if (bitrateEntered) bitrateKbps = enteredKbps;
 
       // --- Storage Calculator sheet chain ---
       var bytesKbPerSec = bitrateKbps / 8;
@@ -113,7 +120,7 @@
       var totalHoursPerDay = hoursPerCartridge * slotsPerDay;
       var totalDrives = Math.max(writeDrives + standby, 2);
 
-      rBitrate.textContent = fmt(bitrateKbps, 1) + ' Kbps';
+      rBitrate.textContent = fmt(bitrateKbps, 1) + ' Kbps' + (bitrateEntered ? ' (entered)' : '');
       rPerCamDay.textContent = fmt(gbPerDayPerCam, 2) + ' GB';
       rTotalTb.textContent = fmt(roundedTotalTb, 0) + ' TB';
       rSlots.textContent = fmt(Math.ceil(slotsNeeded), 0) + ' cartridges';
@@ -132,7 +139,7 @@
       }));
     }
 
-    [camerasEl, resSelect, fpsEl, retentionEl, motionEl, bppEl, ltoEl, hoursEl, writeDrivesEl, standbyEl].forEach(function (el) {
+    [camerasEl, resSelect, fpsEl, retentionEl, motionEl, bitrateEl, bppEl, ltoEl, hoursEl, writeDrivesEl, standbyEl].forEach(function (el) {
       el.addEventListener('input', recalc);
       el.addEventListener('change', recalc);
     });

@@ -163,7 +163,7 @@
       ['Resolution', selText('calcResolution'), 'Years you own the system', String(r.years)],
       ['Frames per second', val('calcFps'), 'LTO tape', selText('calcLto')],
       ['Motion', Math.min(100, Math.max(1, parseFloat(val('calcMotion')) || 1)) + '%', 'Tape drives', val('calcWriteDrives') + ' recording + ' + val('calcStandby') + ' standby (' + drives + ')'],
-      ['Bits per pixel', val('calcBpp'), '', '']
+      ['Bits per pixel', val('calcBpp'), 'Bit rate per camera', parseFloat(val('calcBitrate')) > 0 ? parseFloat(val('calcBitrate')).toLocaleString('en-US') + ' kilobits per second (entered)' : 'Calculated']
     ];
     var results = [
       ['Bitrate per camera', txt('rBitrate'), 'Total video stored', txt('rTotalTb')],
