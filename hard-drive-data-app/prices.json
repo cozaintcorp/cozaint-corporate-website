@@ -412,12 +412,13 @@
         "checked": "2026-10-20"
       },
       {
-        "name": "Avigilon NVR6 Premium recorder",
+        "name": "Avigilon AI NVR 2 Premium Form D recorder (successor to the discontinued NVR6 Premium)",
         "raw_tb": 160,
-        "price_usd": 57115.99,
-        "source_name": "CDW",
-        "source_url": "https://www.cdw.com/product/avigilon-nvr6-prm-160tb-s22/8358433",
-        "checked": "2026-10-20"
+        "price_usd": 56973.2,
+        "source_name": "CDW-G",
+        "source_url": "https://www.cdwg.com/product/avigilon-160tb-ai-nvr-2-prm-form-d/8514647",
+        "checked": "2026-10-23",
+        "note": "Part AINVR2-PRM-FORM-D-160TB-NA, 160 TB. Listed price; the listing says it is not orderable online (quote/order through the reseller)."
       }
     ],
     "source_name": "Reseller listings (SHI, CDW, 123SecurityProducts)",
