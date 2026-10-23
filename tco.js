@@ -391,6 +391,23 @@
       (hddChanged().sys ? ' <strong>This estimate uses a price per TB you entered (' + money2(sysPerTb()) + ').</strong>' : '') + '</p>');
   }
 
+  // Plain-language summary of the whole method, for everyday visitors.
+  function howNote(r) {
+    var tier = Math.round(prices.tape_system.disk_tier_fraction * 100);
+    var nSys = systemsList().length, nCloud = cloudProviders().length;
+    var items = [
+      '<li><strong>Your video.</strong> Cameras × bit rate per camera × retention days gives the storage needed: <strong>' + num(r.tb) + ' TB</strong> for these settings.</li>',
+      '<li><strong>Cozaint MARCIA.</strong> Enough LTO tape cartridges to hold that video, plus the tape library, tape drives, MARCIA software, a small disk tier that keeps ' + tier +
+        '% of the video ready for instant playback, and power. Cozaint products are at Cozaint list price.</li>',
+      '<li><strong>Hard drive system.</strong> The same video on a typical complete, ready-made surveillance storage system, priced at the average cost per TB of ' + nSys +
+        ' verified current system providers, plus power.</li>',
+      '<li><strong>Cloud.</strong> The same video stored in the cloud, at the average monthly price of ' + nCloud + ' verified cloud service providers.</li>',
+      '<li><strong>Over time.</strong> Everything is added up over the ' + yrs(r.years) + ' you own the system, including replacing hard drives that fail or wear out. Prices are checked every month.</li>'
+    ];
+    return noteBox('how', 'How these numbers are calculated', '<ol class="tco-list">' + items.join('') + '</ol>' +
+      '<p>The notes below show the details behind each part.</p>');
+  }
+
   // ** note: where the drive failure and wear-out figures come from.
   function failureNote() {
     var h = prices.hdd, list = mtbfSurvey(), ch = hddChanged();
@@ -650,6 +667,7 @@
       table('Cozaint MARCIA (LTO tape with a ' + Math.round(prices.tape_system.disk_tier_fraction * 100) + '% disk tier)', r.tape) +
       table('Average complete hard drive surveillance system', r.hdd) +
       table('Cloud storage', r.cloud) +
+      howNote(r) +
       failureNote() +
       cozaintNote(r) +
       systemsNote() +
