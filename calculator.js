@@ -78,14 +78,14 @@
       var res = RESOLUTIONS[parseInt(resSelect.value, 10)] || RESOLUTIONS[14];
       var fps = parseFloat(fpsEl.value) || 0;
       var retentionDays = parseFloat(retentionEl.value) || 0;
-      var motionPct = parseFloat(motionEl.value) || 1;
+      var motionPct = Math.min(100, Math.max(1, parseFloat(motionEl.value) || 1)); // typed box: keep within 1-100%
       var bpp = parseFloat(bppEl.value) || 0.15;
       var ltoCapacity = parseFloat(ltoEl.value) || 18;
       var hoursPerCartridge = parseFloat(hoursEl.value) || 7;
       var writeDrives = parseFloat(writeDrivesEl.value) || 3;
       var standby = parseFloat(standbyEl.value) || 0;
 
-      motionValEl.textContent = motionPct + '%';
+      if (motionValEl) motionValEl.textContent = motionPct + '%';
 
       // --- ResolutionSizes sheet chain ---
       var pixels = res.w * res.h;

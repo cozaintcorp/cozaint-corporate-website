@@ -162,7 +162,7 @@
       ['Cameras', val('calcCameras'), 'Retention', num(last.calc.retentionDays) + ' days'],
       ['Resolution', selText('calcResolution'), 'Years you own the system', String(r.years)],
       ['Frames per second', val('calcFps'), 'LTO tape', selText('calcLto')],
-      ['Motion', val('calcMotion') + '%', 'Tape drives', val('calcWriteDrives') + ' recording + ' + val('calcStandby') + ' standby (' + drives + ')'],
+      ['Motion', Math.min(100, Math.max(1, parseFloat(val('calcMotion')) || 1)) + '%', 'Tape drives', val('calcWriteDrives') + ' recording + ' + val('calcStandby') + ' standby (' + drives + ')'],
       ['Bits per pixel', val('calcBpp'), '', '']
     ];
     var results = [
