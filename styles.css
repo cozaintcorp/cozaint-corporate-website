@@ -1206,3 +1206,15 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .calc-unit { display: flex; align-items: center; gap: 12px; }
 .calc-unit input { flex: 1; min-width: 0; }
 .calc-unit-label { flex: none; font-size: 14px; font-weight: 600; color: var(--grey-600); }
+
+/* Hard drive assumptions and collapsible notes (assessment calculator) */
+.tco-assume { margin: 16px 0 6px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--white); }
+.tco-assume-title { margin: 0 0 4px; font-weight: 700; font-size: 14px; color: var(--forest); }
+.tco-assume .calc-row { margin-top: 6px; }
+.tco-reset { background: none; border: 0; padding: 0; margin-left: 4px; font: inherit; font-weight: 700; color: #0a7a52; text-decoration: underline; cursor: pointer; }
+details.tco-footnote { padding: 0; }
+details.tco-footnote > summary { cursor: pointer; padding: 10px 14px; font-weight: 700; color: #0a7a52; text-decoration: underline; text-underline-offset: 3px; list-style: none; }
+details.tco-footnote > summary::-webkit-details-marker { display: none; }
+details.tco-footnote > summary::after { content: " +"; text-decoration: none; display: inline-block; margin-left: 4px; }
+details.tco-footnote[open] > summary::after { content: " −"; }
+details.tco-footnote > .tco-note-body { padding: 0 14px 12px; }

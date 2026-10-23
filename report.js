@@ -198,6 +198,13 @@
 
     // ---------- Breakdown ----------
     doc.addPage(); y = M;
+    var hd = T.hdd(), ch = hd.changed;
+    var mark = function (c) { return c ? ' (changed)' : ''; };
+    kvTable('Hard drive assumptions', [
+      ['Drive used', hd.model, 'MTBF', num(hd.mtbf) + ' hours' + mark(ch.mtbf)],
+      ['Capacity per drive', hd.capacity + ' TB' + mark(ch.capacity), 'Annual failure rate', (hd.afr * 100).toFixed(2) + '% (from MTBF)'],
+      ['Cost per drive', money2(hd.price) + mark(ch.price), 'Complete system price', money2(hd.sysPerTb) + ' per TB' + mark(ch.sys)]
+    ]);
     heading('How the costs add up');
     y += 6;
     function breakdown(title, part) {
@@ -222,10 +229,12 @@
     heading('Notes and sources');
     y += 8;
     var h = prices.hdd;
-    para('** Drive failures. Hard drives spin 24 hours a day and wear out; tape cartridges sit still on a shelf until needed. Failures during service use the ' +
-      'industry-standard annualized failure rate (failures / (drive-days / 365) x 100), measured by Backblaze on about 350,000 drives: ' +
-      (h.annual_failure_rate * 100).toFixed(2) + '% a year. Enterprise drives are rated for ' + T.serviceLife() + ' years of 24/7 use, so systems owned longer replace every drive. ' +
-      'LTO cartridges are designed for a ' + T.tapeLife() + '-year archival life. Sources: Backblaze Drive Stats (backblaze.com); LTO media data sheet.');
+    para('** Drive failures. Hard drives spin 24 hours a day and wear out; tape cartridges sit still on a shelf until needed. Failures during service = drives x annual failure rate x years, ' +
+      'where annual failure rate = 1 - e^(-8,760 / MTBF). MTBF used: ' + num(hd.mtbf) + ' hours (' + (hd.afr * 100).toFixed(2) + '% a year)' +
+      (ch.mtbf ? ', as entered.' : ', the industry average of the manufacturers\' published MTBF ratings for ' + hd.survey + ' current enterprise and surveillance drive lines from all three hard drive manufacturers.') +
+      ' Manufacturer ratings come from lab testing; large real-world fleets report higher rates (Backblaze: ' + (h.annual_failure_rate * 100).toFixed(2) + '% a year). ' +
+      'Enterprise drives are rated for ' + T.serviceLife() + ' years of 24/7 use, so systems owned longer replace every drive. ' +
+      'LTO cartridges are designed for a ' + T.tapeLife() + '-year archival life.');
     y += 4;
     var renew = T.renewalPrice(last.calc.ltoCapacity);
     para('*** Cozaint pricing. Cozaint Certified LTO media, the MARCIA LTO library and expansion modules, LTO library drives, SAS connectivity and MARCIA base software are at Cozaint list price (MSRP). ' +
@@ -240,9 +249,9 @@
     });
     y += 4;
     var ca = T.cloud(r.tb);
-    para('\u2020 Average cloud price. Standard storage, pay as you go, averaged across ' + ca.list.length + ' providers at ' + num(r.tb) + ' TB: ' + money2(ca.perTb) + ' per TB per month.');
+    para('\u2020 Average cloud price. Standard storage, pay as you go, averaged across ' + ca.list.length + ' verified cloud service providers at ' + num(r.tb) + ' TB: ' + money2(ca.perTb) + ' per TB per month.');
     ca.list.forEach(function (x, i) {
-      para('   ' + x.name + ': ' + money2(ca.per[i]) + ' per TB per month (' + site(x.source_url) + ')', 8);
+      para('   Verified cloud service provider ' + (i + 1) + ': ' + money2(ca.per[i]) + ' per TB per month', 8);
     });
     y += 4;
     para('Not counted on any option: racks, network switches, video management (VMS) licenses, installation and support contracts. Cloud also leaves out the on-site recorder the cameras still need, ' +

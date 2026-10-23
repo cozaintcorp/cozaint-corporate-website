@@ -147,6 +147,15 @@ def main():
             if a_new and a_old and abs(a_new - a_old) / a_old > MAX_MONTHLY_CHANGE:
                 problems.append(f"average complete system price moved from ${a_old:.0f} to ${a_new:.0f} per TB (more than 30%)")
 
+    survey = get(new, ("hdd", "mtbf_survey", "drives"))
+    if not isinstance(survey, list) or len(survey) < 3:
+        problems.append("hdd.mtbf_survey.drives must list at least 3 drive lines")
+    else:
+        for i, x in enumerate(survey):
+            v = x.get("mtbf_hours") if isinstance(x, dict) else None
+            if not (isinstance(v, (int, float)) and not isinstance(v, bool) and 100000 <= v <= 5000000):
+                problems.append(f"hdd.mtbf_survey.drives[{i}] MTBF must be between 100,000 and 5,000,000 hours")
+
     provs = get(new, ("cloud_providers", "providers"))
     if not isinstance(provs, list) or len(provs) < 2:
         problems.append("cloud_providers.providers must list at least 2 providers besides Wasabi")

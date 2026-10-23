@@ -36,6 +36,16 @@ the drive model changes (then take the new model's warranty years and MTBF
 from its datasheet). When Backblaze publishes new drive stats, update
 `hdd.annual_failure_rate` from their lifetime table total and refresh its note.
 
+## Drive MTBF survey (`hdd.mtbf_survey.drives`)
+
+The calculator's MTBF is the plain average of the manufacturers' published
+MTBF ratings for current enterprise and surveillance drive lines from all
+three hard drive makers (Seagate, Western Digital, Toshiba). Each month,
+check each listed drive line's current datasheet; update `mtbf_hours` and
+`checked` if the rating changed, and replace a discontinued line with its
+successor from the same maker. Keep at least one enterprise and one
+surveillance line per maker. Mention any change in the report.
+
 ## Cloud providers (`cloud` and `cloud_providers.providers`)
 
 The website prices cloud storage as the AVERAGE of Wasabi (the `cloud`

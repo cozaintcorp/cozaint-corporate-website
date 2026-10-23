@@ -67,6 +67,7 @@
         if (timer) clearTimeout(timer);
         if (!usable(data)) throw new Error('bad data');
         prices = data;
+        fillHdd();
         render();
       })
       .catch(function () {
@@ -82,17 +83,43 @@
     if (msg) msg.textContent = 'Current prices could not be loaded. Please try again later.';
   }
 
+  // ---------- Hard drive assumptions (visitor can change them) ----------
+  var userHdd = {}; // capacity_tb, price_usd, mtbf_hours, sys_per_tb typed by the visitor
+  function mtbfSurvey() {
+    var s = prices.hdd && prices.hdd.mtbf_survey;
+    return (s && Array.isArray(s.drives) ? s.drives : []).filter(function (x) { return x && x.mtbf_hours > 0; });
+  }
+  function mtbfIndustry() {
+    var l = mtbfSurvey();
+    if (!l.length) return prices.hdd.manufacturer_mtbf_hours || 2500000;
+    return l.reduce(function (t, x) { return t + x.mtbf_hours; }, 0) / l.length;
+  }
+  function hddCapacity() { return userHdd.capacity_tb > 0 ? userHdd.capacity_tb : prices.hdd.capacity_tb; }
+  function hddPrice() { return userHdd.price_usd > 0 ? userHdd.price_usd : prices.hdd.price_usd; }
+  function hddMtbf() { return userHdd.mtbf_hours > 0 ? userHdd.mtbf_hours : mtbfIndustry(); }
+  // Annual failure rate from MTBF: 1 - e^(-hours in a year / MTBF)
+  function hddAfr() { return 1 - Math.exp(-HOURS_PER_YEAR / hddMtbf()); }
+  function sysPerTb() { return userHdd.sys_per_tb > 0 ? userHdd.sys_per_tb : avgPerRawTb(); }
+  function hddChanged() {
+    return {
+      capacity: userHdd.capacity_tb > 0 && userHdd.capacity_tb !== prices.hdd.capacity_tb,
+      price: userHdd.price_usd > 0 && userHdd.price_usd !== prices.hdd.price_usd,
+      mtbf: userHdd.mtbf_hours > 0 && Math.round(userHdd.mtbf_hours) !== Math.round(mtbfIndustry()),
+      sys: userHdd.sys_per_tb > 0 && Math.abs(userHdd.sys_per_tb - avgPerRawTb()) >= 0.005
+    };
+  }
+
   // A RAID 6 disk system holding `tb` terabytes: drives, enclosures, servers, power.
   function diskSystem(tb, years) {
     var p = prices;
     if (tb <= 0) return { tb: 0, rawTb: 0, drives: 0, enclosures: 0, servers: 0, replacements: 0, refreshes: 0, refreshDrives: 0, watts: 0 };
     var rawTb = tb / p.raid.usable_fraction;
     var g = p.raid.group_size;
-    var drives = Math.ceil(Math.ceil(rawTb / p.hdd.capacity_tb) / g) * g;
+    var drives = Math.ceil(Math.ceil(rawTb / hddCapacity()) / g) * g;
     var enclosures = Math.ceil(drives / p.disk_enclosure.bays);
     var servers = Math.max(1, Math.ceil(enclosures / p.server.enclosures_per_server));
     // Random failures during service: annualized failure rate x drives x years.
-    var replacements = Math.ceil(drives * p.hdd.annual_failure_rate * years);
+    var replacements = Math.ceil(drives * hddAfr() * years);
     // Wear-out: every drive is replaced when it reaches its service life, if the
     // system keeps running past that point (e.g. life 5: replaced at years 5, 10, 15).
     var refreshes = Math.max(0, Math.ceil(years / serviceLife()) - 1);
@@ -222,16 +249,16 @@
     var p = prices;
     var tb = calc.totalTb;
     var gen = String(calc.ltoCapacity);
-    var drivePrice = p.hdd.price_usd;
+    var drivePrice = hddPrice();
 
     // ---------- Average complete hard drive surveillance system ----------
     var d = diskSystem(tb, years);
     var dPow = powerCost(d.watts, years);
-    var avg = avgPerRawTb();
+    var avg = sysPerTb();
     var nSys = systemsList().length;
     var hddLines = [
       line('Complete surveillance storage system ****', num(tb) + ' TB of video needs ' + num(d.rawTb) + ' TB of raw disk (RAID 6) × ' + money2(avg) +
-        ' per TB, the average price of ' + nSys + ' complete video surveillance storage systems', d.rawTb * avg),
+        ' per TB' + (hddChanged().sys ? ' (entered)' : ', the average price of ' + nSys + ' complete video surveillance storage systems'), d.rawTb * avg),
       line('Replacement drives: failures **', 'Included: assumed covered by the system warranty', 0),
       wearOutLine(d, drivePrice, years),
       line('Power and cooling', 'About ' + dPow.kw.toFixed(1) + ' kW around the clock for ' + yrs(years) + ' at ' + (p.electricity.usd_per_kwh * 100).toFixed(2) + '¢ per kWh, cooling included',
@@ -272,7 +299,7 @@
       line('SAS connectivity ***', hbas + ' × ' + money2(hw.sas_hba.price_usd) + ' adapter + ' + num(nDrives) + ' × ' + money2(hw.sas_cable.price_usd) + ' cables',
         hbas * hw.sas_hba.price_usd + nDrives * hw.sas_cable.price_usd),
       marcia ? line('MARCIA base software ***', '1 × ' + money2(marcia), marcia) : null,
-      line(tierPct + '% disk tier: hard drives', num(t.drives) + ' × ' + money2(drivePrice) + ' (' + num(tierTb) + ' TB, ' + tierPct +
+      line(tierPct + '% disk tier: hard drives', num(t.drives) + ' × ' + money2(drivePrice) + ' (' + hddCapacity() + ' TB drives; ' + num(tierTb) + ' TB, ' + tierPct +
         '% of the video, kept on disk for instant playback; market price)', t.drives * drivePrice),
       line(tierPct + '% disk tier: enclosure', num(t.enclosures) + ' × ' + money2(p.disk_enclosure.price_usd) + ' (market price)', t.enclosures * p.disk_enclosure.price_usd),
       line(tierPct + '% disk tier: server', num(t.servers) + ' × ' + money2(p.server.price_usd) + ' (runs MARCIA and the disk tier; market price)', t.servers * p.server.price_usd),
@@ -308,20 +335,26 @@
       '<tr class="tco-total"><td>Total</td><td>' + money(part.total) + '</td></tr></tbody></table>';
   }
 
+  // Each note shows only its title until the visitor opens it.
+  var openNotes = {};
+  function noteBox(id, title, body) {
+    var open = openNotes[id] ? ' open' : '';
+    return '<details class="tco-footnote" data-note="' + id + '"' + open + '><summary>' + title + '</summary><div class="tco-note-body">' + body + '</div></details>';
+  }
+
   // *** Cozaint pricing and Media Lifecycle Renewal
   function cozaintNote(r) {
     var ret = lastCalc && lastCalc.retentionDays > 0 ? lastCalc.retentionDays : 0;
     var gen = lastCalc ? String(lastCalc.ltoCapacity) : '18';
     var renew = renewalPrice(gen);
-    return '<div class="tco-footnote"><p><strong>*** Cozaint pricing.</strong> Everything Cozaint sells is shown at Cozaint list price (MSRP): ' +
+    return noteBox('cozaint', '*** Cozaint pricing and Media Lifecycle Renewal', '<p>Everything Cozaint sells is shown at Cozaint list price (MSRP): ' +
       'Cozaint Certified LTO media, the MARCIA LTO library and expansion modules, LTO library drives, SAS connectivity and MARCIA base software. ' +
       'Libraries are sold without drives. The ' + Math.round(prices.tape_system.disk_tier_fraction * 100) + '% disk tier (drives, enclosure and server) is not a Cozaint product, so it is shown at market price.</p>' +
       (renew > 0 ? '<p><strong>MARCIA Media Lifecycle Renewal.</strong> The calculator buys enough cartridges to hold the retention period' +
         (ret ? ' (' + num(ret) + ' days)' : '') + '. When video on a cartridge is older than that, MARCIA automatically erases and reinitializes the cartridge ' +
         'and returns it to recording; Cozaint charges ' + money2(renew) + ' per cartridge each time (MSRP for this tape generation).</p>' +
         '<p><span class="tco-formula">renewals = cartridges × (days of ownership − retention days) ÷ retention days</span>. ' +
-        'When the years of ownership equal the retention period, no cartridge is reused and there is no renewal charge.</p>' : '') +
-      '</div>';
+        'When the years of ownership equal the retention period, no cartridge is reused and there is no renewal charge.</p>' : ''));
   }
 
   // † Average cloud price
@@ -329,14 +362,15 @@
     var a = cloudAvgPerTb(r.tb);
     var items = a.list.map(function (x, i) {
       var steps = x.tiers.length > 1 ? ' (' + x.tiers.map(function (t) { return money2(t.usd_per_tb_month) + (t.up_to_tb == null ? ' above that' : ' up to ' + num(t.up_to_tb) + ' TB'); }).join(', ') + ')' : '';
-      return '<li>' + link(x.source_url, x.name) + ': ' + money2(a.per[i]) + ' per TB per month at ' + num(r.tb) + ' TB' + steps + '</li>';
+      // Providers are shown by number, not by name.
+      return '<li>Verified cloud service provider ' + (i + 1) + ': ' + money2(a.per[i]) + ' per TB per month at ' + num(r.tb) + ' TB' + steps + '</li>';
     }).join('');
-    return '<div class="tco-footnote"><p><strong>† Average cloud price.</strong> Cloud storage is priced as the average of ' + a.list.length +
-      ' providers\' standard storage, pay as you go, at the amount of video in this system (some providers charge less per TB as the amount grows):</p>' +
+    return noteBox('cloud', '† Average cloud price', '<p>Cloud storage is priced as the average of ' + a.list.length +
+      ' verified cloud service providers\' standard storage, pay as you go, at the amount of video in this system (some providers charge less per TB as the amount grows):</p>' +
       '<ul class="tco-list">' + items + '</ul>' +
       '<p>Average: <strong>' + money2(a.perTb) + ' per TB per month</strong>. Not counted: the on-site recorder the cameras still need, ' +
       'the internet connection needed to upload video from every camera around the clock, download (retrieval) fees some providers charge, ' +
-      'and minimum-storage or early-deletion fees. The real cloud cost is therefore higher. Prices are refreshed every month.</p></div>';
+      'and minimum-storage or early-deletion fees. The real cloud cost is therefore higher. Prices are refreshed every month.</p>');
   }
 
   // **** Average complete surveillance system
@@ -347,31 +381,34 @@
       return '<li>Verified current system provider ' + (i + 1) + ': ' + money(x.price_usd) + ' for ' + num(x.raw_tb) + ' TB = ' + money2(x.price_usd / x.raw_tb) +
         ' per TB</li>';
     }).join('');
-    return '<div class="tco-footnote"><p><strong>**** Average complete surveillance system.</strong> The hard drive option is priced as a complete, ready-made ' +
+    return noteBox('systems', '**** Average complete surveillance system', '<p>The hard drive option is priced as a complete, ready-made ' +
       'video surveillance storage system (recorder or video server with drives, operating system and warranty), the way customers actually buy one, ' +
       'not as a do-it-yourself build from parts. Its price is the average price per TB of raw disk across ' + list.length + ' complete systems from verified current system providers, at US reseller prices:</p>' +
       '<ul class="tco-list">' + items + '</ul>' +
       '<p>Average: <strong>' + money2(avgPerRawTb()) + ' per TB of raw disk</strong>. The video needs about 20% more raw disk than its size, ' +
       'because RAID 6 uses 2 of every 12 drives for protection. Competitor prices are discounted reseller prices, while Cozaint is at full list price, ' +
-      'so the comparison leans in the competitors\' favor. The average is refreshed every month.</p></div>';
+      'so the comparison leans in the competitors\' favor. The average is refreshed every month.' +
+      (hddChanged().sys ? ' <strong>This estimate uses a price per TB you entered (' + money2(sysPerTb()) + ').</strong>' : '') + '</p>');
   }
 
   // ** note: where the drive failure and wear-out figures come from.
   function failureNote() {
-    var h = prices.hdd;
-    var afr = (h.annual_failure_rate * 100).toFixed(2) + '%';
-    return '<div class="tco-footnote"><p><strong>** How drive failures are counted.</strong> Hard drives spin 24 hours a day and wear out; ' +
-      'tape cartridges sit still on a shelf until needed. The calculator counts two kinds of drive replacement:</p>' +
-      '<p><strong>1. Failures during service.</strong> Drives × annualized failure rate × years. The rate comes from the industry-standard formula ' +
-      '<span class="tco-formula">failure rate = failures ÷ (drive-days ÷ 365) × 100</span>, measured by ' +
-      link(h.annual_failure_rate_source_url, 'Backblaze') + ' on about 350,000 drives running around the clock: ' + afr + ' a year.' +
-      (h.manufacturer_afr ? ' Manufacturers quote a lower lab figure (' + (h.manufacturer_afr * 100).toFixed(2) +
-        '% from a ' + (h.manufacturer_mtbf_hours / 1e6) + ' million hour MTBF rating); the calculator uses the real-world rate.' : '') +
-      ' This is counted for the Cozaint disk tier. For the complete surveillance system it is assumed covered by the system warranty.</p>' +
+    var h = prices.hdd, list = mtbfSurvey(), ch = hddChanged();
+    var ratings = list.map(function (x) { return num(x.mtbf_hours); }).join('; ');
+    return noteBox('failures', '** How drive failures are counted',
+      '<p>Hard drives spin 24 hours a day and wear out; tape cartridges sit still on a shelf until needed. The calculator counts two kinds of drive replacement.</p>' +
+      '<p><strong>1. Failures during service.</strong> Drives × annual failure rate × years. The annual failure rate comes from the drive\'s MTBF ' +
+      '(mean time between failures): <span class="tco-formula">annual failure rate = 1 − e<sup>−8,760 ÷ MTBF</sup></span> (8,760 = hours in a year). ' +
+      'The MTBF used is <strong>' + num(hddMtbf()) + ' hours</strong>, a failure rate of ' + (hddAfr() * 100).toFixed(2) + '% a year' +
+      (ch.mtbf ? ' (entered).' : ': the industry average of the manufacturers\' published MTBF ratings for ' + list.length +
+        ' current enterprise and surveillance drive lines from all three hard drive manufacturers (' + ratings + ' hours).') +
+      ' Manufacturer ratings come from lab testing; large real-world fleets report higher failure rates (' +
+      link(h.annual_failure_rate_source_url, 'Backblaze') + ': ' + (h.annual_failure_rate * 100).toFixed(2) + '% a year across about 350,000 drives). ' +
+      'Failures are counted for the Cozaint disk tier; for the complete surveillance system they are assumed covered by the system warranty.</p>' +
       '<p><strong>2. Worn-out drives.</strong> Enterprise drives are rated and warrantied for ' + serviceLife() + ' years of 24/7 use (' +
       link(h.service_life_source_url, 'Seagate Exos X20') + '). Systems owned longer than that need every drive replaced, which the calculator adds for each ' +
-      serviceLife() + '-year period (drives only, at market price). LTO cartridges are designed for a ' + tapeLife() + '-year archival life (' +
-      link(prices.lto.archival_life_source_url, 'LTO media data sheet') + '), so the video on tape needs no replacement media.</p></div>';
+      serviceLife() + '-year period (drives only). LTO cartridges are designed for a ' + tapeLife() + '-year archival life (' +
+      link(prices.lto.archival_life_source_url, 'LTO media data sheet') + '), so the video on tape needs no replacement media.</p>');
   }
 
   function sourcesHtml() {
@@ -552,6 +589,28 @@
       : '.'));
   }
 
+  // ---------- Hard drive assumption boxes ----------
+  function fillHdd() {
+    if (!el('hddCap') || !prices) return;
+    el('hddModel').textContent = prices.hdd.model_display || prices.hdd.label;
+    el('hddCap').value = prices.hdd.capacity_tb;
+    el('hddPrice').value = prices.hdd.price_usd.toFixed(2);
+    el('hddMtbf').value = Math.round(mtbfIndustry());
+    el('hddSysTb').value = avgPerRawTb().toFixed(2);
+    el('hddNSurvey').textContent = mtbfSurvey().length;
+    el('hddNSys').textContent = systemsList().length;
+  }
+  function readHdd() {
+    var v = function (id) { var n = parseFloat(el(id).value); return n > 0 ? n : 0; };
+    userHdd = { capacity_tb: v('hddCap'), price_usd: v('hddPrice'), mtbf_hours: v('hddMtbf'), sys_per_tb: v('hddSysTb') };
+    render();
+  }
+  function showHddRate() {
+    if (el('hddAfr')) el('hddAfr').textContent = (hddAfr() * 100).toFixed(2) + '%';
+    var ch = hddChanged(), any = ch.capacity || ch.price || ch.mtbf || ch.sys;
+    if (el('hddReset')) el('hddReset').hidden = !any;
+  }
+
   // Years of ownership follow the retention period until the visitor changes them.
   var yearsTouched = false;
   function syncYears() {
@@ -585,6 +644,7 @@
       ? 'Cozaint MARCIA saves ' + money(saving) + ' (' + pct + '%) compared with the average complete hard drive surveillance system over ' + yrs(years) + ' of ownership.'
       : 'At this size, the average hard drive system costs less than Cozaint MARCIA.';
 
+    Array.prototype.forEach.call(el('tcoBreakdown').querySelectorAll('details[data-note]'), function (d) { openNotes[d.dataset.note] = d.open; });
     el('tcoBreakdown').innerHTML =
       '<p class="tco-breakdown-title">* How these costs add up</p>' +
       table('Cozaint MARCIA (LTO tape with a ' + Math.round(prices.tape_system.disk_tier_fraction * 100) + '% disk tier)', r.tape) +
@@ -600,6 +660,7 @@
       'Sources: ' + sourcesHtml() + '.</p>';
 
     el('tcoStatus').textContent = '';
+    showHddRate();
     renderChart(r);
     window.COZAINT_TCO.last = { r: r, calc: lastCalc, years: years };
     document.dispatchEvent(new CustomEvent('cozaint:tco', { detail: window.COZAINT_TCO.last }));
@@ -611,6 +672,10 @@
     prices: function () { return prices; },
     systems: function () { return systemsList(); },
     avgPerRawTb: function () { return avgPerRawTb(); },
+    hdd: function () {
+      return { model: prices.hdd.model_display || prices.hdd.label, capacity: hddCapacity(), price: hddPrice(), mtbf: hddMtbf(),
+        afr: hddAfr(), sysPerTb: sysPerTb(), industryMtbf: mtbfIndustry(), survey: mtbfSurvey().length, changed: hddChanged() };
+    },
     cloud: function (tb) { return cloudAvgPerTb(tb); },
     serviceLife: function () { return serviceLife(); },
     tapeLife: function () { return tapeLife(); },
@@ -625,6 +690,10 @@
   document.addEventListener('DOMContentLoaded', function () {
     if (!el('tcoBox')) return;
     el('tcoYears').addEventListener('input', function () { yearsTouched = true; render(); });
+    ['hddCap', 'hddPrice', 'hddMtbf', 'hddSysTb'].forEach(function (id) {
+      if (el(id)) { el(id).addEventListener('input', readHdd); el(id).addEventListener('change', readHdd); }
+    });
+    if (el('hddReset')) el('hddReset').addEventListener('click', function () { userHdd = {}; fillHdd(); render(); });
     // Phones: show the savings bar while the chart is off screen and the calculator card is on screen.
     var mbar = el('tcoMbar'), chart = el('tcoChart'), section = document.querySelector('#calculator .calc-card');
     if (mbar && chart && section && window.IntersectionObserver) {

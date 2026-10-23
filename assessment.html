@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261023a">
+<link rel="stylesheet" href="styles.css?v=20261023b">
 <!-- Microsoft Clarity (visitor analytics). Runs only on cozaint.com, not on the review copy. -->
 <script type="text/javascript">
   if (/(^|\.)cozaint\.com$/.test(location.hostname)) {
@@ -187,6 +187,31 @@
             <label for="tcoYears">Years you own the system</label>
             <input type="number" id="tcoYears" min="1" max="20" value="2" aria-describedby="tcoYearsHelp">
             <p class="calc-hint" id="tcoYearsHelp">Costs are added up over this period. It is different from retention: retention is how long each day's video is kept; ownership is how long the system runs and keeps recording. It starts out matching your retention.</p>
+            <div class="tco-assume">
+              <p class="tco-assume-title">Hard drive assumptions</p>
+              <p class="calc-hint">Drive used for the comparison: <strong id="hddModel">—</strong>. Change any value to see how it affects the costs.</p>
+              <div class="calc-row">
+                <div>
+                  <label for="hddCap">Capacity per drive</label>
+                  <div class="calc-unit"><input type="number" id="hddCap" min="1" step="any" inputmode="decimal"><span class="calc-unit-label">TB</span></div>
+                </div>
+                <div>
+                  <label for="hddPrice">Cost per drive</label>
+                  <div class="calc-unit"><span class="calc-unit-label">$</span><input type="number" id="hddPrice" min="1" step="any" inputmode="decimal"></div>
+                </div>
+              </div>
+              <div class="calc-row">
+                <div>
+                  <label for="hddMtbf">MTBF (mean time between failures)</label>
+                  <div class="calc-unit"><input type="number" id="hddMtbf" min="1000" step="any" inputmode="decimal"><span class="calc-unit-label">hours</span></div>
+                </div>
+                <div>
+                  <label for="hddSysTb">Complete hard drive system price</label>
+                  <div class="calc-unit"><span class="calc-unit-label">$</span><input type="number" id="hddSysTb" min="1" step="any" inputmode="decimal"><span class="calc-unit-label">per TB</span></div>
+                </div>
+              </div>
+              <p class="calc-hint">MTBF starts at the industry average of the manufacturers' published ratings for <span id="hddNSurvey">6</span> current enterprise and surveillance drive lines (all three hard drive makers), which means <span id="hddAfr">—</span> of drives fail each year. System price per TB starts at the average of <span id="hddNSys">5</span> verified current system providers. Details are in the notes below. <button type="button" class="tco-reset" id="hddReset" hidden>Reset to current values</button></p>
+            </div>
             <div class="tco-grid">
               <div class="tco-tape"><span>Cozaint MARCIA (LTO tape)</span><strong><span id="tcoTape">—</span><sup>*</sup></strong></div>
               <div><span>Hard drive surveillance system (average)</span><strong><span id="tcoHdd">—</span><sup>*</sup></strong></div>
@@ -327,8 +352,8 @@
 })();
 </script>
 <script src="calculator.js?v=20261023c"></script>
-<script src="tco.js?v=20261023a"></script>
-<script src="report.js?v=20261023d"></script>
+<script src="tco.js?v=20261023b"></script>
+<script src="report.js?v=20261023e"></script>
 <script src="lead-config.js?v=20261019"></script>
 <script src="script.js?v=20261019"></script>
 <script src="nav.js"></script>

@@ -24,7 +24,55 @@
     "service_life_source_url": "https://www.storagereview.com/review/seagate-exos-x20-20tb-enterprise-hdd-review",
     "source_name": "DatacenterDisk hard drive price tracker",
     "source_url": "https://datacenterdisk.com/price-forecast",
-    "checked": "2026-10-19"
+    "checked": "2026-10-19",
+    "model_display": "Seagate Exos X20, 18 TB enterprise hard drive",
+    "mtbf_survey": {
+      "rule": "Industry average MTBF used by the calculator: the plain average of the manufacturers' published MTBF ratings for current enterprise and surveillance drive lines from all three hard drive makers (Seagate, Western Digital, Toshiba). Annual failure rate = 1 - e^(-8,760 / MTBF). Shown on the website without the drive names.",
+      "drives": [
+        {
+          "name": "Seagate Exos X20",
+          "type": "enterprise",
+          "mtbf_hours": 2500000,
+          "source_url": "https://www.storagereview.com/review/seagate-exos-x20-20tb-enterprise-hdd-review",
+          "checked": "2026-10-23"
+        },
+        {
+          "name": "Western Digital Ultrastar DC HC580",
+          "type": "enterprise",
+          "mtbf_hours": 2500000,
+          "source_url": "https://shop.inception.co.uk/western-digital-ultrastar-dc-hc580-internal-hard-drive-24-tb-7200-rpm-512-mb-3-5-serial-ata-0f62796.html",
+          "checked": "2026-10-23"
+        },
+        {
+          "name": "Toshiba MG11",
+          "type": "enterprise",
+          "mtbf_hours": 2500000,
+          "source_url": "https://www.adorama.com/toshiba-mg11-16tb-3-5-inch-sata-iii-internal-hard-drive/p/tomg11aca16t",
+          "checked": "2026-10-23"
+        },
+        {
+          "name": "Seagate SkyHawk AI",
+          "type": "surveillance",
+          "mtbf_hours": 2000000,
+          "source_url": "https://www.storagereview.com/review/seagate-skyhawk-ai-20tb-hdd-review",
+          "checked": "2026-10-23"
+        },
+        {
+          "name": "Western Digital Purple Pro (12-18 TB)",
+          "type": "surveillance",
+          "mtbf_hours": 2500000,
+          "source_url": "https://blocksandfiles.com/2021/05/18/wds-pro-purple-surveillance-hdd/",
+          "checked": "2026-10-23"
+        },
+        {
+          "name": "Toshiba S300 Pro",
+          "type": "surveillance",
+          "mtbf_hours": 1200000,
+          "source_url": "https://toshiba.semicon-storage.com/ap-en/storage/product/internal-specialty/surveillance/articles/s300-pro.html",
+          "checked": "2026-10-23"
+        }
+      ]
+    }
   },
   "raid": {
     "label": "RAID 6, 12-drive groups (10 data + 2 parity)",
