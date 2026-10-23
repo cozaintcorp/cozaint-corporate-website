@@ -1218,3 +1218,5 @@ details.tco-footnote > summary::-webkit-details-marker { display: none; }
 details.tco-footnote > summary::after { content: " +"; text-decoration: none; display: inline-block; margin-left: 4px; }
 details.tco-footnote[open] > summary::after { content: " −"; }
 details.tco-footnote > .tco-note-body { padding: 0 14px 12px; }
+
+.tco-list a { white-space: nowrap; }

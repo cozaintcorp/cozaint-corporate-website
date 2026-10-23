@@ -86,6 +86,18 @@
       doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(GREEN[0], GREEN[1], GREEN[2]);
       text(str, M, y); y += 8;
     }
+    // One provider line with a clickable link at the end (provider shown by number only).
+    function linkLine(str, label, url) {
+      if (y > H - 70) { doc.addPage(); y = M; }
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(GREY[0], GREY[1], GREY[2]);
+      var t = clean(str);
+      doc.text(t, M, y);
+      if (url) {
+        doc.setTextColor(GREEN[0], GREEN[1], GREEN[2]);
+        doc.textWithLink(label, M + doc.getTextWidth(t) + 6, y, { url: url });
+      }
+      y += 8 * 1.35;
+    }
     function para(str, size, color) {
       doc.setFont('helvetica', 'normal'); doc.setFontSize(size || 9); var c = color || GREY; doc.setTextColor(c[0], c[1], c[2]);
       var lines = doc.splitTextToSize(clean(str), W - 2 * M);
@@ -245,13 +257,13 @@
     para('**** Average complete hard drive surveillance system. Priced as a complete, ready-made video surveillance storage system (recorder or video server with drives), ' +
       'at the average price per TB of raw disk across systems from verified current system providers, at US reseller prices (' + money2(T.avgPerRawTb()) + ' per TB). RAID 6 needs about 20% more raw disk than the video stored.');
     T.systems().forEach(function (x, i) {
-      para('   Verified current system provider ' + (i + 1) + ': ' + money(x.price_usd) + ' for ' + num(x.raw_tb) + ' TB = ' + money2(x.price_usd / x.raw_tb) + ' per TB', 8);
+      linkLine('   Verified current system provider ' + (i + 1) + ': ' + money(x.price_usd) + ' for ' + num(x.raw_tb) + ' TB = ' + money2(x.price_usd / x.raw_tb) + ' per TB', 'View listing', x.source_url);
     });
     y += 4;
     var ca = T.cloud(r.tb);
     para('\u2020 Average cloud price. Standard storage, pay as you go, averaged across ' + ca.list.length + ' verified cloud service providers at ' + num(r.tb) + ' TB: ' + money2(ca.perTb) + ' per TB per month.');
     ca.list.forEach(function (x, i) {
-      para('   Verified cloud service provider ' + (i + 1) + ': ' + money2(ca.per[i]) + ' per TB per month', 8);
+      linkLine('   Verified cloud service provider ' + (i + 1) + ': ' + money2(ca.per[i]) + ' per TB per month', 'View pricing', x.company_url || x.source_url);
     });
     y += 4;
     para('Not counted on any option: racks, network switches, video management (VMS) licenses, installation and support contracts. Cloud also leaves out the on-site recorder the cameras still need, ' +

@@ -231,7 +231,7 @@
   }
   function cloudProviders() {
     var list = [{ name: 'Wasabi', tiers: [{ up_to_tb: null, usd_per_tb_month: prices.cloud.usd_per_tb_month }],
-      source_url: prices.cloud.source_url, source_name: prices.cloud.source_name, region: 'pay as you go' }];
+      source_url: prices.cloud.source_url, source_name: prices.cloud.source_name, company_url: prices.cloud.company_url, region: 'pay as you go' }];
     var c = prices.cloud_providers;
     (c && Array.isArray(c.providers) ? c.providers : []).forEach(function (x) {
       if (x && Array.isArray(x.tiers) && x.tiers.length && x.tiers.every(function (t) { return t.usd_per_tb_month > 0; })) list.push(x);
@@ -363,7 +363,9 @@
     var items = a.list.map(function (x, i) {
       var steps = x.tiers.length > 1 ? ' (' + x.tiers.map(function (t) { return money2(t.usd_per_tb_month) + (t.up_to_tb == null ? ' above that' : ' up to ' + num(t.up_to_tb) + ' TB'); }).join(', ') + ')' : '';
       // Providers are shown by number, not by name.
-      return '<li>Verified cloud service provider ' + (i + 1) + ': ' + money2(a.per[i]) + ' per TB per month at ' + num(r.tb) + ' TB' + steps + '</li>';
+      var url = x.company_url || x.source_url;
+      return '<li>Verified cloud service provider ' + (i + 1) + ': ' + money2(a.per[i]) + ' per TB per month at ' + num(r.tb) + ' TB' + steps +
+        (url ? ' · ' + link(url, 'View pricing') : '') + '</li>';
     }).join('');
     return noteBox('cloud', '† Average cloud price', '<p>Cloud storage is priced as the average of ' + a.list.length +
       ' verified cloud service providers\' standard storage, pay as you go, at the amount of video in this system (some providers charge less per TB as the amount grows):</p>' +
@@ -379,7 +381,7 @@
     // Providers are shown by number, not by name (several are Cozaint partners).
     var items = list.map(function (x, i) {
       return '<li>Verified current system provider ' + (i + 1) + ': ' + money(x.price_usd) + ' for ' + num(x.raw_tb) + ' TB = ' + money2(x.price_usd / x.raw_tb) +
-        ' per TB</li>';
+        ' per TB' + (x.source_url ? ' · ' + link(x.source_url, 'View listing') : '') + '</li>';
     }).join('');
     return noteBox('systems', '**** Average complete surveillance system', '<p>The hard drive option is priced as a complete, ready-made ' +
       'video surveillance storage system (recorder or video server with drives, operating system and warranty), the way customers actually buy one, ' +

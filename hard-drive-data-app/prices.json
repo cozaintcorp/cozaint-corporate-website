@@ -178,11 +178,12 @@
     "usd_per_tb_month": 7.99,
     "source_name": "Wasabi documentation: May 2026 Wasabi pricing notice and FAQs",
     "source_url": "https://docs.wasabi.com/docs/may-2026-wasabi-pricing",
-    "checked": "2026-10-19"
+    "checked": "2026-10-19",
+    "company_url": "https://wasabi.com/pricing"
   },
   "cloud_providers": {
     "label": "Other major cloud storage providers, standard (hot) storage tier, US East / primary US region, pay as you go",
-    "rule": "The calculator averages these providers together with Wasabi (the cloud section). Each provider charges per TB per month by volume step: up_to_tb is the top of the step (null = no limit). Prices are per GB per month x 1,000.",
+    "rule": "The calculator averages these providers together with Wasabi (the cloud section). Each provider charges per TB per month by volume step: up_to_tb is the top of the step (null = no limit). Prices are per GB per month x 1,000. company_url is the provider's own pricing page, linked on the website (the provider is shown by number, not name).",
     "providers": [
       {
         "name": "Amazon S3 Standard",
@@ -203,7 +204,8 @@
         ],
         "source_name": "CloudBurn: Amazon S3 pricing (updated 2026-10-12)",
         "source_url": "https://cloudburn.io/blog/amazon-s3-pricing",
-        "checked": "2026-10-21"
+        "checked": "2026-10-21",
+        "company_url": "https://aws.amazon.com/s3/pricing/"
       },
       {
         "name": "Microsoft Azure Blob Storage, Hot tier (LRS)",
@@ -224,7 +226,8 @@
         ],
         "source_name": "N2WS: Azure storage costs (updated October 2026)",
         "source_url": "https://n2ws.com/blog/microsoft-azure-cloud-services/azure-storage-costs",
-        "checked": "2026-10-21"
+        "checked": "2026-10-21",
+        "company_url": "https://azure.microsoft.com/en-us/pricing/details/storage/blobs/"
       },
       {
         "name": "Google Cloud Storage, Standard (single region)",
@@ -237,7 +240,8 @@
         ],
         "source_name": "Google Cloud Storage pricing",
         "source_url": "https://cloud.google.com/storage/pricing",
-        "checked": "2026-10-21"
+        "checked": "2026-10-21",
+        "company_url": "https://cloud.google.com/storage/pricing"
       }
     ]
   },
