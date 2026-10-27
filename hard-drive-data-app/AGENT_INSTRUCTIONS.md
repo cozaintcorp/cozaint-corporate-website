@@ -75,6 +75,9 @@ Milestone Husky, Genetec Streamvault). Each month:
 - Each entry needs `name`, `raw_tb`, `price_usd`, `source_name`, `source_url`,
   `checked`. The safety check holds the update if the average moves more than 30%.
 - Mention in the report which systems changed, were added or were dropped.
+- Never change `surveillance_systems.volume_price_breaks` (the volume price
+  break tiers applied to the average for larger systems). Only a person sets
+  them; the safety check blocks any change.
 
 If a source cannot be reached, keep last month's value for that section,
 leave its old `checked` date, and mention it in the report.

@@ -123,6 +123,8 @@ def main():
         for sec in ("cozaint_software", "cozaint_hardware", "cozaint_services"):
             if get(old, (sec,)) != get(new, (sec,)):
                 problems.append(f"{sec} changed; only a person may change Cozaint prices")
+        if get(old, ("surveillance_systems", "volume_price_breaks")) != get(new, ("surveillance_systems", "volume_price_breaks")):
+            problems.append("surveillance_systems.volume_price_breaks changed; only a person may change the price breaks")
 
     systems = get(new, ("surveillance_systems", "systems"))
     if not isinstance(systems, list) or len(systems) < 3:

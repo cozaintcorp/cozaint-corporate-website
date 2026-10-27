@@ -216,6 +216,23 @@
     if (!list.length) return NaN;
     return list.reduce(function (t, x) { return t + x.price_usd / x.raw_tb; }, 0) / list.length;
   }
+  // Volume price breaks for larger systems, by TB of raw disk (set by Cozaint).
+  function priceBreakTiers() {
+    var v = prices.surveillance_systems && prices.surveillance_systems.volume_price_breaks;
+    return v && Array.isArray(v.tiers) ? v.tiers : [];
+  }
+  function tbLabel(t) { return t >= 1000 ? num(t / 1000) + ' PB' : num(t) + ' TB'; }
+  function tierRange(i) {
+    var tiers = priceBreakTiers(), from = i > 0 ? tiers[i - 1].up_to_tb : 0, to = tiers[i].up_to_tb;
+    return to == null ? 'over ' + tbLabel(from) : (from === 0 ? 'up to ' : tbLabel(from) + ' to ') + tbLabel(to);
+  }
+  function priceBreak(rawTb) {
+    var tiers = priceBreakTiers();
+    for (var i = 0; i < tiers.length; i++) {
+      if (tiers[i].up_to_tb == null || rawTb <= tiers[i].up_to_tb) return { tier: i + 1, discount: tiers[i].discount || 0, range: tierRange(i) };
+    }
+    return { tier: 0, discount: 0, range: '' };
+  }
 
   // ---------- Cloud: Wasabi (cloud section) plus the other providers ----------
   // Monthly cost of storing `tb` with stepped prices [{up_to_tb, usd_per_tb_month}].
@@ -256,9 +273,13 @@
     var dPow = powerCost(d.watts, years);
     var avg = sysPerTb();
     var nSys = systemsList().length;
+    var brk = priceBreak(d.rawTb);
+    var eff = avg * (1 - brk.discount);
     var hddLines = [
       line('Complete surveillance storage system ****', num(tb) + ' TB of video needs ' + num(d.rawTb) + ' TB of raw disk (RAID 6) × ' + money2(avg) +
-        ' per TB' + (hddChanged().sys ? ' (entered)' : ', the average price of ' + nSys + ' complete video surveillance storage systems'), d.rawTb * avg),
+        ' per TB' + (hddChanged().sys ? ' (entered)' : ', the average price of ' + nSys + ' complete video surveillance storage systems') +
+        (brk.discount > 0 ? ', less a volume price break of ' + Math.round(brk.discount * 100) + '% for a system ' + brk.range + ' (' + money2(eff) + ' per TB)' : ''),
+        d.rawTb * eff),
       line('Replacement drives: failures **', 'Included: assumed covered by the system warranty', 0),
       wearOutLine(d, drivePrice, years),
       line('Power and cooling', 'About ' + dPow.kw.toFixed(1) + ' kW around the clock for ' + yrs(years) + ' at ' + (p.electricity.usd_per_kwh * 100).toFixed(2) + '¢ per kWh, cooling included',
@@ -322,7 +343,7 @@
     return {
       tb: tb, years: years, cartridges: cartridges, renewals: renewals,
       tape: { lines: tapeLines, total: sum(tapeLines) },
-      hdd: { lines: hddLines, total: sum(hddLines) },
+      hdd: { lines: hddLines, total: sum(hddLines), rawTb: d.rawTb, perTb: avg, effPerTb: eff, priceBreak: brk },
       cloud: { lines: cloudLines, total: sum(cloudLines) }
     };
   }
@@ -376,7 +397,7 @@
   }
 
   // **** Average complete surveillance system
-  function systemsNote() {
+  function systemsNote(r) {
     var list = systemsList();
     // Providers are shown by number, not by name (several are Cozaint partners).
     var items = list.map(function (x, i) {
@@ -390,7 +411,18 @@
       '<p>Average: <strong>' + money2(avgPerRawTb()) + ' per TB of raw disk</strong>. The video needs about 20% more raw disk than its size, ' +
       'because RAID 6 uses 2 of every 12 drives for protection. Competitor prices are discounted reseller prices, while Cozaint is at full list price, ' +
       'so the comparison leans in the competitors\' favor. The average is refreshed every month.' +
-      (hddChanged().sys ? ' <strong>This estimate uses a price per TB you entered (' + money2(sysPerTb()) + ').</strong>' : '') + '</p>');
+      (hddChanged().sys ? ' <strong>This estimate uses a price per TB you entered (' + money2(sysPerTb()) + ').</strong>' : '') + '</p>' +
+      breaksHtml(r));
+  }
+  function breaksHtml(r) {
+    var tiers = priceBreakTiers(), cur = r && r.hdd.priceBreak ? r.hdd.priceBreak.tier : 0;
+    if (!tiers.length) return '';
+    var rows = tiers.map(function (t, i) {
+      var txt = 'Tier ' + (i + 1) + ', ' + tierRange(i) + ' of raw disk: ' + (t.discount > 0 ? Math.round(t.discount * 100) + '% off (' + money2(sysPerTb() * (1 - t.discount)) + ' per TB)' : 'no price break (' + money2(sysPerTb()) + ' per TB)');
+      return '<li>' + (i + 1 === cur ? '<strong>' + txt + ' ← this estimate</strong>' : txt) + '</li>';
+    }).join('');
+    return '<p><strong>Volume price breaks.</strong> Larger systems are bought at a discount, so the average price per TB is reduced by the size of the system ' +
+      '(the whole system gets its tier\'s price):</p><ul class="tco-list">' + rows + '</ul>';
   }
 
   // Plain-language summary of the whole method, for everyday visitors.
@@ -402,7 +434,7 @@
       '<li><strong>Cozaint MARCIA.</strong> Enough LTO tape cartridges to hold that video, plus the tape library, tape drives, MARCIA software, a small disk tier that keeps ' + tier +
         '% of the video ready for instant playback, and power. Cozaint products are at Cozaint list price.</li>',
       '<li><strong>Hard drive system.</strong> The same video on a typical complete, ready-made surveillance storage system, priced at the average cost per TB of ' + nSys +
-        ' verified current system providers, plus power.</li>',
+        ' verified current system providers, with a volume price break for larger systems (up to ' + Math.round(Math.max.apply(null, priceBreakTiers().map(function (t) { return t.discount || 0; }).concat(0)) * 100) + '% off), plus power.</li>',
       '<li><strong>Cloud.</strong> The same video stored in the cloud, at the average monthly price of ' + nCloud + ' verified cloud service providers.</li>',
       '<li><strong>Over time.</strong> Everything is added up over the ' + yrs(r.years) + ' you own the system, including replacing hard drives that fail or wear out. Prices are checked every month.</li>'
     ];
@@ -672,7 +704,7 @@
       howNote(r) +
       failureNote() +
       cozaintNote(r) +
-      systemsNote() +
+      systemsNote(r) +
       cloudNote(r) +
       '<p class="tco-notes">Prices updated ' + esc(prices.updated) + ' (Cozaint products at Cozaint list price; everything else at market or reseller prices)' +
       '. Cooling adds ' + Math.round((prices.cooling.pue - 1) * 100) + '% to equipment power (industry average). ' +
@@ -692,6 +724,7 @@
     prices: function () { return prices; },
     systems: function () { return systemsList(); },
     avgPerRawTb: function () { return avgPerRawTb(); },
+    priceBreaks: function () { return priceBreakTiers().map(function (t, i) { return { tier: i + 1, range: tierRange(i), discount: t.discount || 0 }; }); },
     hdd: function () {
       return { model: prices.hdd.model_display || prices.hdd.label, capacity: hddCapacity(), price: hddPrice(), mtbf: hddMtbf(),
         afr: hddAfr(), sysPerTb: sysPerTb(), industryMtbf: mtbfIndustry(), survey: mtbfSurvey().length, changed: hddChanged() };

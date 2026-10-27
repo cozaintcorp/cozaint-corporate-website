@@ -259,6 +259,11 @@
     T.systems().forEach(function (x, i) {
       linkLine('   Verified current system provider ' + (i + 1) + ': ' + money(x.price_usd) + ' for ' + num(x.raw_tb) + ' TB = ' + money2(x.price_usd / x.raw_tb) + ' per TB', 'View listing', x.source_url);
     });
+    if (T.priceBreaks && T.priceBreaks().length) {
+      var cur = last.r.hdd.priceBreak ? last.r.hdd.priceBreak.tier : 0;
+      para('Volume price breaks. Larger systems are bought at a discount, so the average price per TB is reduced by the size of the system (the whole system gets its tier\'s price): ' +
+        T.priceBreaks().map(function (b) { return 'Tier ' + b.tier + ', ' + b.range + ': ' + (b.discount > 0 ? Math.round(b.discount * 100) + '% off' : 'no price break') + (b.tier === cur ? ' (this report)' : ''); }).join('; ') + '.');
+    }
     y += 4;
     var ca = T.cloud(r.tb);
     para('\u2020 Average cloud price. Standard storage, pay as you go, averaged across ' + ca.list.length + ' verified cloud service providers at ' + num(r.tb) + ' TB: ' + money2(ca.perTb) + ' per TB per month.');
