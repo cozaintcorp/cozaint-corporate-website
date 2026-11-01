@@ -1,17 +1,17 @@
 {
   "schema_version": 2,
-  "updated": "2026-10-19",
+  "updated": "2026-11-01",
   "updated_by": "Claude monthly agent",
   "notes": "Typical current price of a new product from public price listings. US dollars, before tax and shipping. The website calculator reads this file.",
   "hdd": {
     "label": "Seagate Exos X20 18 TB enterprise hard drive, new",
     "capacity_tb": 18,
-    "price_usd": 764.9,
-    "usd_per_tb": 42.49,
+    "price_usd": 792.0,
+    "usd_per_tb": 44.0,
     "watts": 8.5,
     "watts_note": "Between Seagate Exos X24 write (8.2 W) and read (9.8 W) power; surveillance recording is mostly writes.",
-    "market_median_usd_per_tb": 49.05,
-    "market_median_note": "Median of 68 new enterprise-drive offers on Amazon US (as of 2026-10-19).",
+    "market_median_usd_per_tb": 49.02,
+    "market_median_note": "Median of 72 new enterprise-drive offers tracked by DatacenterDisk (as of 2026-10-31).",
     "annual_failure_rate": 0.0141,
     "annual_failure_rate_note": "Backblaze lifetime annualized failure rate across about 353,000 drives, through June 30, 2026.",
     "annual_failure_rate_source_url": "https://backblaze.com/blog/backblaze-drive-stats-for-q2-2026",
@@ -22,9 +22,9 @@
     "service_life_years": 5,
     "service_life_note": "Enterprise drives carry a 5-year warranty (Seagate Exos X20) and are planned for 3 to 5 years of 24x7 service. To keep video longer, every drive is replaced at the end of each 5-year life.",
     "service_life_source_url": "https://www.storagereview.com/review/seagate-exos-x20-20tb-enterprise-hdd-review",
-    "source_name": "DatacenterDisk hard drive price tracker",
-    "source_url": "https://datacenterdisk.com/price-forecast",
-    "checked": "2026-10-19",
+    "source_name": "MaxMyBuild price tracker (lowest in-stock new offer, Amazon US); median from DatacenterDisk",
+    "source_url": "https://www.maxmybuild.com/storage/hard-drives/seagate-exos-x20/18tb",
+    "checked": "2026-11-01",
     "model_display": "Seagate Exos X20, 18 TB enterprise hard drive",
     "mtbf_survey": {
       "rule": "Industry average MTBF used by the calculator: the plain average of the manufacturers' published MTBF ratings for current enterprise and surveillance drive lines from all three hard drive makers (Seagate, Western Digital, Toshiba). Annual failure rate = 1 - e^(-8,760 / MTBF). Shown on the website without the drive names.",
@@ -87,7 +87,7 @@
     "watts_note": "Estimate for fans, expanders and power-supply losses, not counting the drives.",
     "source_name": "SabrePC",
     "source_url": "https://www.sabrepc.com/CSE-946SE1C-R1K66JBOD-Supermicro-S2582609",
-    "checked": "2026-10-19"
+    "checked": "2026-11-01"
   },
   "server": {
     "label": "Dell PowerEdge R760xs 2U server, starting configuration",
@@ -98,7 +98,7 @@
     "watts_note": "Estimate of typical running power.",
     "source_name": "Dell.com",
     "source_url": "https://www.dell.com/en-us/shop/dell-poweredge-servers/new-poweredge-r760xs-rack-server/spd/poweredge-r760xs/amer_r760xs_16830_vi_vp",
-    "checked": "2026-10-17"
+    "checked": "2026-11-01"
   },
   "tape_library": {
     "label": "HPE StoreEver MSL6480 tape library (80-slot modules)",
@@ -112,7 +112,7 @@
     "source_url": "https://ltoworld.com/products/hp-msl6480-scalable-base-module",
     "source_url_2": "https://ltoworld.com/products/hp-msl6480-scalable-expansion-module",
     "source_url_3": "https://www.hpe.com/us/en/collaterals/collateral.c04111416.html",
-    "checked": "2026-10-17"
+    "checked": "2026-11-01"
   },
   "lto": {
     "12": {
@@ -161,7 +161,7 @@
       "label": "HPE MSL LTO-9 SAS drive upgrade kit (R6Q75A)",
       "price_usd": 10824,
       "source_url": "https://store.ccnytech.com/products/hpe-msl-lto-9-45000-sas-drv-upg-1212471",
-      "checked": "2026-10-19"
+      "checked": "2026-11-01"
     },
     "30": {
       "label": "LTO-10 tape drive (external drive price; library kit not listed)",
@@ -178,7 +178,7 @@
     "usd_per_tb_month": 7.99,
     "source_name": "Wasabi documentation: May 2026 Wasabi pricing notice and FAQs",
     "source_url": "https://docs.wasabi.com/docs/may-2026-wasabi-pricing",
-    "checked": "2026-10-19",
+    "checked": "2026-11-01",
     "company_url": "https://wasabi.com/pricing"
   },
   "cloud_providers": {
@@ -204,7 +204,7 @@
         ],
         "source_name": "CloudBurn: Amazon S3 pricing (updated 2026-10-12)",
         "source_url": "https://cloudburn.io/blog/amazon-s3-pricing",
-        "checked": "2026-10-21",
+        "checked": "2026-11-01",
         "company_url": "https://aws.amazon.com/s3/pricing/"
       },
       {
@@ -240,17 +240,17 @@
         ],
         "source_name": "Google Cloud Storage pricing",
         "source_url": "https://cloud.google.com/storage/pricing",
-        "checked": "2026-10-21",
+        "checked": "2026-11-01",
         "company_url": "https://cloud.google.com/storage/pricing"
       }
     ]
   },
   "electricity": {
-    "label": "US average commercial electricity price, 12 months ending July 2026 (EIA data)",
-    "usd_per_kwh": 0.1385,
+    "label": "US average commercial electricity price, 12 months ending August 2026 (EIA data)",
+    "usd_per_kwh": 0.1387,
     "source_name": "StartBusinessByState analysis of EIA retail electricity data",
     "source_url": "https://startbusinessbystate.com/?p=16487",
-    "checked": "2026-10-19"
+    "checked": "2026-11-01"
   },
   "cooling": {
     "label": "Cooling, as a multiplier on equipment power (data center PUE)",
@@ -385,7 +385,8 @@
         "price_usd": 41168.0,
         "source_name": "SHI",
         "source_url": "https://www.shi.com/product/45370044",
-        "checked": "2026-10-20"
+        "checked": "2026-10-20",
+        "note": "SHI listing showed no selling price on 2026-11-01 (MSRP $58,100 only); last confirmed price kept, held for review."
       },
       {
         "name": "BCDVideo BCD228X-PVS professional video server",
@@ -393,23 +394,26 @@
         "price_usd": 89949.6,
         "source_name": "SHI",
         "source_url": "https://texas.gs.shi.com/product/51745105/PROFESSIONAL-2U-28-BAY-VIDEO-RECORDING-SERVER-DUAL-INTEL-XEON-SILVER-4514Y",
-        "checked": "2026-10-20"
+        "checked": "2026-10-20",
+        "note": "SHI listing could not be reached on 2026-11-01; last confirmed price kept."
       },
       {
         "name": "BCDVideo BCD104-EVS video server",
         "raw_tb": 48,
-        "price_usd": 13151.0,
-        "source_name": "SHI",
-        "source_url": "https://www.shi.com/product/46359701",
-        "checked": "2026-10-20"
+        "price_usd": 10434.98,
+        "source_name": "Aztek Computers",
+        "source_url": "https://www.aztekcomputers.com/bcd104-evs-48t-4-bay-1u-recording-server-bcdvideo/p",
+        "checked": "2026-11-01",
+        "note": "Part BCD104-EVS-48T (48 TB). Moved from SHI, whose listing no longer shows a selling price."
       },
       {
         "name": "Hanwha Vision Wisenet WAVE WRR-P-S202L1 recorder",
         "raw_tb": 48,
         "price_usd": 16291.48,
-        "source_name": "123SecurityProducts",
-        "source_url": "https://www.123securityproducts.com/wrrps202l148tb.html",
-        "checked": "2026-10-20"
+        "source_name": "CCTVVideo.com",
+        "source_url": "https://cctvvideo.com/product/hanwha-vision-wrr-p-s202l1-48tb",
+        "checked": "2026-11-01",
+        "note": "Same price as before; moved from 123SecurityProducts, whose listing no longer shows a price."
       },
       {
         "name": "Avigilon AI NVR 2 Premium Form D recorder (successor to the discontinued NVR6 Premium)",
@@ -417,13 +421,22 @@
         "price_usd": 56973.2,
         "source_name": "CDW-G",
         "source_url": "https://www.cdwg.com/product/avigilon-160tb-ai-nvr-2-prm-form-d/8514647",
-        "checked": "2026-10-23",
+        "checked": "2026-11-01",
         "note": "Part AINVR2-PRM-FORM-D-160TB-NA, 160 TB. Listed price; the listing says it is not orderable online (quote/order through the reseller)."
+      },
+      {
+        "name": "Milestone Husky IVO 350R recorder (HE350R-24TB)",
+        "raw_tb": 24,
+        "price_usd": 5447.99,
+        "source_name": "CDW",
+        "source_url": "https://www.cdw.com/product/milestone-husky-ivo-350-24tb-rack-mount/7274763",
+        "checked": "2026-11-01",
+        "note": "Advertised price; CDW list price $8,075.00. 24 TB raw, drives included."
       }
     ],
-    "source_name": "Reseller listings (SHI, CDW, 123SecurityProducts)",
+    "source_name": "Reseller listings (SHI, CDW, CDW-G, Aztek Computers, CCTVVideo.com)",
     "source_url": "https://www.shi.com/product/45370044",
-    "checked": "2026-10-20",
+    "checked": "2026-11-01",
     "volume_price_breaks": {
       "label": "Volume price breaks for larger complete systems",
       "rule": "Applied to the average price per TB of raw disk, by the raw disk the system needs (1 PB = 1,000 TB). The whole system gets its tier's discount. Set by Cozaint; the monthly price update never changes this.",
@@ -458,12 +471,12 @@
     }
   },
   "market_trend": {
-    "summary": "Hard drive prices keep edging up: DatacenterDisk's matched-model index shows enterprise drives about +2% over 30 days, with no relief expected before 2027 as AI data centers absorb supply. LTO cartridge prices stay roughly flat (about +0.5% over 30 days), and Wasabi's pay-as-you-go cloud price remains $7.99 per TB per month since July 1, 2026.",
+    "summary": "Hard drive prices keep edging up: DatacenterDisk's matched-model index shows enterprise drives about +1.2% over 30 days, with no relief expected before 2027 as AI data centers absorb supply. LTO cartridge prices stay roughly flat (about +1.3% over 30 days across the LTO basket), and Wasabi's pay-as-you-go cloud price remains $7.99 per TB per month.",
     "sources": [
       "https://datacenterdisk.com/price-forecast",
       "https://datacenterdisk.com/trends/lto",
-      "https://docs.wasabi.com/docs/may-2026-wasabi-pricing-faqs",
-      "https://hddhunt.com/blog/why-hdd-prices-are-rising-2026/"
+      "https://docs.wasabi.com/docs/may-2026-wasabi-pricing",
+      "https://www.maxmybuild.com/storage/hard-drives/seagate-exos-x20/18tb"
     ]
   }
 }

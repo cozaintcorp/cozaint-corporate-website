@@ -2,6 +2,47 @@
 
 Newest month at the top. Written by the monthly price agent.
 
+## 2026-11-01
+
+**Prices.** Mostly steady. The Seagate Exos X20 18 TB drive rose from $764.90
+to $792.00 ($44.00 per TB, lowest in-stock new offer), while the median new
+enterprise drive held at about $49 per TB. DatacenterDisk's index shows
+enterprise drives up about 1.2% over 30 days, with no relief expected before
+2027 (Western Digital sold out for 2026). LTO media stays roughly flat (about
++1.3% over 30 days; LTO-9 from about $4.89 per TB). Unchanged: the Supermicro
+60-bay enclosure ($5,800.74, still out of stock), the Dell R760xs ($15,956.82),
+the HPE MSL6480 modules ($14,986 / $7,629), the HPE LTO-9 library drive kit
+($10,824), Wasabi ($7.99 per TB per month), Amazon S3 and Google Cloud Storage.
+Electricity edged up to 13.87 cents per kWh (12 months to August 2026).
+Sources: [MaxMyBuild Exos X20](https://www.maxmybuild.com/storage/hard-drives/seagate-exos-x20/18tb),
+[DatacenterDisk forecast](https://datacenterdisk.com/price-forecast),
+[DatacenterDisk LTO trends](https://datacenterdisk.com/trends/lto),
+[StartBusinessByState (EIA data)](https://startbusinessbystate.com/?p=16487),
+[Dell](https://dell.com/en-us/shop/dell-poweredge-servers/new-poweredge-r760xs-rack-server/spd/poweredge-r760xs/amer_r760xs_16830_vi_vp),
+[CloudBurn S3](https://cloudburn.io/blog/amazon-s3-pricing),
+[Google Cloud](https://cloud.google.com/storage/pricing)
+
+**Complete surveillance systems.** Average fell from $256.55 to $242.20 per TB
+of raw disk (6 systems, was 5). Added: Milestone Husky IVO 350R 24 TB at CDW,
+$5,447.99 ($227 per TB). BCDVideo BCD104-EVS 48 TB moved from SHI (no selling
+price shown) to Aztek Computers at $10,434.98 (was $13,151). Hanwha WAVE
+WRR-P-S202L1 48 TB moved to CCTVVideo.com at the same $16,291.48. Avigilon AI
+NVR 2 Premium Form D 160 TB unchanged at CDW-G ($56,973.20). Kept at last
+month's price: BCDVideo BCD226X-EVS (SHI now shows only a $58,100 MSRP, no
+selling price; held for review) and BCD228X-PVS (SHI page not reachable).
+Sources: [CDW Milestone](https://www.cdw.com/product/milestone-husky-ivo-350-24tb-rack-mount/7274763),
+[Aztek BCD104-EVS](https://www.aztekcomputers.com/bcd104-evs-48t-4-bay-1u-recording-server-bcdvideo/p),
+[CCTVVideo Hanwha](https://cctvvideo.com/product/hanwha-vision-wrr-p-s202l1-48tb),
+[CDW-G Avigilon](https://www.cdwg.com/product/avigilon-160tb-ai-nvr-2-prm-form-d/8514647)
+
+**Kept from last time (source not reachable this run).** LTO cartridge price
+ranges and LTO-8/LTO-10 drive prices (TapeBackup.org), Azure Blob prices (N2WS
+guide), and the drive MTBF ratings (not re-checked). Backblaze has not yet
+published Q3 2026 drive stats, so the failure rate stays at 1.41%; Uptime
+Institute PUE stays at 1.52.
+
+**Competitors and alternatives.** Nothing new found this month.
+
 ## 2026-10-19
 
 **Prices.** Mostly steady. The Seagate Exos X20 18 TB drive is unchanged at
