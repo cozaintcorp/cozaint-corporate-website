@@ -99,7 +99,10 @@ python3 hard-drive-data-app/check_prices.py hard-drive-data-app/prices.json /tmp
 
 ## 3. Save and publish
 
-1. Add one row to `history.csv` with today's values (same column order).
+1. Run `python3 hard-drive-data-app/update_history.py` from the repository root. It adds
+   (or refreshes) today's row in `history.csv` with every price in `prices.json`, and adds
+   new columns by itself when a system or cloud provider is added. Do not edit
+   `history.csv` by hand.
 2. Add a dated section at the top of `market-notes.md`: what changed in prices,
    and any new surveillance-storage products or competitor news worth knowing
    (tape archives, disk appliances, cloud video retention). Keep it short and

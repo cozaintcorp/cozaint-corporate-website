@@ -8,7 +8,8 @@ up to date with current hard drive, LTO tape, cloud and electricity prices.
 | File | What it is |
 |---|---|
 | `prices.json` | The current prices. The calculator reads this file. Every number has a source link and a "checked" date. |
-| `history.csv` | One row per month, for tracking price trends over time. |
+| `history.csv` | Price history: one row per price update with every price the calculator uses (hard drives, each complete system, each cloud provider, tape, Cozaint list prices). Opens in Excel. Written by `update_history.py`. |
+| `update_history.py` | Adds the newest row to `history.csv` (`--rebuild` rebuilds every row from the git history of `prices.json`). |
 | `market-notes.md` | Monthly notes on price trends and competitor products. |
 | `check_prices.py` | Safety check run before each update. Blocks missing data, impossible numbers, and any price that moves more than 30% in a month. |
 | `AGENT_INSTRUCTIONS.md` | Step-by-step instructions the monthly agent follows. |
