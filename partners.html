@@ -55,11 +55,53 @@
   <section class="page-hero">
     <div class="section-inner">
       <p class="eyebrow">Partners</p>
-      <h1>Built to work with the tools you already own.</h1>
-      <p class="sub">Cozaint works alongside the video software, tape library and storage companies your team already relies on, so you add long-term video retention without ripping anything out.</p>
+      <h1>Bring your customers the storage tier they are missing.</h1>
+      <p class="sub">Apply to the Cozaint reseller program below, or explore the technology partners MARCIA works with: the video software, tape library and storage companies your customers already rely on.</p>
     </div>
   </section>
 
+
+  <!-- REVAMP: RESELLER PROGRAM + APPLICATION -->
+  <section class="rv-light" id="apply">
+    <div class="section-inner rv-apply">
+      <div>
+        <p class="eyebrow eyebrow-dark">Partner program for resellers &amp; integrators</p>
+        <h2 class="rv-h2">Hollywood trusts LTO with its archives. Your surveillance customers should too.</h2>
+        <p class="rv-lead">Studios and broadcasters have relied on LTO tape to preserve their most valuable video for years. Your surveillance customers are still buying racks of hard drives to keep footage nobody watches every day. Cozaint MARCIA&trade; makes LTO practical for surveillance: its patented architecture lets the operator's normal VMS playback recall archived video from tape, on the same timeline.</p>
+        <h3>What it means for your business</h3>
+        <p>You add a long-term retention tier to every surveillance project. That makes you more competitive on bids where retention is long or mandated, from casinos, airports and prisons to campuses, hospitals and critical infrastructure, and it gives you an archive that grows with every camera your customers add.</p>
+        <div class="rv-benefits">
+          <div><b>Protected margins &amp; deal registration</b>Register your opportunities and keep the margin on the deals you build.</div>
+          <div><b>Training &amp; certification</b>Sales and technical training so your team can design, sell and support MARCIA.</div>
+          <div><b>Sales &amp; marketing support</b>Co-branded collateral, the Cozaint storage cost calculator for your proposals, and help on customer calls.</div>
+        </div>
+        <div class="rv-chipgroup"><h3>Works with the VMS your customers already run</h3>
+          <div class="rv-chips"><span>Milestone XProtect</span><span>Hanwha WAVE</span><span>Digital Watchdog DW Spectrum</span><span>Network Optix Nx Witness</span><span>Cozaint BOBBYvms</span></div></div>
+        <div class="rv-chipgroup"><h3>Validated on enterprise tape</h3>
+          <div class="rv-chips"><span>HPE StoreEver</span><span>Quantum Scalar</span><span>ATTO XstreamCORE</span></div></div>
+      </div>
+      <form class="rv-formcard" id="rvApply" novalidate>
+        <h3>Apply in two minutes</h3>
+        <p>Our partner team will be in touch.</p>
+        <label for="aName">Your name</label><input id="aName" autocomplete="name" required>
+        <label for="aCompany">Company</label><input id="aCompany" autocomplete="organization" required>
+        <label for="aEmail">Work email</label><input id="aEmail" type="email" autocomplete="email" required>
+        <label for="aPhone">Phone <span class="opt">(optional)</span></label><input id="aPhone" type="tel" autocomplete="tel">
+        <label for="aCustomers">Customers you serve</label>
+        <select id="aCustomers" required>
+          <option value="" disabled selected>Select one</option>
+          <option>Enterprise and commercial</option><option>Government and public safety</option>
+          <option>Casinos and hospitality</option><option>Healthcare</option><option>Education</option>
+          <option>Banks and finance</option><option>Transportation and airports</option><option>Several of these</option>
+        </select>
+        <label for="aMsg">Anything else? <span class="opt">(optional)</span></label><textarea id="aMsg" rows="3"></textarea>
+        <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn btn-primary btn-full">Apply to become a reseller</button>
+        <p class="rv-gated">After you apply: partner pricing, the MARCIA Reseller Sales Guide and deal registration. Want the numbers first? <a href="assessment.html#calculator">Run the storage cost calculator</a>.</p>
+        <p class="form-status" id="aStatus" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
   <section class="pt-section">
     <div class="section-inner">
       <div class="pt-tabs" role="tablist" aria-label="Partner types">
@@ -164,8 +206,8 @@
         <div class="pt-resell">
           <h2>Become a Cozaint reseller.</h2>
           <p class="lead">We are building our reseller program for security integrators and IT resellers. If you sell or install video surveillance systems and want to offer your customers long-term video retention at a fraction of the cost of disk, we would like to talk.</p>
-          <p><a class="btn btn-primary" href="contact.html?product=reseller#quote">Apply to become a reseller</a></p>
-          <p class="pt-resell-note">The button opens our short request form with "Becoming a reseller" already selected. Tell us about your company and the customers you serve, and we will be in touch.</p>
+          <p><a class="btn btn-primary" href="partners.html#apply">Apply to become a reseller</a></p>
+          <p class="pt-resell-note">The button takes you to the short application at the top of this page.</p>
         </div>
       </div>
     </div>
@@ -242,6 +284,29 @@
 
 <script src="script.js"></script>
 <script src="nav.js"></script>
+<script src="lead-config.js"></script>
+<script>
+(function(){
+var f=document.getElementById('rvApply'); if(!f) return;
+var st=document.getElementById('aStatus'), cfg=window.COZAINT_LEAD||{};
+function v(id){return document.getElementById(id).value.trim();}
+f.addEventListener('submit',function(e){
+  e.preventDefault(); st.className='form-status'; st.textContent='';
+  if(!f.checkValidity()){f.reportValidity();return;}
+  var trap=f.querySelector('[name=website]').value; if(trap){f.reset();return;}
+  var msg='Reseller application. Customers served: '+v('aCustomers')+(v('aMsg')?'. '+v('aMsg'):'');
+  var d={form:'reseller-application',name:v('aName'),email:v('aEmail'),phone:v('aPhone'),company:v('aCompany'),interest:'Becoming a reseller',message:msg,website:trap};
+  var btn=f.querySelector('button[type=submit]'),label=btn.textContent;
+  function fallback(){var b='Name: '+d.name+'\nEmail: '+d.email+'\nPhone: '+d.phone+'\nCompany: '+d.company+'\n\n'+msg;
+    st.className='form-status err'; st.innerHTML='We could not send that automatically. Please <a href="mailto:'+(cfg.email||'info@cozaint.com')+'?subject='+encodeURIComponent('Reseller application')+'&body='+encodeURIComponent(b)+'">email us</a> or call 760-975-8000.';}
+  if(!cfg.endpoint||!cfg.send){fallback();return;}
+  btn.textContent='Sending...'; btn.disabled=true;
+  cfg.send(d).then(function(){st.className='form-status ok'; st.textContent='Thank you. Our partner team will be in touch shortly.'; f.reset(); btn.textContent='Application sent';})
+   .catch(function(){fallback(); btn.textContent=label; btn.disabled=false;});
+});
+})();
+</script>
+
 <script>
 (function(){
 var tabs=document.querySelectorAll('.pt-tab'),chips=document.querySelectorAll('.pt-chip'),tiles=document.querySelectorAll('.pt-tile');

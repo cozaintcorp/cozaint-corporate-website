@@ -153,32 +153,74 @@
   </section>
 
   <!-- ARCHITECTURE / RESOURCES -->
-  <section class="ebook" id="architecture">
-    <div class="section-inner ebook-grid">
-      <div class="ebook-cover">
-        <div class="ebook-cover-inner ebook-cover-plain">
-          <span class="ebook-logo-mark" aria-hidden="true">
-            <svg width="34" height="34" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M23 2 L42 9 V22 C42 33 34 41 23 44 C12 41 4 33 4 22 V9 Z" fill="#0f2e24"/>
-              <circle cx="17" cy="22" r="6" fill="none" stroke="#0f2e24" stroke-width="2.2"/>
-              <circle cx="29" cy="22" r="6" fill="none" stroke="#0f2e24" stroke-width="2.2"/>
-            </svg>
-            <span>MARCIA<sup>™</sup></span>
-          </span>
-          <p class="ebook-kicker">The architecture of</p>
-          <h3>Enterprise<br>Visual<br>Continuity</h3>
-          <p class="ebook-tagline">Intelligent Video Lifecycle Management</p>
-        </div>
+  
+  <!-- REVAMP: PATENTED WORKFLOW -->
+  <section class="rv-light" id="patented">
+    <div class="section-inner">
+      <p class="eyebrow eyebrow-dark">Patented technology built for the surveillance workflow</p>
+      <h2 class="rv-h2">The operator moves the timeline. MARCIA does the rest.</h2>
+      <p class="rv-lead">Competitors can sell tape libraries, archive software or disk. What makes MARCIA different is the patented VMS integration that turns LTO into part of the operator's normal workflow: no extra steps, no restore jobs, no IT ticket.</p>
+      <div class="rv-flow">
+        <div><b>1 &middot; Request</b>The operator moves the VMS timeline to a past date and time.</div>
+        <div><b>2 &middot; Locate</b>MARCIA identifies which storage tier holds that video.</div>
+        <div><b>3 &middot; Map</b>It maps the request to the exact cartridge and position.</div>
+        <div><b>4 &middot; Recall</b>The tape library loads the cartridge and reads the video.</div>
+        <div><b>5 &middot; Play</b>The video returns to the same VMS timeline.</div>
       </div>
+      <span class="rv-patent">U.S. Patent No. 12,755,902</span>
+    </div>
+  </section>
+
+  <!-- REVAMP: DISK VS CLOUD VS MARCIA -->
+  <section class="rv-light" style="background:var(--paper-deep)" id="compare">
+    <div class="section-inner">
+      <p class="eyebrow eyebrow-dark">Disk, cloud or MARCIA?</p>
+      <h2 class="rv-h2">How the options compare for long-term video.</h2>
+      <div class="rv-tablewrap"><table class="rv-table">
+        <tr><th></th><th>Disk only</th><th>Cloud</th><th>MARCIA (disk + LTO)</th></tr>
+        <tr><td>Immediate access to recent video</td><td>Yes</td><td>Yes</td><td class="m">Yes, recent tier on disk</td></tr>
+        <tr><td>Multi-year economics</td><td>Poor</td><td>Variable, recurring fees</td><td class="m">Strong</td></tr>
+        <tr><td>Power for archived video</td><td>Continuous</td><td>Provider's</td><td class="m">None for cartridges at rest</td></tr>
+        <tr><td>Depends on internet bandwidth</td><td>No</td><td>Yes</td><td class="m">No</td></tr>
+        <tr><td>Offline (air-gapped) copy</td><td>Limited</td><td>No</td><td class="m">Yes, cartridges can be stored offline</td></tr>
+        <tr><td>Operator workflow</td><td>VMS timeline</td><td>Often a separate portal</td><td class="m">Same VMS timeline</td></tr>
+        <tr><td>Scaling to petabytes</td><td>Expensive</td><td>Expensive, recurring</td><td class="m">Designed for it</td></tr>
+      </table></div>
+      <p class="rv-sub">See your own numbers: <a href="assessment.html#calculator">compare MARCIA with hard drive systems and cloud for your cameras and retention &rarr;</a></p>
+    </div>
+  </section>
+
+  <!-- REVAMP: WHY KEEP MORE VIDEO + COMPATIBILITY -->
+  <section class="rv-light" id="why-more">
+    <div class="section-inner">
+      <p class="eyebrow eyebrow-dark">Why keep more video?</p>
+      <h2 class="rv-h2">Storage savings start the conversation. Trusted Visual Evidence is why it matters.</h2>
+      <div class="rv-why">
+        <div><b>Investigations</b>Disputes and incidents that surface months later.</div>
+        <div><b>Litigation and liability</b>Video that defends you long after the event.</div>
+        <div><b>Compliance</b>Retention rules and evidence policies you must meet.</div>
+        <div><b>AI re-analysis</b>New analytics can re-examine history that would otherwise be overwritten.</div>
+      </div>
+      <div class="rv-chipgroup"><h3>Works with the VMS you already run</h3>
+        <div class="rv-chips"><span>Milestone XProtect</span><span>Hanwha WAVE</span><span>Digital Watchdog DW Spectrum</span><span>Network Optix Nx Witness</span><span>Cozaint BOBBYvms</span></div></div>
+      <div class="rv-chipgroup"><h3>Validated on enterprise tape</h3>
+        <div class="rv-chips"><span>HPE StoreEver</span><span>Quantum Scalar</span><span>ATTO XstreamCORE</span></div></div>
+    </div>
+  </section>
+
+  <section class="ebook" id="architecture">
+    <div class="section-inner rv-brief">
+      <a href="assets/marcia-solution-brief.pdf" target="_blank" rel="noopener"><img src="assets/marcia-brief-cover.png" alt="MARCIA Solution Brief, page 1"></a>
       <div class="ebook-copy">
-        <p class="eyebrow">See the complete MARCIA™ architecture.</p>
-        <h2>Explore the preserved product material covering the three-stage model, lifecycle policy, metadata continuity, and operating principles.</h2>
+        <p class="eyebrow">MARCIA&trade; Solution Brief</p>
+        <h2>Everything about MARCIA on two pages.</h2>
         <ul class="check-list">
-          <li>Understand the active, governed, and requested stages</li>
-          <li>Review the role of lifecycle policy</li>
-          <li>Build a framework for retention requirements</li>
+          <li>The storage problem, and the idea Hollywood already proved</li>
+          <li>How the patented VMS workflow brings video back from LTO</li>
+          <li>Disk vs cloud vs MARCIA, compatibility and a real customer</li>
         </ul>
-      <a href="assets/cozaint-ivlm-ebook.pdf" target="_blank" class="btn btn-primary">Preview the eBook</a>
+        <a href="assets/marcia-solution-brief.pdf" target="_blank" rel="noopener" class="btn btn-primary">Download the Solution Brief</a>
+        <p class="rv-sub">Background reading: <a href="assets/askalice-2-tier-storage-ebook.pdf" target="_blank" rel="noopener">Video Surveillance Storage: Implementing a 2-Tier Storage Solution (eBook, 2023 askALICE edition)</a></p>
       </div>
     </div>
   </section>
@@ -187,8 +229,20 @@
   <section class="resources" id="resources">
     <div class="section-inner">
       <div class="resource-list">
-        <a class="resource-row" href="assets/video-surveillance-storage-white-paper.pdf" target="_blank">
-          <span>Video Surveillance Storage White Paper A1</span>
+        <a class="resource-row" href="assets/marcia-solution-brief.pdf" target="_blank" rel="noopener">
+          <span>MARCIA&trade; Solution Brief</span>
+          <span class="resource-tag">PDF ↗</span>
+        </a>
+        <a class="resource-row" href="assets/case-for-lto-petabyte-scale.pdf" target="_blank" rel="noopener">
+          <span>The Case for LTO at Petabyte Scale: cold LTO archive vs online RAID6</span>
+          <span class="resource-tag">PDF ↗</span>
+        </a>
+        <a class="resource-row" href="assets/askalice-oceanside-case-study.pdf" target="_blank" rel="noopener">
+          <span>The problem MARCIA was built to solve: City of Oceanside case study</span>
+          <span class="resource-tag">PDF ↗</span>
+        </a>
+        <a class="resource-row" href="assets/video-surveillance-storage-white-paper.pdf" target="_blank" rel="noopener">
+          <span>Video Surveillance Storage White Paper</span>
           <span class="resource-tag">PDF ↗</span>
         </a>
         <a class="resource-row" href="https://youtu.be/Lzi0qEuFPkg" target="_blank" rel="noopener">
@@ -196,7 +250,7 @@
           <span class="resource-tag">VIDEO ↗</span>
         </a>
         <a class="resource-row" href="environments.html">
-          <span>Environments: Where MARCIA™ Is Used</span>
+          <span>Industries: where MARCIA&trade; is used</span>
           <span class="resource-tag">PAGE →</span>
         </a>
       </div>
