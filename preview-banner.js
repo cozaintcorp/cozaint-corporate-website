@@ -5,7 +5,8 @@
   if (location.hostname.indexOf('github.io') === -1) return;
   var TITLE = 'PREVIEW of the next website update (in progress, not yet approved). Not on cozaint.com yet.';
   var CHANGES = [
-    ['Home (Hollywood picture)', 'index.html#hollywood']
+    ['Home (Hollywood picture, More link)', 'index.html'],
+    ['Proven by Hollywood (new page)', 'hollywood.html']
   ];
   var base = location.pathname.replace(/[^\/]*$/, '');
   var d = document.createElement('div');
