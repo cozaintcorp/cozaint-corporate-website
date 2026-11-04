@@ -1348,3 +1348,8 @@ details.tco-footnote > .tco-note-body { padding: 0 14px 12px; }
 .hw-read em{color:#b9c6bf;font-style:normal}
 .hw-cta{text-align:left}
 @media (max-width:820px){.hw-hero-grid,.hw-compare,.hw-benefits{grid-template-columns:1fr}}
+/* Hollywood page: two-color comparison panels, as in the Nov 1 email */
+.hw-good{background:#e4f4eb;border:2px solid #1f7a52}
+.hw-bad{background:#f8e4e0;border:2px solid #b3412e}
+.hw-good li{border-top-color:rgba(31,122,82,.22)}
+.hw-bad li{border-top-color:rgba(179,65,46,.22)}
