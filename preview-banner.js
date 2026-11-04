@@ -3,10 +3,9 @@
    Update CHANGES for each new preview. */
 (function () {
   if (location.hostname.indexOf('github.io') === -1) return;
-  var TITLE = 'PREVIEW of the November 3, 2026 website update (approved). Not on cozaint.com yet.';
+  var TITLE = 'PREVIEW of the next website update (in progress, not yet approved). Not on cozaint.com yet.';
   var CHANGES = [
-    ['Home', 'index.html'], ['MARCIA', 'marcia.html'], ['Downloads', 'downloads.html'],
-    ['Partners', 'partners.html'], ['askALICE', 'askalice.html'], ['Deal Registration (new)', 'deal-registration.html']
+    ['Home (Hollywood picture)', 'index.html#hollywood']
   ];
   var base = location.pathname.replace(/[^\/]*$/, '');
   var d = document.createElement('div');

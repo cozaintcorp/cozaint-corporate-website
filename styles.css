@@ -1314,3 +1314,9 @@ details.tco-footnote > .tco-note-body { padding: 0 14px 12px; }
 .dr-check input{width:auto!important;margin-top:4px}
 .dr-list{margin:6px 0 16px;padding-left:20px}.dr-list li{margin:0 0 6px}
 .dr-list{list-style:disc}.dr-list a,.rv-apply > div p a{color:#1f7a52;text-decoration:underline}
+
+/* Home: Hollywood heading with picture on the right (2026-11-03) */
+.rv-hw-top{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:28px}
+.rv-hw-text .rv-h2{margin-bottom:0}
+.rv-hw-img{width:100%;height:auto;display:block;border-radius:14px;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+@media (max-width:820px){.rv-hw-top{grid-template-columns:1fr;gap:20px}}
