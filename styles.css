@@ -1353,3 +1353,12 @@ details.tco-footnote > .tco-note-body { padding: 0 14px 12px; }
 .hw-bad{background:#f8e4e0;border:2px solid #b3412e}
 .hw-good li{border-top-color:rgba(31,122,82,.22)}
 .hw-bad li{border-top-color:rgba(179,65,46,.22)}
+
+/* Industry webinar call-out (industry pages, above the hero buttons) */
+.ind-webinar { display:flex; align-items:center; gap:24px; flex-wrap:wrap; max-width:860px; margin:30px 0 22px; padding:20px 24px; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.28); border-left:5px solid #f2b705; border-radius:12px; backdrop-filter:blur(2px); }
+.ind-webinar-text { flex:1 1 320px; }
+.ind-webinar-tag { display:inline-block; font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#f2b705; margin-bottom:6px; }
+.ind-webinar-text p { margin:0; color:#fff; font-size:16px; line-height:1.5; }
+.ind-webinar-btn { background:#f2b705; color:#0a2019; font-weight:800; border:none; white-space:nowrap; }
+.ind-webinar-btn:hover { background:#ffc81f; color:#0a2019; }
+@media (max-width: 640px) { .ind-webinar-btn { white-space:normal; text-align:center; width:100%; } }

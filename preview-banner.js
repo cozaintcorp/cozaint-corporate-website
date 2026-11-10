@@ -7,7 +7,8 @@
   var CHANGES = [
     ['Home (Hollywood picture, More link)', 'index.html'],
     ['Proven by Hollywood (new page)', 'hollywood.html'],
-    ['MARCIA (video: company name now pronounced correctly)', 'marcia.html']
+    ['MARCIA (video: company name now pronounced correctly)', 'marcia.html'],
+    ['Banks (new: questionnaire & webinar button)', 'banks.html']
   ];
   var base = location.pathname.replace(/[^\/]*$/, '');
   var d = document.createElement('div');
