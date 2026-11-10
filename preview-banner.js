@@ -6,7 +6,8 @@
   var TITLE = 'PREVIEW of the next website update (in progress, not yet approved). Not on cozaint.com yet.';
   var CHANGES = [
     ['Home (Hollywood picture, More link)', 'index.html'],
-    ['Proven by Hollywood (new page)', 'hollywood.html']
+    ['Proven by Hollywood (new page)', 'hollywood.html'],
+    ['MARCIA (video: company name now pronounced correctly)', 'marcia.html']
   ];
   var base = location.pathname.replace(/[^\/]*$/, '');
   var d = document.createElement('div');
