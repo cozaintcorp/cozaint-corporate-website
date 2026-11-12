@@ -118,6 +118,15 @@
             </div>
           </div>
 
+          <label for="calcLto">LTO tape generation</label>
+          <select id="calcLto" aria-describedby="calcLtoHelp">
+            <option value="12">LTO-8: 12 TB per cartridge</option>
+            <option value="18">LTO-9: 18 TB per cartridge</option>
+            <option value="30" selected>LTO-10: 30 TB per cartridge</option>
+            <option value="40">LTO-10: 40 TB per cartridge (newest cartridges)</option>
+          </select>
+          <p class="calc-hint" id="calcLtoHelp">Switch generations to see how the number of cartridges, the LTO drives and the prices change.</p>
+
           <label for="calcBitrate">Bit rate</label>
           <div class="calc-unit">
             <input type="number" id="calcBitrate" min="1" step="any" inputmode="decimal" placeholder="" aria-describedby="calcBitrateHelp">
@@ -142,31 +151,6 @@
                 <label for="calcBpp">Bits per pixel (BPP)</label>
                 <input type="number" id="calcBpp" min="0.01" max="1" step="0.01" value="0.15">
               </div>
-              <div>
-                <label for="calcLto">LTO generation</label>
-                <select id="calcLto">
-                  <option value="12">LTO-8 — 12 TB / cartridge</option>
-                  <option value="18" selected>LTO-9 — 18 TB / cartridge</option>
-                  <option value="30">LTO-10 — 30 TB / cartridge</option>
-                  <option value="40">LTO-10 — 40 TB / cartridge</option>
-                </select>
-              </div>
-            </div>
-            <div class="calc-row">
-              <div>
-                <label for="calcHours">Hours per cartridge write (300 MB/sec)</label>
-                <input type="number" id="calcHours" min="1" value="7">
-              </div>
-              <div>
-                <label for="calcWriteDrives">Write drives per site</label>
-                <input type="number" id="calcWriteDrives" min="1" value="1">
-              </div>
-            </div>
-            <div class="calc-row">
-              <div>
-                <label for="calcStandby">Standby drives</label>
-                <input type="number" id="calcStandby" min="0" value="1">
-              </div>
             </div>
           </details>
 
@@ -175,11 +159,14 @@
             <div class="calc-results-grid">
               <div><span>Bitrate per camera</span><strong id="rBitrate">—</strong></div>
               <div><span>Storage per camera / day</span><strong id="rPerCamDay">—</strong></div>
+              <div><span>Video recorded / day (all cameras)</span><strong id="rDailyTb">—</strong></div>
               <div><span>Total retention storage</span><strong id="rTotalTb">—</strong></div>
               <div><span>LTO cartridges needed</span><strong id="rSlots">—</strong></div>
               <div><span>Cartridges written / day</span><strong id="rSlotsDay">—</strong></div>
-              <div><span>Drive-hours needed / day</span><strong id="rHours">—</strong></div>
+              <div><span>LTO drives needed</span><strong id="rDrives">—</strong></div>
+              <div><span>Write time / day</span><strong id="rHours">—</strong></div>
             </div>
+            <p class="calc-hint calc-drive-note" id="rDriveNote">LTO drives: one drive writes for up to 23.5 hours a day (a half-hour buffer), at MARCIA's conservative planning speed of 70% of the drive's rated speed: 210 MB/s for LTO-8 and LTO-9 (about 17.77 TB a day) and 280 MB/s for LTO-10 (about 23.69 TB a day). Write drives are added until the day's video fits, plus one more drive for recall and playback.</p>
           </div>
 
           <div class="calc-results tco-box" id="tcoBox">
@@ -351,9 +338,9 @@
   set('assessEyebrow', p.eyebrow); set('assessTitle', p.title); set('assessSub', p.sub);
 })();
 </script>
-<script src="calculator.js?v=20261023c"></script>
-<script src="tco.js?v=20261023d"></script>
-<script src="report.js?v=20261023f"></script>
+<script src="calculator.js?v=20261112a"></script>
+<script src="tco.js?v=20261112a"></script>
+<script src="report.js?v=20261112a"></script>
 <script src="lead-config.js?v=20261019"></script>
 <script src="script.js?v=20261019"></script>
 <script src="nav.js"></script>

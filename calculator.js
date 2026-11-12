@@ -63,9 +63,6 @@
     var motionValEl = document.getElementById('motionVal');
     var bppEl = document.getElementById('calcBpp');
     var ltoEl = document.getElementById('calcLto');
-    var hoursEl = document.getElementById('calcHours');
-    var writeDrivesEl = document.getElementById('calcWriteDrives');
-    var standbyEl = document.getElementById('calcStandby');
 
     var rBitrate = document.getElementById('rBitrate');
     var rPerCamDay = document.getElementById('rPerCamDay');
@@ -73,6 +70,8 @@
     var rSlots = document.getElementById('rSlots');
     var rSlotsDay = document.getElementById('rSlotsDay');
     var rHours = document.getElementById('rHours');
+    var rDrives = document.getElementById('rDrives');
+    var rDailyTb = document.getElementById('rDailyTb');
 
     function recalc() {
       var cameras = parseFloat(camerasEl.value) || 0;
@@ -81,10 +80,7 @@
       var retentionDays = parseFloat(retentionEl.value) || 0;
       var motionPct = Math.min(100, Math.max(1, parseFloat(motionEl.value) || 1));
       var bpp = parseFloat(bppEl.value) || 0.15;
-      var ltoCapacity = parseFloat(ltoEl.value) || 18;
-      var hoursPerCartridge = parseFloat(hoursEl.value) || 7;
-      var writeDrives = parseFloat(writeDrivesEl.value) || 3;
-      var standby = parseFloat(standbyEl.value) || 0;
+      var ltoCapacity = parseFloat(ltoEl.value) || 30;
 
       if (motionValEl) motionValEl.textContent = motionPct + '%';
 
@@ -103,29 +99,39 @@
       if (bitrateEl) bitrateEl.placeholder = fmt(bitrateKbps, 1); // grey hint = the calculated value
       if (bitrateEntered) bitrateKbps = enteredKbps;
 
-      // --- Storage Calculator sheet chain ---
-      var bytesKbPerSec = bitrateKbps / 8;
-      var mbPerSec = bytesKbPerSec / 1024;
-      var mbPerHour = mbPerSec * 3600;
-      var mbPerDayPerCam = mbPerHour * 24;
-      var gbPerDayPerCam = mbPerDayPerCam / 1024;
-      var totalGbPerCamRetention = gbPerDayPerCam * retentionDays;
-      var totalTbPerCamRetention = totalGbPerCamRetention / 1024;
-      var totalTbAllCameras = totalTbPerCamRetention * cameras;
+      // --- Storage (decimal units, as tape capacities are: 1 TB = 1,000 GB = 1,000,000 MB) ---
+      // Daily TB per camera = Mbps x 0.0108 (Mbps / 8 bits x 86,400 seconds / 1,000,000).
+      var mbPerSec = bitrateKbps / 8 / 1000;
+      var gbPerDayPerCam = mbPerSec * 86400 / 1000;
+      var dailyTbAll = gbPerDayPerCam * cameras / 1000;
+      var totalTbAllCameras = dailyTbAll * retentionDays;
 
-      // --- Total_Calculator sheet chain ---
+      // --- Cartridges ---
       var roundedTotalTb = Math.round(totalTbAllCameras / 10) * 10;
       var slotsNeeded = ltoCapacity > 0 ? roundedTotalTb / ltoCapacity : 0;
       var slotsPerDay = retentionDays > 0 ? Math.ceil(slotsNeeded / retentionDays) : 0;
-      var totalHoursPerDay = hoursPerCartridge * slotsPerDay;
-      var totalDrives = Math.max(writeDrives + standby, 2);
+
+      // --- LTO drives (MARCIA planning method) ---
+      // One drive writes for 23.5 hours a day (half-hour buffer) at 70% of its rated speed:
+      // 210 MB/s for LTO-8 and LTO-9, 280 MB/s for LTO-10.
+      // TB per 23.5 hours = MB/s x 84,600 / 1,000,000. Add write drives until the day's video fits,
+      // then one more drive for recall and playback.
+      var driveMBps = ltoCapacity >= 30 ? 280 : 210;
+      var tbPerDrivePerDay = driveMBps * 84600 / 1000000;
+      var writeDrives = Math.max(1, Math.ceil(dailyTbAll / tbPerDrivePerDay));
+      var totalDrives = writeDrives + 1;
+      var writeHoursPerDrive = writeDrives > 0 ? (dailyTbAll * 1000000 / driveMBps / 3600) / writeDrives : 0;
+      var wh = Math.floor(writeHoursPerDrive), wm = Math.round((writeHoursPerDrive - wh) * 60);
+      if (wm === 60) { wh += 1; wm = 0; }
 
       rBitrate.textContent = fmt(bitrateKbps, 1) + ' Kbps' + (bitrateEntered ? ' (entered)' : '');
       rPerCamDay.textContent = fmt(gbPerDayPerCam, 2) + ' GB';
       rTotalTb.textContent = fmt(roundedTotalTb, 0) + ' TB';
       rSlots.textContent = fmt(Math.ceil(slotsNeeded), 0) + ' cartridges';
       rSlotsDay.textContent = fmt(slotsPerDay, 0) + ' / day';
-      rHours.textContent = fmt(totalHoursPerDay, 1) + ' hrs (' + fmt(totalDrives, 0) + ' drives incl. standby)';
+      rDailyTb.textContent = fmt(dailyTbAll, 2) + ' TB';
+      rDrives.textContent = fmt(totalDrives, 0) + ' (' + fmt(writeDrives, 0) + ' write + 1 recall)';
+      rHours.textContent = wh + ' hr ' + wm + ' min' + (writeDrives > 1 ? ' per write drive' : '') + ' at ' + driveMBps + ' MB/s';
 
       // Hand the sizing results to the cost comparison (tco.js)
       document.dispatchEvent(new CustomEvent('cozaint:calc', {
@@ -134,12 +140,15 @@
           ltoCapacity: ltoCapacity,
           cartridges: Math.ceil(slotsNeeded),
           tapeDrives: totalDrives,
+          writeDrives: writeDrives,
+          driveMBps: driveMBps,
+          dailyTb: dailyTbAll,
           retentionDays: retentionDays
         }
       }));
     }
 
-    [camerasEl, resSelect, fpsEl, retentionEl, motionEl, bitrateEl, bppEl, ltoEl, hoursEl, writeDrivesEl, standbyEl].forEach(function (el) {
+    [camerasEl, resSelect, fpsEl, retentionEl, motionEl, bitrateEl, bppEl, ltoEl].forEach(function (el) {
       el.addEventListener('input', recalc);
       el.addEventListener('change', recalc);
     });

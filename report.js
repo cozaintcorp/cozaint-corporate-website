@@ -169,18 +169,18 @@
     y += 10;
 
     // ---------- Inputs and sizing ----------
-    var drives = (parseFloat(val('calcWriteDrives')) || 0) + (parseFloat(val('calcStandby')) || 0);
     var inputs = [
       ['Cameras', val('calcCameras'), 'Retention', num(last.calc.retentionDays) + ' days'],
       ['Resolution', selText('calcResolution'), 'Years you own the system', String(r.years)],
       ['Frames per second', val('calcFps'), 'LTO tape', selText('calcLto')],
-      ['Motion', Math.min(100, Math.max(1, parseFloat(val('calcMotion')) || 1)) + '%', 'Tape drives', val('calcWriteDrives') + ' recording + ' + val('calcStandby') + ' standby (' + drives + ')'],
+      ['Motion', Math.min(100, Math.max(1, parseFloat(val('calcMotion')) || 1)) + '%', '', ''],
       ['Bits per pixel', val('calcBpp'), 'Bit rate per camera', parseFloat(val('calcBitrate')) > 0 ? parseFloat(val('calcBitrate')).toLocaleString('en-US') + ' kilobits per second (entered)' : 'Calculated']
     ];
     var results = [
       ['Bitrate per camera', txt('rBitrate'), 'Total video stored', txt('rTotalTb')],
       ['Storage per camera per day', txt('rPerCamDay'), 'LTO cartridges needed', txt('rSlots')],
-      ['Cartridges written per day', txt('rSlotsDay'), 'Drive-hours needed per day', txt('rHours')]
+      ['Video recorded per day', txt('rDailyTb'), 'Cartridges written per day', txt('rSlotsDay')],
+      ['LTO drives needed', txt('rDrives'), 'Write time per day', txt('rHours')]
     ];
     function kvTable(title, body) {
       heading(title);
