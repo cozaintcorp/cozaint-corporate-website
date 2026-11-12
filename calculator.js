@@ -99,17 +99,23 @@
       if (bitrateEl) bitrateEl.placeholder = fmt(bitrateKbps, 1); // grey hint = the calculated value
       if (bitrateEntered) bitrateKbps = enteredKbps;
 
-      // --- Storage (decimal units, as tape capacities are: 1 TB = 1,000 GB = 1,000,000 MB) ---
-      // Daily TB per camera = Mbps x 0.0108 (Mbps / 8 bits x 86,400 seconds / 1,000,000).
-      var mbPerSec = bitrateKbps / 8 / 1000;
-      var gbPerDayPerCam = mbPerSec * 86400 / 1000;
-      var dailyTbAll = gbPerDayPerCam * cameras / 1000;
-      var totalTbAllCameras = dailyTbAll * retentionDays;
+      // --- Storage Calculator sheet chain (unchanged) ---
+      var bytesKbPerSec = bitrateKbps / 8;
+      var mbPerSec = bytesKbPerSec / 1024;
+      var mbPerHour = mbPerSec * 3600;
+      var mbPerDayPerCam = mbPerHour * 24;
+      var gbPerDayPerCam = mbPerDayPerCam / 1024;
+      var totalGbPerCamRetention = gbPerDayPerCam * retentionDays;
+      var totalTbPerCamRetention = totalGbPerCamRetention / 1024;
+      var totalTbAllCameras = totalTbPerCamRetention * cameras;
 
-      // --- Cartridges ---
+      // --- Total_Calculator sheet chain (unchanged) ---
       var roundedTotalTb = Math.round(totalTbAllCameras / 10) * 10;
       var slotsNeeded = ltoCapacity > 0 ? roundedTotalTb / ltoCapacity : 0;
       var slotsPerDay = retentionDays > 0 ? Math.ceil(slotsNeeded / retentionDays) : 0;
+
+      // Daily video to write to tape, by Jay's formula: Daily TB = cameras x Mbps x 0.0108
+      var dailyTbAll = cameras * (bitrateKbps / 1000) * 0.0108;
 
       // --- LTO drives (MARCIA planning method) ---
       // One drive writes for 23.5 hours a day (half-hour buffer) at 70% of its rated speed:

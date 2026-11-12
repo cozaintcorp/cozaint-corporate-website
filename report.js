@@ -179,7 +179,7 @@
     var results = [
       ['Bitrate per camera', txt('rBitrate'), 'Total video stored', txt('rTotalTb')],
       ['Storage per camera per day', txt('rPerCamDay'), 'LTO cartridges needed', txt('rSlots')],
-      ['Video recorded per day', txt('rDailyTb'), 'Cartridges written per day', txt('rSlotsDay')],
+      ['Video written to tape per day', txt('rDailyTb'), 'Cartridges written per day', txt('rSlotsDay')],
       ['LTO drives needed', txt('rDrives'), 'Write time per day', txt('rHours')]
     ];
     function kvTable(title, body) {
