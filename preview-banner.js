@@ -9,7 +9,8 @@
     ['Proven by Hollywood (new page)', 'hollywood.html'],
     ['MARCIA (video: company name now pronounced correctly)', 'marcia.html'],
     ['Banks (new: questionnaire & webinar button)', 'banks.html'],
-    ['Calculator (LTO choice, LTO drive count)', 'assessment.html#calculator']
+    ['Calculator (LTO choice, LTO drive count)', 'assessment.html#calculator'],
+    ['BOBBY family (new: choose your BOBBY)', 'bobby.html']
   ];
   var base = location.pathname.replace(/[^\/]*$/, '');
   var d = document.createElement('div');
