@@ -3,14 +3,10 @@
    Update CHANGES for each new preview. */
 (function () {
   if (location.hostname.indexOf('github.io') === -1) return;
-  var TITLE = 'PREVIEW of the next website update (in progress, not yet approved). Not on cozaint.com yet.';
+  var TITLE = 'PREVIEW of the November 20, 2026 website update (approved, sent to the webmaster). Not on cozaint.com yet.';
   var CHANGES = [
-    ['Home (Hollywood picture, More link)', 'index.html'],
-    ['Proven by Hollywood (new page)', 'hollywood.html'],
-    ['MARCIA (video: company name now pronounced correctly)', 'marcia.html'],
-    ['Banks (new: questionnaire & webinar button)', 'banks.html'],
-    ['Calculator (LTO choice, LTO drive count)', 'assessment.html#calculator'],
-    ['BOBBY family (new: choose your BOBBY)', 'bobby.html']
+    ['BOBBY family (new page: choose your BOBBY)', 'bobby.html'],
+    ['Product Suite menu (new entry: BOBBY (all models))', 'index.html']
   ];
   var base = location.pathname.replace(/[^\/]*$/, '');
   var d = document.createElement('div');
