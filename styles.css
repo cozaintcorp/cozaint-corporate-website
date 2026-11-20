@@ -1391,6 +1391,8 @@ details.tco-footnote > .tco-note-body { padding: 0 14px 12px; }
 .bf-photo { background: var(--paper-deep); }
 .bf-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
 .bf-photo-render img { object-fit: contain; padding: 14px; }
+.bf-photo-white { background: #fff; }
+.bf-hero-trio a:first-child img { background: #fff; }
 .bf-body { display: flex; flex-direction: column; flex: 1; padding: 24px; }
 .bf-body h3 { margin: 0 0 10px; }
 .bf-body h3 span { font: 700 13px var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: #1c8a5c; margin-left: 8px; }
