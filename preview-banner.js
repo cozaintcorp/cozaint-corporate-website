@@ -3,9 +3,10 @@
    Update CHANGES for each new preview. */
 (function () {
   if (location.hostname.indexOf('github.io') === -1) return;
-  var TITLE = 'PREVIEW of the November 25, 2026 website update (Casinos questionnaire and webinar button). Not on cozaint.com yet.';
+  var TITLE = 'PREVIEW of the November 25, 2026 website update (Casinos questionnaire button; Podcasts page cleanup). Not on cozaint.com yet.';
   var CHANGES = [
-    ['Casinos page (new gold button: Take the Questionnaire & Watch the Webinar)', 'casinos.html']
+    ['Casinos page (new gold button: Take the Questionnaire & Watch the Webinar)', 'casinos.html'],
+    ['Podcasts page (dead Podbean links removed)', 'podcasts.html']
   ];
   var base = location.pathname.replace(/[^\/]*$/, '');
   var d = document.createElement('div');
