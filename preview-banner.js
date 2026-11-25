@@ -3,10 +3,9 @@
    Update CHANGES for each new preview. */
 (function () {
   if (location.hostname.indexOf('github.io') === -1) return;
-  var TITLE = 'PREVIEW of the November 20, 2026 website update (approved, sent to the webmaster). Not on cozaint.com yet.';
+  var TITLE = 'PREVIEW of the November 25, 2026 website update (Casinos questionnaire and webinar button). Not on cozaint.com yet.';
   var CHANGES = [
-    ['BOBBY family (new page: choose your BOBBY)', 'bobby.html'],
-    ['Product Suite menu (new entry: BOBBY (all models))', 'index.html']
+    ['Casinos page (new gold button: Take the Questionnaire & Watch the Webinar)', 'casinos.html']
   ];
   var base = location.pathname.replace(/[^\/]*$/, '');
   var d = document.createElement('div');
